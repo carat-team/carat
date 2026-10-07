@@ -1,6 +1,6 @@
 spring:
   application:
-    name: cogniflex
+    name: carat
   config:
     import:
       - "optional:file:.env[.properties]"
@@ -10,7 +10,7 @@ spring:
       max-file-size: 1024MB
       max-request-size: 1024MB
   datasource:
-    url: "jdbc:postgresql://${DB_HOST:localhost}:${DB_PORT:5432}/${DB_NAME:cogniflex}"
+    url: "jdbc:postgresql://${DB_HOST:localhost}:${DB_PORT:5432}/${DB_NAME:carat}"
     username: "${DB_USER}"
     password: "${DB_PASSWORD}"
     driver-class-name: org.postgresql.Driver

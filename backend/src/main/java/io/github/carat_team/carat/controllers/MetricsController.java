@@ -1,0 +1,60 @@
+package io.github.carat_team.carat.controllers;
+
+import io.github.carat_team.carat.dto.MetricsResponse;
+import io.github.carat_team.carat.services.availability.DatabaseAvailabilityService;
+import io.github.carat_team.carat.services.availability.MLServiceAvailabilityService;
+
+import io.github.carat_team.carat.services.availability.RedisAvailabilityService;
+
+import java.util.function.Supplier;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Profile;
+import org.springframework.util.StopWatch;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+@RestController
+@RequestMapping("/api/metrics")
+@Profile("!test")
+public class MetricsController {
+
+    @Autowired
+    private RedisAvailabilityService redisAvailabilityService;
+
+    @Autowired
+    private DatabaseAvailabilityService databaseAvailabilityService;
+
+    @Autowired
+    private MLServiceAvailabilityService MLServiceAvailabilityService;
+
+    private String measureAndFormat(Supplier<String> service)
+    {
+        String serviceCallback = null;
+        StopWatch stopWatch = new StopWatch();
+        stopWatch.start();
+        try
+        {
+            serviceCallback = service.get();
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
+        stopWatch.stop();
+        if (serviceCallback.equals("CONNECTED"))
+        {
+            return String.valueOf(stopWatch.getTotalTimeSeconds());
+        }
+        return serviceCallback;
+    }
+
+    @GetMapping
+    public MetricsResponse getMetrics() {
+        return new MetricsResponse(
+            measureAndFormat(databaseAvailabilityService::getStatus),
+            measureAndFormat(redisAvailabilityService::getStatus),
+            measureAndFormat(MLServiceAvailabilityService::getStatus)
+        );
+    }
+}
+

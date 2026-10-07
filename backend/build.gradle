@@ -5,9 +5,9 @@ plugins {
 	id 'com.google.protobuf' version '0.9.5'
 }
 
-group = 'io.github.duckysmacky'
+group = 'io.github.carat_team'
 version = '0.0.1'
-description = 'Backend for Cogniflex'
+description = 'Backend for Carat'
 
 java {
 	toolchain {
