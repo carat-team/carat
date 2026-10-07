@@ -70,11 +70,11 @@ if [[ -n "$REGISTRY" && -n "$REGISTRY_USERNAME" ]]; then
 
   log "Pulling custom images from '$IMAGE_PREFIX'"
   docker pull "$IMAGE_PREFIX/carat-backend:latest"
-  docker pull "$IMAGE_PREFIX/carat-ml-service:latest"
+  docker pull "$IMAGE_PREFIX/carat-inference:latest"
 
   log "Tagging custom images for docker compose"
   docker tag "$IMAGE_PREFIX/carat-backend:latest" carat-backend:latest
-  docker tag "$IMAGE_PREFIX/carat-ml-service:latest" carat-ml-service:latest
+  docker tag "$IMAGE_PREFIX/carat-inference:latest" carat-inference:latest
 else
   log "No registry username provided, using local custom images"
 fi
@@ -89,13 +89,13 @@ log "Removing old Carat images"
 if [[ -n "$REGISTRY" && -n "$REGISTRY_USERNAME" ]]; then
   remove_old_project_images \
     "carat-backend" \
-    "carat-ml-service" \
+    "carat-inference" \
     "$REGISTRY/$REGISTRY_USERNAME/carat-backend" \
-    "$REGISTRY/$REGISTRY_USERNAME/carat-ml-service"
+    "$REGISTRY/$REGISTRY_USERNAME/carat-inference"
 else
   remove_old_project_images \
     "carat-backend" \
-    "carat-ml-service"
+    "carat-inference"
 fi
 
 log "Removing dangling images"

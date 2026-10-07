@@ -1,16 +1,17 @@
-package io.github.duckysmacky.cogniflex.analysis.dynamic.ml;
+package io.github.carat_team.carat.inference;
 
 import com.google.protobuf.ByteString;
+import io.github.duckysmacky.cogniflex.analysis.dynamic.inference.InferenceClient;
 import io.github.duckysmacky.cogniflex.analysis.AnalysisVerdict;
 import io.github.duckysmacky.cogniflex.analysis.ContentType;
 import io.github.duckysmacky.cogniflex.analysis.dynamic.DynamicAnalysisResult;
-import io.github.duckysmacky.cogniflex.config.MLGrpcProperties;
+import io.github.carat_team.carat.config.InferenceGrpcProperties;
 import io.github.duckysmacky.cogniflex.exceptions.ServiceUnavailableException;
-import io.github.duckysmacky.cogniflex.grpc.AnalyzeReply;
-import io.github.duckysmacky.cogniflex.grpc.MLAnalyzerGrpc;
-import io.github.duckysmacky.cogniflex.grpc.PhotoRequest;
-import io.github.duckysmacky.cogniflex.grpc.TextRequest;
-import io.github.duckysmacky.cogniflex.grpc.VideoRequest;
+import io.github.carat_team.carat.grpc.AnalyzeReply;
+import io.github.carat_team.carat.grpc.AnalyzerGrpc;
+import io.github.carat_team.carat.grpc.PhotoRequest;
+import io.github.carat_team.carat.grpc.TextRequest;
+import io.github.carat_team.carat.grpc.VideoRequest;
 import io.grpc.Status;
 import io.grpc.StatusRuntimeException;
 import org.slf4j.Logger;
@@ -24,15 +25,15 @@ import java.util.concurrent.TimeUnit;
 import java.util.function.Supplier;
 
 @Service
-public class MLGrpcClient implements MLClient {
-    private static final Logger log = LoggerFactory.getLogger(MLGrpcClient.class);
+public class InferenceGrpcClient implements InferenceClient {
+    private static final Logger log = LoggerFactory.getLogger(InferenceGrpcClient.class);
 
-    private final MLAnalyzerGrpc.MLAnalyzerBlockingStub baseStub;
-    private final MLGrpcProperties properties;
+    private final AnalyzerGrpc.AnalyzerBlockingStub baseStub;
+    private final InferenceGrpcProperties properties;
 
-    public MLGrpcClient(
-        MLAnalyzerGrpc.MLAnalyzerBlockingStub baseStub,
-        MLGrpcProperties properties
+    public InferenceGrpcClient(
+        AnalyzerGrpc.AnalyzerBlockingStub baseStub,
+        InferenceGrpcProperties properties
     ) {
         this.baseStub = baseStub;
         this.properties = properties;
@@ -113,7 +114,7 @@ public class MLGrpcClient implements MLClient {
         return mapReply(ContentType.VIDEO, reply);
     }
 
-    private MLAnalyzerGrpc.MLAnalyzerBlockingStub stubWithTimeout() {
+    private AnalyzerGrpc.AnalyzerBlockingStub stubWithTimeout() {
         return baseStub.withDeadlineAfter(properties.getTimeout().toMillis(), TimeUnit.MILLISECONDS);
     }
 

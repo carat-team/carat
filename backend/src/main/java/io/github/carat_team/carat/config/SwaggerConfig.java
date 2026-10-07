@@ -14,9 +14,9 @@ public class SwaggerConfig {
     public OpenAPI customOpenAPI() {
         return new OpenAPI()
                 .info(new Info()
-                        .title("Cogniflex API")
+                        .title("Carat API")
                         .version("1.0")
-                        .description("Документация для проекта Cogniflex")
+                        .description("Документация для проекта Carat")
                 );
     }
 }

@@ -1,4 +1,4 @@
-package io.github.duckysmacky.cogniflex.config;
+package io.github.carat_team.carat.config;
 
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
@@ -9,8 +9,8 @@ import org.springframework.validation.annotation.Validated;
 import java.time.Duration;
 
 @Validated
-@ConfigurationProperties(prefix = "grpc.ml-service")
-public class MLGrpcProperties {
+@ConfigurationProperties(prefix = "grpc.inference")
+public class InferenceGrpcProperties {
 
     @NotBlank
     private String host;
