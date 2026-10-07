@@ -48,10 +48,10 @@ jobs:
           echo "registry_username=${owner}" >> "$GITHUB_OUTPUT"
           echo "tag_commit=${tag_commit}" >> "$GITHUB_OUTPUT"
           echo "version=${version}" >> "$GITHUB_OUTPUT"
-          echo "backend_image_sha=${image_prefix}/cogniflex-backend:${tag_commit}" >> "$GITHUB_OUTPUT"
-          echo "backend_image_version=${image_prefix}/cogniflex-backend:${version}" >> "$GITHUB_OUTPUT"
-          echo "ml_service_image_sha=${image_prefix}/cogniflex-ml-service:${tag_commit}" >> "$GITHUB_OUTPUT"
-          echo "ml_service_image_version=${image_prefix}/cogniflex-ml-service:${version}" >> "$GITHUB_OUTPUT"
+          echo "backend_image_sha=${image_prefix}/carat-backend:${tag_commit}" >> "$GITHUB_OUTPUT"
+          echo "backend_image_version=${image_prefix}/carat-backend:${version}" >> "$GITHUB_OUTPUT"
+          echo "ml_service_image_sha=${image_prefix}/carat-ml-service:${tag_commit}" >> "$GITHUB_OUTPUT"
+          echo "ml_service_image_version=${image_prefix}/carat-ml-service:${version}" >> "$GITHUB_OUTPUT"
 
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
@@ -157,11 +157,11 @@ jobs:
 
           Extension build:
 
-          - \`cogniflex-extension-${VERSION}.zip\`
+          - \`carat-extension-${VERSION}.zip\`
           EOF
 
           gh release create "v${VERSION}" \
-            "extension/release/cogniflex-extension-${VERSION}.zip" \
+            "extension/release/carat-extension-${VERSION}.zip" \
             --title "v${VERSION}" \
             --notes-file release-notes.md \
             --draft \

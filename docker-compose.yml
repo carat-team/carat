@@ -1,9 +1,9 @@
-name: Cogniflex
+name: Carat
 
 services:
   db:
     image: postgres:18
-    container_name: cogniflex-db
+    container_name: carat-db
     environment:
       POSTGRES_DB: ${DB_NAME}
       POSTGRES_USER: ${DB_USER}
@@ -16,7 +16,7 @@ services:
 
   redis:
     image: redis:8
-    container_name: cogniflex-redis
+    container_name: carat-redis
     volumes:
       - redis_data:/data
     networks:
@@ -27,8 +27,8 @@ services:
     build:
       context: .
       dockerfile: backend/Dockerfile
-    image: cogniflex-backend:latest
-    container_name: cogniflex-backend
+    image: carat-backend:latest
+    container_name: carat-backend
     ports:
       - "${BACKEND_PORT:-8080}:${BACKEND_PORT:-8080}"
     env_file:
@@ -53,8 +53,8 @@ services:
     build:
       context: .
       dockerfile: ml-service/Dockerfile
-    image: cogniflex-ml-service:latest
-    container_name: cogniflex-ml-service
+    image: carat-ml-service:latest
+    container_name: carat-ml-service
     env_file:
       - .env
     volumes:

@@ -43,19 +43,19 @@ jobs:
           image_prefix="ghcr.io/${owner}"
 
           echo "registry_username=${owner}" >> "$GITHUB_OUTPUT"
-          echo "backend_image_latest=${image_prefix}/cogniflex-backend:latest" >> "$GITHUB_OUTPUT"
-          echo "backend_image_sha=${image_prefix}/cogniflex-backend:${GITHUB_SHA}" >> "$GITHUB_OUTPUT"
-          echo "ml_service_image_latest=${image_prefix}/cogniflex-ml-service:latest" >> "$GITHUB_OUTPUT"
-          echo "ml_service_image_sha=${image_prefix}/cogniflex-ml-service:${GITHUB_SHA}" >> "$GITHUB_OUTPUT"
+          echo "backend_image_latest=${image_prefix}/carat-backend:latest" >> "$GITHUB_OUTPUT"
+          echo "backend_image_sha=${image_prefix}/carat-backend:${GITHUB_SHA}" >> "$GITHUB_OUTPUT"
+          echo "ml_service_image_latest=${image_prefix}/carat-ml-service:latest" >> "$GITHUB_OUTPUT"
+          echo "ml_service_image_sha=${image_prefix}/carat-ml-service:${GITHUB_SHA}" >> "$GITHUB_OUTPUT"
 
           {
             echo "backend_tags<<EOF"
-            echo "${image_prefix}/cogniflex-backend:latest"
-            echo "${image_prefix}/cogniflex-backend:${GITHUB_SHA}"
+            echo "${image_prefix}/carat-backend:latest"
+            echo "${image_prefix}/carat-backend:${GITHUB_SHA}"
             echo "EOF"
             echo "ml_service_tags<<EOF"
-            echo "${image_prefix}/cogniflex-ml-service:latest"
-            echo "${image_prefix}/cogniflex-ml-service:${GITHUB_SHA}"
+            echo "${image_prefix}/carat-ml-service:latest"
+            echo "${image_prefix}/carat-ml-service:${GITHUB_SHA}"
             echo "EOF"
           } >> "$GITHUB_OUTPUT"
 

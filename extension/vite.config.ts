@@ -17,7 +17,7 @@ export default defineConfig({
     crx({ manifest }),
     zip({
       outDir: 'release',
-      outFileName: `cogniflex-extension-${extensionVersion}.zip`,
+      outFileName: `carat-extension-${extensionVersion}.zip`,
     }),
     tailwindcss(),
   ],
