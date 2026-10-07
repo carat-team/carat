@@ -43,7 +43,7 @@ remove_old_project_images() {
 
 cd "$APP_DIR"
 
-log "Deploying Cogniflex from branch '$BRANCH' in '$APP_DIR'"
+log "Deploying Carat from branch '$BRANCH' in '$APP_DIR'"
 
 if ! git rev-parse --is-inside-work-tree >/dev/null 2>&1; then
   log "Error: '$APP_DIR' is not a git repository"
@@ -69,12 +69,12 @@ if [[ -n "$REGISTRY" && -n "$REGISTRY_USERNAME" ]]; then
   IMAGE_PREFIX="$REGISTRY/$REGISTRY_USERNAME"
 
   log "Pulling custom images from '$IMAGE_PREFIX'"
-  docker pull "$IMAGE_PREFIX/cogniflex-backend:latest"
-  docker pull "$IMAGE_PREFIX/cogniflex-ml-service:latest"
+  docker pull "$IMAGE_PREFIX/carat-backend:latest"
+  docker pull "$IMAGE_PREFIX/carat-inference:latest"
 
   log "Tagging custom images for docker compose"
-  docker tag "$IMAGE_PREFIX/cogniflex-backend:latest" cogniflex-backend:latest
-  docker tag "$IMAGE_PREFIX/cogniflex-ml-service:latest" cogniflex-ml-service:latest
+  docker tag "$IMAGE_PREFIX/carat-backend:latest" carat-backend:latest
+  docker tag "$IMAGE_PREFIX/carat-inference:latest" carat-inference:latest
 else
   log "No registry username provided, using local custom images"
 fi
@@ -85,17 +85,17 @@ docker compose pull db redis
 log "Recreating services"
 docker compose up -d --force-recreate --no-build
 
-log "Removing old Cogniflex images"
+log "Removing old Carat images"
 if [[ -n "$REGISTRY" && -n "$REGISTRY_USERNAME" ]]; then
   remove_old_project_images \
-    "cogniflex-backend" \
-    "cogniflex-ml-service" \
-    "$REGISTRY/$REGISTRY_USERNAME/cogniflex-backend" \
-    "$REGISTRY/$REGISTRY_USERNAME/cogniflex-ml-service"
+    "carat-backend" \
+    "carat-inference" \
+    "$REGISTRY/$REGISTRY_USERNAME/carat-backend" \
+    "$REGISTRY/$REGISTRY_USERNAME/carat-inference"
 else
   remove_old_project_images \
-    "cogniflex-backend" \
-    "cogniflex-ml-service"
+    "carat-backend" \
+    "carat-inference"
 fi
 
 log "Removing dangling images"

@@ -1,4 +1,4 @@
-# Cogniflex ML gRPC API
+# Carat ML gRPC API
 
 Документация по gRPC-сервису ML-инференса для анализа изображений, видео и текста.
 
@@ -7,20 +7,20 @@
 Единый protobuf-контракт хранится в корне репозитория:
 
 ```text
-proto/ml_analyzer.proto
+proto/carat/inference/analyzer.proto
 ```
 
 Этот файл является единственным источником правды для Backend и ML-сервиса:
 
 - Backend генерирует Java gRPC-клиент из `proto/`.
-- ML-сервис генерирует Python gRPC-код из `proto/` в `ml-service/generated/`.
+- ML-сервис генерирует Python gRPC-код из `proto/` в `inference/generated/`.
 
 Сгенерированные файлы не коммитятся.
 
 ## Структура ML-сервиса
 
 ```text
-ml-service/
+inference/
   main.py
   config.yaml
   requirements.txt
@@ -36,7 +36,7 @@ ml-service/
 ```
 
 - `main.py` - точка входа сервиса.
-- `app/proto.py` - генерация Python gRPC-кода из `proto/ml_analyzer.proto`.
+- `app/proto.py` - генерация Python gRPC-кода из `proto/carat/inference/analyzer.proto`.
 - `app/server.py` - запуск gRPC-сервера и загрузка моделей.
 - `app/grpc_service.py` - реализация RPC-методов.
 - `app/detectors/` - runtime-обертки над моделями.
@@ -48,15 +48,15 @@ ml-service/
 Установка зависимостей для локального запуска ML-сервиса:
 
 ```bash
-py -3.10 -m pip install -r ml-service/requirements.txt
+py -3.10 -m pip install -r inference/requirements.txt
 ```
 
-Для анализа изображений нужны веса, указанные в `ml-service/config.yaml`.
+Для анализа изображений нужны веса, указанные в `inference/config.yaml`.
 По умолчанию ожидаются:
 
 ```text
-ml-service/weights/resnet_general92.pth
-ml-service/weights/resnet_faces88.pth
+inference/weights/resnet_general92.pth
+inference/weights/resnet_faces88.pth
 ```
 
 ## Конфигурация
@@ -68,7 +68,7 @@ GRPC_HOST=[::]
 GRPC_PORT=50051
 ```
 
-Параметры самого сервиса задаются в `ml-service/config.yaml`:
+Параметры самого сервиса задаются в `inference/config.yaml`:
 
 ```yaml
 app:
@@ -83,21 +83,21 @@ models:
     model_name: roberta-base
 ```
 
-Пути к весам относительные от директории `ml-service/`.
+Пути к весам относительные от директории `inference/`.
 
 ## Запуск сервера
 
 Локально:
 
 ```bash
-cd ml-service
+cd inference
 python main.py
 ```
 
 Через Docker Compose:
 
 ```bash
-docker compose up --build ml-service
+docker compose up --build inference
 ```
 
 Сервис запускает gRPC-сервер на `GRPC_HOST:GRPC_PORT` и предоставляет методы:
@@ -111,7 +111,7 @@ docker compose up --build ml-service
 Выполнять в другом окне терминала после запуска сервера.
 
 ```bash
-cd ml-service
+cd inference
 
 python tests/test_photo_client.py "путь_к_изображению"
 python tests/test_video_client.py "путь_к_видео"
@@ -160,7 +160,7 @@ python tests/test_text_client.py "текст для анализа"
 
 Сервер по умолчанию принимает сообщения до `100 МБ`.
 
-Лимит настраивается в `ml-service/config.yaml`:
+Лимит настраивается в `inference/config.yaml`:
 
 ```yaml
 app:
@@ -198,18 +198,18 @@ app:
 
 ## Proto
 
-Актуальная версия находится в `proto/ml_analyzer.proto`:
+Актуальная версия находится в `proto/carat/inference/analyzer.proto`:
 
 ```protobuf
 syntax = "proto3";
 
-package cogniflex.ml;
+package carat.inference;
 
 option java_multiple_files = true;
-option java_package = "io.github.duckysmacky.cogniflex.grpc";
-option java_outer_classname = "MlAnalyzerProto";
+option java_package = "io.github.carat_team.carat.grpc";
+option java_outer_classname = "AnalyzerProto";
 
-service MLAnalyzer {
+service Analyzer {
   rpc AnalyzePhoto (PhotoRequest) returns (AnalyzeReply);
   rpc AnalyzeVideo (VideoRequest) returns (AnalyzeReply);
   rpc AnalyzeText (TextRequest) returns (AnalyzeReply);

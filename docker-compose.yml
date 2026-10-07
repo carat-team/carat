@@ -1,9 +1,9 @@
-name: Cogniflex
+name: Carat
 
 services:
   db:
     image: postgres:18
-    container_name: cogniflex-db
+    container_name: carat-db
     environment:
       POSTGRES_DB: ${DB_NAME}
       POSTGRES_USER: ${DB_USER}
@@ -16,7 +16,7 @@ services:
 
   redis:
     image: redis:8
-    container_name: cogniflex-redis
+    container_name: carat-redis
     volumes:
       - redis_data:/data
     networks:
@@ -27,8 +27,8 @@ services:
     build:
       context: .
       dockerfile: backend/Dockerfile
-    image: cogniflex-backend:latest
-    container_name: cogniflex-backend
+    image: carat-backend:latest
+    container_name: carat-backend
     ports:
       - "${BACKEND_PORT:-8080}:${BACKEND_PORT:-8080}"
     env_file:
@@ -37,29 +37,29 @@ services:
       - SPRING_PROFILES_ACTIVE=prod
       - DB_HOST=db
       - REDIS_HOST=redis
-      - ML_SERVICE_HOST=ml-service
+      - INFERENCE_HOST=inference
     volumes:
       - ./backend/src/main/resources:/app/config:ro
     depends_on:
       - db
       - redis
-      - ml-service
+      - inference
     networks:
       - backend-network
       - analysis-network
     restart: unless-stopped
 
-  ml-service:
+  inference:
     build:
       context: .
-      dockerfile: ml-service/Dockerfile
-    image: cogniflex-ml-service:latest
-    container_name: cogniflex-ml-service
+      dockerfile: inference/Dockerfile
+    image: carat-inference:latest
+    container_name: carat-inference
     env_file:
       - .env
     volumes:
-      - ./ml-service/config.yaml:/app/ml-service/config.yaml:ro
-      - ./ml-service/weights:/app/ml-service/weights:ro
+      - ./inference/config.yaml:/app/inference/config.yaml:ro
+      - ./inference/weights:/app/inference/weights:ro
     networks:
       - analysis-network
     restart: unless-stopped
