@@ -4,18 +4,23 @@ import tempfile
 import time
 import threading
 
+import cv2
 import grpc
+import numpy as np
 from carat.inference import analyzer_pb2
 from carat.inference import analyzer_pb2_grpc
+
+from app.quality import analyze_quality
 
 _inference_lock = threading.Lock()
 
 
 class AnalyzerServicer(analyzer_pb2_grpc.AnalyzerServicer):
-    def __init__(self, photo_detector, video_detector, text_detector):
+    def __init__(self, photo_detector, video_detector, text_detector, quality_config):
         self.photo_detector = photo_detector
         self.video_detector = video_detector
         self.text_detector = text_detector
+        self.quality_config = quality_config
 
     def AnalyzePhoto(self, request, context):
         image_bytes = request.image_data
@@ -115,6 +120,59 @@ class AnalyzerServicer(analyzer_pb2_grpc.AnalyzerServicer):
         except Exception as e:
             _set_internal_error(context, "Text", start_time, e)
             return analyzer_pb2.AnalyzeReply()
+
+    def AnalyzeQuality(self, request, context):
+        image_bytes = request.image_data
+
+        logging.info("=" * 60)
+        logging.info("[Quality] New request received")
+        logging.info("[Quality] Peer: %s", context.peer())
+        logging.info(
+            "[Quality] Data size: %s bytes (%.2f MB)",
+            len(image_bytes),
+            len(image_bytes) / 1024 / 1024,
+        )
+
+        if not image_bytes:
+            logging.warning("[Quality] Empty request received, returning error")
+            context.set_code(grpc.StatusCode.INVALID_ARGUMENT)
+            context.set_details("Empty image bytes received")
+            return analyzer_pb2.QualityReply()
+
+        start_time = time.time()
+
+        try:
+            image = cv2.imdecode(np.frombuffer(image_bytes, np.uint8), cv2.IMREAD_COLOR)
+            if image is None:
+                logging.warning("[Quality] Cannot decode image, returning error")
+                context.set_code(grpc.StatusCode.INVALID_ARGUMENT)
+                context.set_details("Cannot decode image")
+                return analyzer_pb2.QualityReply()
+
+            result = analyze_quality(image, self.quality_config)
+        except Exception as e:
+            _set_internal_error(context, "Quality", start_time, e)
+            return analyzer_pb2.QualityReply()
+
+        logging.info("[Quality] Analysis completed in %.3fs", time.time() - start_time)
+        logging.info(
+            "[Quality] Result: overall=%s, verdict=%s, weakest=%s",
+            result.overall,
+            result.verdict,
+            result.weakest,
+        )
+
+        return analyzer_pb2.QualityReply(
+            sharpness=result.sharpness,
+            overexposure=result.overexposure,
+            underexposure=result.underexposure,
+            resolution=result.resolution,
+            overall=result.overall,
+            verdict=result.verdict,
+            weakest=result.weakest,
+            width=result.width,
+            height=result.height,
+        )
 
 
 def _reply_from_prediction(operation, start_time, confidence, pred):

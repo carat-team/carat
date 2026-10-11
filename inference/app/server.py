@@ -29,7 +29,7 @@ def serve(service_root: Path, project_root: Path):
         ],
     )
     analyzer_pb2_grpc.add_AnalyzerServicer_to_server(
-        AnalyzerServicer(photo_detector, video_detector, text_detector),
+        AnalyzerServicer(photo_detector, video_detector, text_detector, settings.quality),
         server,
     )
     server.add_insecure_port(f"{settings.grpc.host}:{settings.grpc.port}")
@@ -39,7 +39,7 @@ def serve(service_root: Path, project_root: Path):
     logging.info("Python: %s", sys.version)
     logging.info("Platform: %s %s", platform.system(), platform.release())
     logging.info("Bind address: %s:%s", settings.grpc.host, settings.grpc.port)
-    logging.info("Endpoints: AnalyzePhoto, AnalyzeVideo, AnalyzeText")
+    logging.info("Endpoints: AnalyzePhoto, AnalyzeVideo, AnalyzeText, AnalyzeQuality")
     logging.info(
         "Max message size: %s MB (%s bytes)",
         settings.grpc.max_message_mb,
