@@ -45,7 +45,7 @@ docker compose up --build inference  # individual service
 Three-tier microservice architecture:
 
 ```
-Frontend/Extension (React+TS)
+Frontend (React+TS)
         │ REST
         ▼
 Backend (Spring Boot) ─── gRPC ──► Inference Service (Python, :50051)

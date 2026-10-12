@@ -125,21 +125,6 @@ jobs:
             --tag "${INFERENCE_IMAGE_VERSION}" \
             "${INFERENCE_IMAGE_SHA}"
 
-      - name: Set up Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version-file: extension/.nvmrc
-          cache: yarn
-          cache-dependency-path: extension/yarn.lock
-
-      - name: Build extension
-        working-directory: extension
-        env:
-          EXTENSION_VERSION: ${{ steps.metadata.outputs.version }}
-        run: |
-          yarn install --frozen-lockfile
-          yarn build
-
       - name: Create GitHub release
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -154,14 +139,9 @@ jobs:
 
           - Backend: \`${BACKEND_IMAGE}\`
           - Inference: \`${INFERENCE_IMAGE}\`
-
-          Extension build:
-
-          - \`carat-extension-${VERSION}.zip\`
           EOF
 
           gh release create "v${VERSION}" \
-            "extension/release/carat-extension-${VERSION}.zip" \
             --title "v${VERSION}" \
             --notes-file release-notes.md \
             --draft \
