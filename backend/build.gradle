@@ -6,7 +6,7 @@ plugins {
 }
 
 group = 'io.github.carat_team'
-version = '0.0.1'
+version = '0.1.0'
 description = 'Backend for Carat'
 
 java {
