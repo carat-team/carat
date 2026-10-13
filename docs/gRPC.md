@@ -23,7 +23,9 @@ proto/carat/inference/analyzer.proto
 inference/
   main.py
   config.yaml
-  requirements.txt
+  pyproject.toml
+  uv.lock
+  justfile
   app/
     config.py
     proto.py
@@ -45,10 +47,12 @@ inference/
 
 ## Требования
 
-Установка зависимостей для локального запуска ML-сервиса:
+Для локального запуска нужны [uv](https://docs.astral.sh/uv/) и [just](https://just.systems/).
+Установка зависимостей (uv сам скачает нужную версию Python):
 
 ```bash
-py -3.10 -m pip install -r inference/requirements.txt
+cd inference
+just sync
 ```
 
 Для анализа изображений нужны веса, указанные в `inference/config.yaml`.
@@ -91,7 +95,7 @@ models:
 
 ```bash
 cd inference
-python main.py
+just run
 ```
 
 Через Docker Compose:
@@ -113,9 +117,9 @@ docker compose up --build inference
 ```bash
 cd inference
 
-python tests/test_photo_client.py "путь_к_изображению"
-python tests/test_video_client.py "путь_к_видео"
-python tests/test_text_client.py "текст для анализа"
+just test-photo "путь_к_изображению"
+just test-video "путь_к_видео"
+just test-text "текст для анализа"
 ```
 
 Если клиент запускается с хоста, адрес должен указывать на доступный с хоста gRPC endpoint.
