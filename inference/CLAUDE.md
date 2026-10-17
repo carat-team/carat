@@ -1,1 +1,1 @@
-/home/nikdor/dev/projects/carat/inference/AGENTS.md
+AGENTS.md

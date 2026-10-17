@@ -1,1 +1,1 @@
-/home/nikdor/dev/projects/carat/frontend/AGENTS.md
+AGENTS.md
