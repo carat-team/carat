@@ -1,0 +1,52 @@
+{
+  "n_positive": 214,
+  "n_negative": 600,
+  "siglip2_zero_shot_untuned_threshold": {
+    "roc_auc": 1.0,
+    "pr_auc": 0.9999999999999999,
+    "threshold": 0.0,
+    "perfume_recall": 1.0,
+    "false_positive_rate": 0.015,
+    "accuracy": 0.9889434889434889
+  },
+  "siglip2_zero_shot_val_threshold": {
+    "roc_auc": 1.0,
+    "pr_auc": 0.9999999999999999,
+    "threshold": 0.0325761154294014,
+    "perfume_recall": 1.0,
+    "false_positive_rate": 0.0,
+    "accuracy": 1.0
+  },
+  "siglip2_zero_shot_prompts_v2_untuned_threshold": {
+    "roc_auc": 0.9999376947040499,
+    "pr_auc": 0.9998316073082427,
+    "threshold": 0.0,
+    "perfume_recall": 0.9532710280373832,
+    "false_positive_rate": 0.0,
+    "accuracy": 0.9877149877149877
+  },
+  "siglip2_zero_shot_prompts_v2_val_threshold": {
+    "roc_auc": 0.9999376947040499,
+    "pr_auc": 0.9998316073082427,
+    "threshold": -0.0244500520452857,
+    "perfume_recall": 1.0,
+    "false_positive_rate": 0.03,
+    "accuracy": 0.9778869778869779
+  },
+  "siglip2_linear_probe": {
+    "roc_auc": 0.9999922118380062,
+    "pr_auc": 0.9999782655944359,
+    "threshold": -1.6152444934844956,
+    "perfume_recall": 1.0,
+    "false_positive_rate": 0.11166666666666666,
+    "accuracy": 0.9176904176904177
+  },
+  "efficientnet_b0": {
+    "roc_auc": 0.9531542056074767,
+    "pr_auc": 0.8877818332784834,
+    "threshold": 0.04964626789093027,
+    "perfume_recall": 0.9485981308411215,
+    "false_positive_rate": 0.27166666666666667,
+    "accuracy": 0.7862407862407862
+  }
+}
