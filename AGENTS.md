@@ -76,6 +76,9 @@ Never commit to `master` or `dev` directly. All work goes through a PR into `dev
 7. Run the affected service's build, tests and linters before pushing.
 8. Do not merge PRs, approve your own work, or delete remote branches - humans do that.
 
+When working with worktrees, keep them in `.worktrees/` directory with directory name derived from
+branch's name (e.g.: `feature/auth` branch will be in `.worktrees/feature-auth` worktree)
+
 ## Guardrails
 
 - **No secrets.** Never commit `.env`, tokens, keys or credentials. Config goes through env vars.
