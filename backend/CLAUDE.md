@@ -1,0 +1,1 @@
+/home/nikdor/dev/projects/carat/backend/AGENTS.md
