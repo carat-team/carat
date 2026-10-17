@@ -19,7 +19,7 @@ from sklearn.metrics import average_precision_score, roc_auc_score
 from sklearn.model_selection import train_test_split
 from transformers import AutoModel, AutoTokenizer
 
-from common import SEED, load_images_from_paths, load_records, make_splits
+from common import FRAME_TYPES, SEED, load_images_from_paths, load_records, make_splits
 from efficientnet_baseline import predict_proba, train
 from siglip_experiment import MODEL_NAME, NOT_PERFUME_PROMPTS, PERFUME_PROMPTS, embed_images, embed_texts
 
@@ -115,6 +115,7 @@ def main() -> None:
     y = np.array([1] * len(pos) + [0] * len(neg))
     split = np.concatenate([pos_split, neg_split])
     bucket = np.array(["pos"] * len(pos) + [r["bucket"] for r in neg])
+    frame = np.array([FRAME_TYPES[r["type"]] for r in pos] + ["neg"] * len(neg))
     images = load_images_from_paths(paths, args.work_dir / "images_224_binary.npy", harmonize=True)
     train_idx, val_idx, test_idx = (np.where(split == s)[0] for s in ("train", "val", "test"))
     print({s: {"pos": int(((split == s) & (y == 1)).sum()), "neg": int(((split == s) & (y == 0)).sum())}
@@ -123,18 +124,32 @@ def main() -> None:
     results: dict = {"sizes": {s: {"pos": int(((split == s) & (y == 1)).sum()), "neg": int(((split == s) & (y == 0)).sum())}
                                 for s in ("train", "val", "test")}}
 
+    all_scores: dict[str, np.ndarray] = {}
+    # Negatives are white-background studio shots, so the honest comparison is studio perfume photos
+    # vs negatives; "all" mixes in casual/graphic/document perfume photos that differ in background alone.
+    studio_test = test_idx[(frame[test_idx] == "studio") | (y[test_idx] == 0)]
+
     def report(name: str, score: np.ndarray, threshold: float | None = None) -> None:
         t = best_f1_threshold(y[val_idx], score[val_idx]) if threshold is None else threshold
-        m = metrics(y[test_idx], score[test_idx], t, bucket[test_idx])
-        results[name] = m
+        all_scores[name] = score
+        results[name] = {
+            "all": metrics(y[test_idx], score[test_idx], t, bucket[test_idx]),
+            "studio_perfume_vs_negatives": metrics(y[studio_test], score[studio_test], t, bucket[studio_test]),
+            "perfume_recall_by_frame_type": {
+                ft: float((score[test_idx][frame[test_idx] == ft] >= t).mean()) for ft in FRAME_TYPES
+            },
+        }
         print(f"\n=== {name} (test) ===")
-        print(json.dumps(m, indent=2))
+        print(json.dumps(results[name], indent=2))
 
-    # --- shortcut check ---
+    # --- shortcut check: how well do trivial pixel statistics alone separate the classes? ---
     feats = shortcut_features(images)
-    shortcut = HistGradientBoostingClassifier(random_state=SEED).fit(feats[train_idx], y[train_idx])
-    results["shortcut_baseline_roc_auc"] = float(roc_auc_score(y[test_idx], shortcut.predict_proba(feats[test_idx])[:, 1]))
-    print("\nshortcut baseline (low-level stats only) test ROC-AUC:", results["shortcut_baseline_roc_auc"])
+    studio_train = train_idx[(frame[train_idx] == "studio") | (y[train_idx] == 0)]
+    for name, fit_idx, eval_idx in (("all", train_idx, test_idx), ("studio_perfume_vs_negatives", studio_train, studio_test)):
+        shortcut = HistGradientBoostingClassifier(random_state=SEED).fit(feats[fit_idx], y[fit_idx])
+        auc = float(roc_auc_score(y[eval_idx], shortcut.predict_proba(feats[eval_idx])[:, 1]))
+        results.setdefault("shortcut_baseline_roc_auc", {})[name] = auc
+        print(f"shortcut baseline ({name}) test ROC-AUC: {auc:.4f}")
 
     # --- SigLIP 2 ---
     model = AutoModel.from_pretrained(args.model).eval()
@@ -178,6 +193,7 @@ def main() -> None:
     torch.save(effnet.state_dict(), args.work_dir / "efficientnet_b0_perfume.pth")
 
     (args.work_dir / "perfume_results.json").write_text(json.dumps(results, ensure_ascii=False, indent=2))
+    np.savez(args.work_dir / "perfume_scores.npz", y=y, split=split, bucket=bucket, frame=frame, **all_scores)
 
 
 if __name__ == "__main__":
