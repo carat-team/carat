@@ -27,6 +27,8 @@ Project rules live in `AGENTS.md` (root and per-service); a violation of them is
 - A new model, weights file or dataset without a download source and target path in the README.
 - A new env var not added to `.env.example`.
 - Frontend: `any`, numeric GTIN/codes, `fetch` inside components.
+- A version bump in only some of `backend/build.gradle`, `inference/pyproject.toml`,
+  `frontend/package.json`.
 
 ## Nit (at most 5 per review)
 

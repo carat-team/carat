@@ -92,6 +92,8 @@ branch's name (e.g.: `feature/auth` branch will be in `.worktrees/feature-auth` 
   change to the repo (new service, new build tool, changed workflow), or when explicitly asked.
 - **CI, release and Docker** (`.github/workflows/`, `Dockerfile`s, `docker-compose.yml`,
   `.dockerignore`) are edited only when the task is about them or a critical change requires it.
+- **Versions.** The project version lives in `backend/build.gradle`, `inference/pyproject.toml` and
+  `frontend/package.json`. Bump them together and only when asked.
 - **Organization.** Keep the existing clean, explicit layout (like `proto/carat/inference/`):
   clear module and package names, one responsibility per module, no junk dirs (`utils2`, `new`).
 - **Scope.** Change only what the task needs. No repo-wide reformatting, no unrelated renames.
