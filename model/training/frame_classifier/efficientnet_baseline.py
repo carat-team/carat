@@ -3,6 +3,7 @@
 import argparse
 import json
 import time
+from collections.abc import Callable
 from pathlib import Path
 
 import numpy as np
@@ -51,7 +52,7 @@ def train(
     y: np.ndarray,
     train_idx: np.ndarray,
     n_classes: int,
-    val_score,
+    val_score: Callable[[nn.Module], float],
     epochs: int,
     batch_size: int = 32,
     lr: float = 1e-3,

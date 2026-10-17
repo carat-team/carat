@@ -46,7 +46,10 @@ def main() -> None:
         [args.external_dir / r["uri"] for r in rows], args.work_dir / "images_224_external.npy", harmonize=True
     )
     main_results = json.loads((args.work_dir / "perfume_results.json").read_text())
-    thr = lambda name: main_results[name]["all"]["threshold"]
+
+    def thr(name: str) -> float:
+        return main_results[name]["all"]["threshold"]
+
     results = {"n_positive": int(y.sum()), "n_negative": int((y == 0).sum())}
 
     siglip = AutoModel.from_pretrained(args.model).eval()

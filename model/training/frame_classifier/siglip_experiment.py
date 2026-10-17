@@ -11,7 +11,8 @@ from pathlib import Path
 import numpy as np
 import torch
 from sklearn.linear_model import LogisticRegression
-from transformers import AutoModel, AutoTokenizer
+from transformers import AutoModel, AutoTokenizer, PreTrainedModel, PreTrainedTokenizerBase
+from transformers.utils import ModelOutput
 
 from common import FRAME_TYPES, evaluate, load_images, load_records, make_splits, print_eval
 
@@ -48,13 +49,13 @@ NOT_PERFUME_PROMPTS = [
 ]
 
 
-def _as_tensor(feats) -> torch.Tensor:
+def _as_tensor(feats: torch.Tensor | ModelOutput) -> torch.Tensor:
     # transformers >= 5 returns a ModelOutput from get_*_features, older versions a tensor.
     return feats if isinstance(feats, torch.Tensor) else feats.pooler_output
 
 
 @torch.no_grad()
-def embed_images(model, images: np.ndarray, batch_size: int) -> np.ndarray:
+def embed_images(model: PreTrainedModel, images: np.ndarray, batch_size: int) -> np.ndarray:
     # SigLIP preprocessing for this checkpoint is plain resize + normalize with mean=std=0.5;
     # images are already resized to 224x224 by load_images.
     out = []
@@ -69,14 +70,16 @@ def embed_images(model, images: np.ndarray, batch_size: int) -> np.ndarray:
 
 
 @torch.no_grad()
-def embed_texts(model, tokenizer, prompts: list[str]) -> np.ndarray:
+def embed_texts(model: PreTrainedModel, tokenizer: PreTrainedTokenizerBase, prompts: list[str]) -> np.ndarray:
     # SigLIP was trained with fixed-length padding; any other padding hurts quality.
     tokens = tokenizer(prompts, padding="max_length", max_length=64, truncation=True, return_tensors="pt")
     feats = _as_tensor(model.get_text_features(**tokens))
     return torch.nn.functional.normalize(feats, dim=-1).numpy()
 
 
-def zero_shot_scores(model, tokenizer, img: np.ndarray, prompts: dict[str, list[str]]) -> np.ndarray:
+def zero_shot_scores(
+    model: PreTrainedModel, tokenizer: PreTrainedTokenizerBase, img: np.ndarray, prompts: dict[str, list[str]]
+) -> np.ndarray:
     """Per-class score = mean over that class's prompts of the cosine similarity."""
     cols = []
     for name in prompts:

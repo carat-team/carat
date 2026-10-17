@@ -67,7 +67,7 @@ def main() -> None:
 
 
 class ParquetRows:
-    def __init__(self, shard: Path, row_group: int):
+    def __init__(self, shard: Path, row_group: int) -> None:
         self.images = pq.ParquetFile(shard).read_row_group(row_group, columns=["image"]).column("image")
 
     def image_bytes(self, i: int) -> bytes:
