@@ -1,0 +1,301 @@
+{
+  "frame_type": {
+    "n_test": 550,
+    "models": {
+      "siglip2_zero_shot": {
+        "accuracy": 0.7218,
+        "accuracy_ci95": [
+          0.6836,
+          0.76
+        ],
+        "macro_f1": 0.5919,
+        "macro_f1_ci95": [
+          0.5432,
+          0.6391
+        ]
+      },
+      "siglip2_linear_probe": {
+        "accuracy": 0.9291,
+        "accuracy_ci95": [
+          0.9073,
+          0.9509
+        ],
+        "macro_f1": 0.9347,
+        "macro_f1_ci95": [
+          0.9137,
+          0.9545
+        ]
+      },
+      "efficientnet_b0": {
+        "accuracy": 0.9455,
+        "accuracy_ci95": [
+          0.9273,
+          0.9636
+        ],
+        "macro_f1": 0.9468,
+        "macro_f1_ci95": [
+          0.9274,
+          0.9652
+        ]
+      }
+    },
+    "paired": {
+      "efficientnet_b0_minus_siglip2_linear_probe": {
+        "accuracy_diff_ci95": [
+          -0.0055,
+          0.0382
+        ],
+        "macro_f1_diff_ci95": [
+          -0.0097,
+          0.0344
+        ],
+        "only_first_correct": 24,
+        "only_second_correct": 15,
+        "mcnemar_exact_p": 0.1996
+      },
+      "siglip2_linear_probe_minus_siglip2_zero_shot": {
+        "accuracy_diff_ci95": [
+          0.1655,
+          0.2491
+        ],
+        "macro_f1_diff_ci95": [
+          0.293,
+          0.3952
+        ],
+        "only_first_correct": 137,
+        "only_second_correct": 23,
+        "mcnemar_exact_p": 0.0
+      }
+    }
+  },
+  "perfume": {
+    "main_test": {
+      "siglip2_zero_shot": {
+        "threshold": 0.0,
+        "roc_auc": 0.993,
+        "roc_auc_ci95": [
+          0.9891,
+          0.9963
+        ],
+        "recall": 0.9964,
+        "recall_ci95": [
+          0.9908,
+          1.0
+        ],
+        "fpr": 0.2997,
+        "fpr_ci95": [
+          0.2482,
+          0.3527
+        ]
+      },
+      "siglip2_zero_shot_val_threshold": {
+        "threshold": 0.0326,
+        "roc_auc": 0.993,
+        "roc_auc_ci95": [
+          0.9891,
+          0.9963
+        ],
+        "recall": 0.9673,
+        "recall_ci95": [
+          0.9515,
+          0.9818
+        ],
+        "fpr": 0.0383,
+        "fpr_ci95": [
+          0.0169,
+          0.0618
+        ]
+      },
+      "siglip2_linear_probe": {
+        "threshold": 0.0,
+        "roc_auc": 1.0,
+        "roc_auc_ci95": [
+          0.9999,
+          1.0
+        ],
+        "recall": 0.9945,
+        "recall_ci95": [
+          0.9874,
+          1.0
+        ],
+        "fpr": 0.0,
+        "fpr_ci95": [
+          0.0,
+          0.0
+        ]
+      },
+      "siglip2_linear_probe_val_threshold": {
+        "threshold": -1.6152,
+        "roc_auc": 1.0,
+        "roc_auc_ci95": [
+          0.9999,
+          1.0
+        ],
+        "recall": 1.0,
+        "recall_ci95": [
+          1.0,
+          1.0
+        ],
+        "fpr": 0.007,
+        "fpr_ci95": [
+          0.0,
+          0.0178
+        ]
+      },
+      "efficientnet_b0": {
+        "threshold": 0.5,
+        "roc_auc": 0.9991,
+        "roc_auc_ci95": [
+          0.9978,
+          0.9999
+        ],
+        "recall": 0.9491,
+        "recall_ci95": [
+          0.9288,
+          0.9659
+        ],
+        "fpr": 0.0,
+        "fpr_ci95": [
+          0.0,
+          0.0
+        ]
+      },
+      "efficientnet_b0_val_threshold": {
+        "threshold": 0.0496,
+        "roc_auc": 0.9991,
+        "roc_auc_ci95": [
+          0.9978,
+          0.9999
+        ],
+        "recall": 0.9891,
+        "recall_ci95": [
+          0.979,
+          0.9964
+        ],
+        "fpr": 0.0105,
+        "fpr_ci95": [
+          0.0,
+          0.0242
+        ]
+      }
+    },
+    "main_test_n": {
+      "positive": 550,
+      "negative": 287
+    },
+    "external": {
+      "siglip2_zero_shot": {
+        "threshold": 0.0,
+        "roc_auc": 1.0,
+        "roc_auc_ci95": [
+          1.0,
+          1.0
+        ],
+        "recall": 1.0,
+        "recall_ci95": [
+          1.0,
+          1.0
+        ],
+        "fpr": 0.015,
+        "fpr_ci95": [
+          0.0065,
+          0.0252
+        ]
+      },
+      "siglip2_zero_shot_val_threshold": {
+        "threshold": 0.0326,
+        "roc_auc": 1.0,
+        "roc_auc_ci95": [
+          1.0,
+          1.0
+        ],
+        "recall": 1.0,
+        "recall_ci95": [
+          1.0,
+          1.0
+        ],
+        "fpr": 0.0,
+        "fpr_ci95": [
+          0.0,
+          0.0
+        ]
+      },
+      "siglip2_linear_probe": {
+        "threshold": 0.0,
+        "roc_auc": 1.0,
+        "roc_auc_ci95": [
+          1.0,
+          1.0
+        ],
+        "recall": 1.0,
+        "recall_ci95": [
+          1.0,
+          1.0
+        ],
+        "fpr": 0.0033,
+        "fpr_ci95": [
+          0.0,
+          0.0084
+        ]
+      },
+      "siglip2_linear_probe_val_threshold": {
+        "threshold": -1.6152,
+        "roc_auc": 1.0,
+        "roc_auc_ci95": [
+          1.0,
+          1.0
+        ],
+        "recall": 1.0,
+        "recall_ci95": [
+          1.0,
+          1.0
+        ],
+        "fpr": 0.1117,
+        "fpr_ci95": [
+          0.0867,
+          0.1383
+        ]
+      },
+      "efficientnet_b0": {
+        "threshold": 0.5,
+        "roc_auc": 0.9532,
+        "roc_auc_ci95": [
+          0.9334,
+          0.9701
+        ],
+        "recall": 0.8598,
+        "recall_ci95": [
+          0.8122,
+          0.9048
+        ],
+        "fpr": 0.0533,
+        "fpr_ci95": [
+          0.0362,
+          0.0718
+        ]
+      },
+      "efficientnet_b0_val_threshold": {
+        "threshold": 0.0496,
+        "roc_auc": 0.9532,
+        "roc_auc_ci95": [
+          0.9334,
+          0.9701
+        ],
+        "recall": 0.9486,
+        "recall_ci95": [
+          0.9175,
+          0.9766
+        ],
+        "fpr": 0.2717,
+        "fpr_ci95": [
+          0.2361,
+          0.307
+        ]
+      }
+    },
+    "external_n": {
+      "positive": 214,
+      "negative": 600
+    }
+  }
+}

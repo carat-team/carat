@@ -33,6 +33,26 @@ def summarize(y: np.ndarray, score: np.ndarray, threshold: float) -> dict:
     }
 
 
+def compute_scores(images: np.ndarray, work_dir: Path, model_name: str = MODEL_NAME) -> dict[str, np.ndarray]:
+    """Per-image "perfume-ness" scores of every model from perfume_detection.py (higher = more perfume)."""
+    siglip = AutoModel.from_pretrained(model_name).eval()
+    tokenizer = AutoTokenizer.from_pretrained(model_name)
+    emb = embed_images(siglip, images, 32)
+    pos_txt = embed_texts(siglip, tokenizer, PERFUME_PROMPTS)
+    scores = {}
+    for name, prompts in (("siglip2_zero_shot", NOT_PERFUME_PROMPTS), ("siglip2_zero_shot_prompts_v2", NOT_PERFUME_PROMPTS_V2)):
+        scores[name] = (emb @ pos_txt.T).max(1) - (emb @ embed_texts(siglip, tokenizer, prompts).T).max(1)
+
+    probe = torch.load(work_dir / "siglip2_perfume_probe.pt", weights_only=False)
+    scores["siglip2_linear_probe"] = emb @ probe["coef"].ravel() + probe["intercept"].ravel()[0]
+
+    effnet = models.efficientnet_b0(weights=None)
+    effnet.classifier[1] = torch.nn.Linear(effnet.classifier[1].in_features, 2)
+    effnet.load_state_dict(torch.load(work_dir / "efficientnet_b0_perfume.pth"))
+    scores["efficientnet_b0"] = predict_proba(effnet, images, np.arange(len(images)))[:, 1]
+    return scores
+
+
 def main() -> None:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--external-dir", type=Path, required=True)
@@ -50,26 +70,15 @@ def main() -> None:
     def thr(name: str) -> float:
         return main_results[name]["all"]["threshold"]
 
+    scores = compute_scores(images, args.work_dir, args.model)
     results = {"n_positive": int(y.sum()), "n_negative": int((y == 0).sum())}
-
-    siglip = AutoModel.from_pretrained(args.model).eval()
-    tokenizer = AutoTokenizer.from_pretrained(args.model)
-    emb = embed_images(siglip, images, 32)
-    pos_txt = embed_texts(siglip, tokenizer, PERFUME_PROMPTS)
-    for name, prompts in (("siglip2_zero_shot", NOT_PERFUME_PROMPTS), ("siglip2_zero_shot_prompts_v2", NOT_PERFUME_PROMPTS_V2)):
-        score = (emb @ pos_txt.T).max(1) - (emb @ embed_texts(siglip, tokenizer, prompts).T).max(1)
-        results[name + "_untuned_threshold"] = summarize(y, score, 0.0)
-        results[name + "_val_threshold"] = summarize(y, score, thr(name + "_val_threshold"))
-
-    probe = torch.load(args.work_dir / "siglip2_perfume_probe.pt", weights_only=False)
-    score = emb @ probe["coef"].ravel() + probe["intercept"].ravel()[0]
-    results["siglip2_linear_probe"] = summarize(y, score, thr("siglip2_linear_probe"))
-
-    effnet = models.efficientnet_b0(weights=None)
-    effnet.classifier[1] = torch.nn.Linear(effnet.classifier[1].in_features, 2)
-    effnet.load_state_dict(torch.load(args.work_dir / "efficientnet_b0_perfume.pth"))
-    score = predict_proba(effnet, images, np.arange(len(images)))[:, 1]
-    results["efficientnet_b0"] = summarize(y, score, thr("efficientnet_b0"))
+    for name, score in scores.items():
+        if name.startswith("siglip2_zero_shot"):
+            results[name + "_untuned_threshold"] = summarize(y, score, 0.0)
+            results[name + "_val_threshold"] = summarize(y, score, thr(name + "_val_threshold"))
+        else:
+            results[name] = summarize(y, score, thr(name))
+    np.savez(args.work_dir / "external_scores.npz", y=y, **scores)
 
     for name, r in results.items():
         if isinstance(r, dict):
