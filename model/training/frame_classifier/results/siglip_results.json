@@ -1,0 +1,76 @@
+{
+  "model": "google/siglip2-base-patch16-224",
+  "split_sizes": {
+    "train": 4400,
+    "val": 550,
+    "test": 550
+  },
+  "type_zero_shot": {
+    "accuracy": 0.7218181818181818,
+    "macro_f1": 0.5918575685439251,
+    "report": "              precision    recall  f1-score   support\n\n      studio      0.674     0.958     0.791       261\n      casual      0.829     0.254     0.389       114\n     graphic      0.906     0.869     0.887       122\n    document      0.444     0.226     0.300        53\n\n    accuracy                          0.722       550\n   macro avg      0.713     0.577     0.592       550\nweighted avg      0.735     0.722     0.682       550\n",
+    "confusion": [
+      [
+        250,
+        0,
+        6,
+        5
+      ],
+      [
+        75,
+        29,
+        0,
+        10
+      ],
+      [
+        10,
+        6,
+        106,
+        0
+      ],
+      [
+        36,
+        0,
+        5,
+        12
+      ]
+    ]
+  },
+  "type_linear_probe": {
+    "accuracy": 0.9290909090909091,
+    "macro_f1": 0.9346570501580005,
+    "report": "              precision    recall  f1-score   support\n\n      studio      0.949     0.920     0.934       261\n      casual      0.844     0.904     0.873       114\n     graphic      0.958     0.943     0.950       122\n    document      0.964     1.000     0.981        53\n\n    accuracy                          0.929       550\n   macro avg      0.929     0.941     0.935       550\nweighted avg      0.931     0.929     0.929       550\n",
+    "confusion": [
+      [
+        240,
+        16,
+        3,
+        2
+      ],
+      [
+        9,
+        103,
+        2,
+        0
+      ],
+      [
+        4,
+        3,
+        115,
+        0
+      ],
+      [
+        0,
+        0,
+        0,
+        53
+      ]
+    ],
+    "C": 30
+  },
+  "perfume": {
+    "n_positive": 5500,
+    "n_negative": 0,
+    "zero_shot_recall_on_positives": 0.9974545454545455
+  }
+}
