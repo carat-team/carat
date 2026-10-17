@@ -1,0 +1,28 @@
+{
+  "backbone": "google/siglip2-base-patch16-224",
+  "frame_types": [
+    "studio",
+    "casual",
+    "graphic",
+    "document"
+  ],
+  "perfume_threshold": 0.0,
+  "files": {
+    "efficientnet_b0_frame_type.pth": {
+      "bytes": 16335705,
+      "sha256": "d529298adc39d0ce43a7555643fb955455a20e05c042ccef0bdb2168b96f72ec"
+    },
+    "efficientnet_b0_perfume.pth": {
+      "bytes": 16339919,
+      "sha256": "fea8c4fbd67c3d0b9475c0b5baef62272aaa7630b813b4f5606d161d7c20363b"
+    },
+    "siglip2_frame_type_head.safetensors": {
+      "bytes": 12440,
+      "sha256": "846f156fa378cd55e9f05a5a5c78257f0b4e486ce909db9a7385698039797002"
+    },
+    "siglip2_perfume_head.safetensors": {
+      "bytes": 3212,
+      "sha256": "9e38300ea8ff781cf5d9770e0f55b761e0c1ac9fd1fdf2552331716d9267e614"
+    }
+  }
+}
