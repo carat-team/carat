@@ -48,6 +48,11 @@ NOT_PERFUME_PROMPTS = [
 ]
 
 
+def _as_tensor(feats) -> torch.Tensor:
+    # transformers >= 5 returns a ModelOutput from get_*_features, older versions a tensor.
+    return feats if isinstance(feats, torch.Tensor) else feats.pooler_output
+
+
 @torch.no_grad()
 def embed_images(model, images: np.ndarray, batch_size: int) -> np.ndarray:
     # SigLIP preprocessing for this checkpoint is plain resize + normalize with mean=std=0.5;
@@ -56,7 +61,7 @@ def embed_images(model, images: np.ndarray, batch_size: int) -> np.ndarray:
     for start in range(0, len(images), batch_size):
         batch = torch.from_numpy(images[start : start + batch_size]).permute(0, 3, 1, 2).float()
         batch = (batch / 255.0 - 0.5) / 0.5
-        feats = model.get_image_features(pixel_values=batch)
+        feats = _as_tensor(model.get_image_features(pixel_values=batch))
         out.append(torch.nn.functional.normalize(feats, dim=-1).numpy())
         print(f"\rembedded {min(start + batch_size, len(images))}/{len(images)}", end="", flush=True)
     print()
@@ -67,7 +72,7 @@ def embed_images(model, images: np.ndarray, batch_size: int) -> np.ndarray:
 def embed_texts(model, tokenizer, prompts: list[str]) -> np.ndarray:
     # SigLIP was trained with fixed-length padding; any other padding hurts quality.
     tokens = tokenizer(prompts, padding="max_length", max_length=64, truncation=True, return_tensors="pt")
-    feats = model.get_text_features(**tokens)
+    feats = _as_tensor(model.get_text_features(**tokens))
     return torch.nn.functional.normalize(feats, dim=-1).numpy()
 
 
