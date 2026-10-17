@@ -1,0 +1,324 @@
+{
+  "sizes": {
+    "train": {
+      "pos": 4400,
+      "neg": 2296
+    },
+    "val": {
+      "pos": 550,
+      "neg": 287
+    },
+    "test": {
+      "pos": 550,
+      "neg": 287
+    }
+  },
+  "shortcut_baseline_roc_auc": {
+    "all": 0.9391700981944885,
+    "studio_perfume_vs_negatives": 0.9331704647095732
+  },
+  "siglip2_zero_shot_untuned_threshold": {
+    "all": {
+      "roc_auc": 0.9929806778587266,
+      "pr_auc": 0.9966046179148457,
+      "threshold": 0.0,
+      "accuracy": 0.8948626045400239,
+      "balanced_accuracy": 0.8483560342096927,
+      "perfume_precision": 0.8643533123028391,
+      "perfume_recall": 0.9963636363636363,
+      "perfume_f1": 0.9256756756756755,
+      "confusion": {
+        "tp": 548,
+        "fn": 2,
+        "fp": 86,
+        "tn": 201
+      },
+      "negatives_rejected_at_99pct_perfume_recall": 0.7630662020905923,
+      "false_positive_rate_easy_negatives": 0.11855670103092783,
+      "false_positive_rate_hard_negatives": 0.6774193548387096
+    },
+    "studio_perfume_vs_negatives": {
+      "roc_auc": 0.9945665959122645,
+      "pr_auc": 0.9949507671981188,
+      "threshold": 0.0,
+      "accuracy": 0.8412408759124088,
+      "balanced_accuracy": 0.848258507215614,
+      "perfume_precision": 0.7514450867052023,
+      "perfume_recall": 0.9961685823754789,
+      "perfume_f1": 0.85667215815486,
+      "confusion": {
+        "tp": 260,
+        "fn": 1,
+        "fp": 86,
+        "tn": 201
+      },
+      "negatives_rejected_at_99pct_perfume_recall": 0.7804878048780488,
+      "false_positive_rate_easy_negatives": 0.11855670103092783,
+      "false_positive_rate_hard_negatives": 0.6774193548387096
+    },
+    "perfume_recall_by_frame_type": {
+      "studio": 0.9961685823754789,
+      "casual": 0.9912280701754386,
+      "graphic": 1.0,
+      "document": 1.0
+    }
+  },
+  "siglip2_zero_shot_val_threshold": {
+    "all": {
+      "roc_auc": 0.9929806778587266,
+      "pr_auc": 0.9966046179148457,
+      "threshold": 0.0325761154294014,
+      "accuracy": 0.965352449223417,
+      "balanced_accuracy": 0.9644726005701616,
+      "perfume_precision": 0.9797421731123389,
+      "perfume_recall": 0.9672727272727273,
+      "perfume_f1": 0.9734675205855443,
+      "confusion": {
+        "tp": 532,
+        "fn": 18,
+        "fp": 11,
+        "tn": 276
+      },
+      "negatives_rejected_at_99pct_perfume_recall": 0.7630662020905923,
+      "false_positive_rate_easy_negatives": 0.005154639175257732,
+      "false_positive_rate_hard_negatives": 0.10752688172043011
+    },
+    "studio_perfume_vs_negatives": {
+      "roc_auc": 0.9945665959122645,
+      "pr_auc": 0.9949507671981188,
+      "threshold": 0.0325761154294014,
+      "accuracy": 0.9671532846715328,
+      "balanced_accuracy": 0.9674262752479741,
+      "perfume_precision": 0.9584905660377359,
+      "perfume_recall": 0.9731800766283525,
+      "perfume_f1": 0.9657794676806084,
+      "confusion": {
+        "tp": 254,
+        "fn": 7,
+        "fp": 11,
+        "tn": 276
+      },
+      "negatives_rejected_at_99pct_perfume_recall": 0.7804878048780488,
+      "false_positive_rate_easy_negatives": 0.005154639175257732,
+      "false_positive_rate_hard_negatives": 0.10752688172043011
+    },
+    "perfume_recall_by_frame_type": {
+      "studio": 0.9731800766283525,
+      "casual": 0.9736842105263158,
+      "graphic": 0.9508196721311475,
+      "document": 0.9622641509433962
+    }
+  },
+  "siglip2_zero_shot_prompts_v2_untuned_threshold": {
+    "all": {
+      "roc_auc": 0.9987139689578713,
+      "pr_auc": 0.9993435294030955,
+      "threshold": 0.0,
+      "accuracy": 0.9522102747909199,
+      "balanced_accuracy": 0.9636363636363636,
+      "perfume_precision": 1.0,
+      "perfume_recall": 0.9272727272727272,
+      "perfume_f1": 0.9622641509433962,
+      "confusion": {
+        "tp": 510,
+        "fn": 40,
+        "fp": 0,
+        "tn": 287
+      },
+      "negatives_rejected_at_99pct_perfume_recall": 0.9651567944250871,
+      "false_positive_rate_easy_negatives": 0.0,
+      "false_positive_rate_hard_negatives": 0.0
+    },
+    "studio_perfume_vs_negatives": {
+      "roc_auc": 0.9990655078964583,
+      "pr_auc": 0.9990307363396492,
+      "threshold": 0.0,
+      "accuracy": 0.9708029197080292,
+      "balanced_accuracy": 0.9693486590038314,
+      "perfume_precision": 1.0,
+      "perfume_recall": 0.9386973180076629,
+      "perfume_f1": 0.9683794466403163,
+      "confusion": {
+        "tp": 245,
+        "fn": 16,
+        "fp": 0,
+        "tn": 287
+      },
+      "negatives_rejected_at_99pct_perfume_recall": 0.9651567944250871,
+      "false_positive_rate_easy_negatives": 0.0,
+      "false_positive_rate_hard_negatives": 0.0
+    },
+    "perfume_recall_by_frame_type": {
+      "studio": 0.9386973180076629,
+      "casual": 0.8859649122807017,
+      "graphic": 0.9426229508196722,
+      "document": 0.9245283018867925
+    }
+  },
+  "siglip2_zero_shot_prompts_v2_val_threshold": {
+    "all": {
+      "roc_auc": 0.9987139689578713,
+      "pr_auc": 0.9993435294030955,
+      "threshold": -0.0244500520452857,
+      "accuracy": 0.980884109916368,
+      "balanced_accuracy": 0.9754577130186886,
+      "perfume_precision": 0.978494623655914,
+      "perfume_recall": 0.9927272727272727,
+      "perfume_f1": 0.9855595667870035,
+      "confusion": {
+        "tp": 546,
+        "fn": 4,
+        "fp": 12,
+        "tn": 275
+      },
+      "negatives_rejected_at_99pct_perfume_recall": 0.9651567944250871,
+      "false_positive_rate_easy_negatives": 0.02577319587628866,
+      "false_positive_rate_hard_negatives": 0.07526881720430108
+    },
+    "studio_perfume_vs_negatives": {
+      "roc_auc": 0.9990655078964583,
+      "pr_auc": 0.9990307363396492,
+      "threshold": -0.0244500520452857,
+      "accuracy": 0.9744525547445255,
+      "balanced_accuracy": 0.9752626590305312,
+      "perfume_precision": 0.955719557195572,
+      "perfume_recall": 0.9923371647509579,
+      "perfume_f1": 0.9736842105263158,
+      "confusion": {
+        "tp": 259,
+        "fn": 2,
+        "fp": 12,
+        "tn": 275
+      },
+      "negatives_rejected_at_99pct_perfume_recall": 0.9651567944250871,
+      "false_positive_rate_easy_negatives": 0.02577319587628866,
+      "false_positive_rate_hard_negatives": 0.07526881720430108
+    },
+    "perfume_recall_by_frame_type": {
+      "studio": 0.9923371647509579,
+      "casual": 0.9912280701754386,
+      "graphic": 0.9918032786885246,
+      "document": 1.0
+    }
+  },
+  "linear_probe_C": 1,
+  "siglip2_linear_probe": {
+    "all": {
+      "roc_auc": 0.9999873297434273,
+      "pr_auc": 0.9999934123847167,
+      "threshold": -1.6152444934844956,
+      "accuracy": 0.997610513739546,
+      "balanced_accuracy": 0.9965156794425087,
+      "perfume_precision": 0.9963768115942029,
+      "perfume_recall": 1.0,
+      "perfume_f1": 0.9981851179673321,
+      "confusion": {
+        "tp": 550,
+        "fn": 0,
+        "fp": 2,
+        "tn": 285
+      },
+      "negatives_rejected_at_99pct_perfume_recall": 1.0,
+      "false_positive_rate_easy_negatives": 0.0,
+      "false_positive_rate_hard_negatives": 0.021505376344086023
+    },
+    "studio_perfume_vs_negatives": {
+      "roc_auc": 0.999973300225613,
+      "pr_auc": 0.9999708637443001,
+      "threshold": -1.6152444934844956,
+      "accuracy": 0.9963503649635036,
+      "balanced_accuracy": 0.9965156794425087,
+      "perfume_precision": 0.9923954372623575,
+      "perfume_recall": 1.0,
+      "perfume_f1": 0.9961832061068702,
+      "confusion": {
+        "tp": 261,
+        "fn": 0,
+        "fp": 2,
+        "tn": 285
+      },
+      "negatives_rejected_at_99pct_perfume_recall": 1.0,
+      "false_positive_rate_easy_negatives": 0.0,
+      "false_positive_rate_hard_negatives": 0.021505376344086023
+    },
+    "perfume_recall_by_frame_type": {
+      "studio": 1.0,
+      "casual": 1.0,
+      "graphic": 1.0,
+      "document": 1.0
+    }
+  },
+  "efficientnet_history": [
+    {
+      "epoch": 1,
+      "train_loss": 0.3358041999157536,
+      "val_score": 0.9885397529299969
+    },
+    {
+      "epoch": 2,
+      "train_loss": 0.21424474663426432,
+      "val_score": 0.9991004117833386
+    },
+    {
+      "epoch": 3,
+      "train_loss": 0.17138418074002107,
+      "val_score": 0.9983655369021223
+    },
+    {
+      "epoch": 4,
+      "train_loss": 0.14706118661535983,
+      "val_score": 0.9996705733291099
+    },
+    {
+      "epoch": 5,
+      "train_loss": 0.13847715396915325,
+      "val_score": 0.9997212543554007
+    }
+  ],
+  "efficientnet_b0": {
+    "all": {
+      "roc_auc": 0.9991384225530566,
+      "pr_auc": 0.9995870391094871,
+      "threshold": 0.04964626789093027,
+      "accuracy": 0.989247311827957,
+      "balanced_accuracy": 0.9893189737092176,
+      "perfume_precision": 0.9945155393053017,
+      "perfume_recall": 0.9890909090909091,
+      "perfume_f1": 0.99179580674567,
+      "confusion": {
+        "tp": 544,
+        "fn": 6,
+        "fp": 3,
+        "tn": 284
+      },
+      "negatives_rejected_at_99pct_perfume_recall": 0.9895470383275261,
+      "false_positive_rate_easy_negatives": 0.015463917525773196,
+      "false_positive_rate_hard_negatives": 0.0
+    },
+    "studio_perfume_vs_negatives": {
+      "roc_auc": 0.9983713137623986,
+      "pr_auc": 0.998513206450419,
+      "threshold": 0.04964626789093027,
+      "accuracy": 0.9890510948905109,
+      "balanced_accuracy": 0.9890263927269815,
+      "perfume_precision": 0.9885057471264368,
+      "perfume_recall": 0.9885057471264368,
+      "perfume_f1": 0.9885057471264368,
+      "confusion": {
+        "tp": 258,
+        "fn": 3,
+        "fp": 3,
+        "tn": 284
+      },
+      "negatives_rejected_at_99pct_perfume_recall": 0.9895470383275261,
+      "false_positive_rate_easy_negatives": 0.015463917525773196,
+      "false_positive_rate_hard_negatives": 0.0
+    },
+    "perfume_recall_by_frame_type": {
+      "studio": 0.9885057471264368,
+      "casual": 1.0,
+      "graphic": 1.0,
+      "document": 0.9433962264150944
+    }
+  }
+}
