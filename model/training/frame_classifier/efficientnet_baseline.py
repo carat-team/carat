@@ -33,10 +33,65 @@ def to_batch(images: np.ndarray, idx: np.ndarray, augment: bool) -> torch.Tensor
 
 
 @torch.no_grad()
-def predict(model: nn.Module, images: np.ndarray, idx: np.ndarray, batch_size: int = 64) -> np.ndarray:
+def predict_proba(model: nn.Module, images: np.ndarray, idx: np.ndarray, batch_size: int = 64) -> np.ndarray:
     model.eval()
-    out = [model(to_batch(images, idx[i : i + batch_size], False)).argmax(1).numpy() for i in range(0, len(idx), batch_size)]
+    out = [
+        torch.softmax(model(to_batch(images, idx[i : i + batch_size], False)), dim=1).numpy()
+        for i in range(0, len(idx), batch_size)
+    ]
     return np.concatenate(out)
+
+
+def predict(model: nn.Module, images: np.ndarray, idx: np.ndarray) -> np.ndarray:
+    return predict_proba(model, images, idx).argmax(1)
+
+
+def train(
+    images: np.ndarray,
+    y: np.ndarray,
+    train_idx: np.ndarray,
+    n_classes: int,
+    val_score,
+    epochs: int,
+    batch_size: int = 32,
+    lr: float = 1e-3,
+) -> tuple[nn.Module, list[dict]]:
+    """Fine-tune ImageNet EfficientNet-B0; keeps the epoch with the best val_score(model)."""
+    torch.manual_seed(SEED)
+    rng = np.random.default_rng(SEED)
+    model = models.efficientnet_b0(weights=models.EfficientNet_B0_Weights.IMAGENET1K_V1)
+    model.classifier[1] = nn.Linear(model.classifier[1].in_features, n_classes)
+
+    counts = np.bincount(y[train_idx], minlength=n_classes)
+    weights = torch.tensor(len(train_idx) / (n_classes * counts), dtype=torch.float32)
+    loss_fn = nn.CrossEntropyLoss(weight=weights, label_smoothing=0.05)
+    optimizer = torch.optim.AdamW(model.parameters(), lr=lr, weight_decay=1e-4)
+    steps = epochs * (len(train_idx) // batch_size)
+    scheduler = torch.optim.lr_scheduler.OneCycleLR(optimizer, max_lr=lr, total_steps=steps, pct_start=0.15)
+
+    best_score, best_state, history = -1.0, None, []
+    for epoch in range(epochs):
+        model.train()
+        order = rng.permutation(train_idx)
+        started, total = time.time(), 0.0
+        for step in range(len(order) // batch_size):
+            idx = order[step * batch_size : (step + 1) * batch_size]
+            loss = loss_fn(model(to_batch(images, idx, True)), torch.from_numpy(y[idx]))
+            optimizer.zero_grad()
+            loss.backward()
+            optimizer.step()
+            scheduler.step()
+            total += loss.item()
+        score = val_score(model)
+        history.append({"epoch": epoch + 1, "train_loss": total / (step + 1), "val_score": score})
+        print(f"epoch {epoch + 1}/{epochs} loss={total / (step + 1):.4f} val_score={score:.4f} "
+              f"({time.time() - started:.0f}s)", flush=True)
+        if score > best_score:
+            best_score = score
+            best_state = {k: v.clone() for k, v in model.state_dict().items()}
+
+    model.load_state_dict(best_state)
+    return model, history
 
 
 def main() -> None:
@@ -47,8 +102,6 @@ def main() -> None:
     parser.add_argument("--batch-size", type=int, default=32)
     parser.add_argument("--lr", type=float, default=1e-3)
     args = parser.parse_args()
-    torch.manual_seed(SEED)
-    rng = np.random.default_rng(SEED)
 
     records = load_records(args.dataset_dir)
     split = make_splits(records)
@@ -56,43 +109,16 @@ def main() -> None:
     images = load_images(args.dataset_dir, records, args.work_dir / "images_224.npy")
     train_idx, val_idx, test_idx = (np.where(split == s)[0] for s in ("train", "val", "test"))
 
-    model = models.efficientnet_b0(weights=models.EfficientNet_B0_Weights.IMAGENET1K_V1)
-    model.classifier[1] = nn.Linear(model.classifier[1].in_features, len(FRAME_TYPES))
-
-    counts = np.bincount(y[train_idx], minlength=len(FRAME_TYPES))
-    weights = torch.tensor(len(train_idx) / (len(FRAME_TYPES) * counts), dtype=torch.float32)
-    loss_fn = nn.CrossEntropyLoss(weight=weights, label_smoothing=0.05)
-    optimizer = torch.optim.AdamW(model.parameters(), lr=args.lr, weight_decay=1e-4)
-    steps = args.epochs * (len(train_idx) // args.batch_size)
-    scheduler = torch.optim.lr_scheduler.OneCycleLR(optimizer, max_lr=args.lr, total_steps=steps, pct_start=0.15)
-
-    best_f1, best_state, history = -1.0, None, []
-    for epoch in range(args.epochs):
-        model.train()
-        order = rng.permutation(train_idx)
-        started, total = time.time(), 0.0
-        for step in range(len(order) // args.batch_size):
-            idx = order[step * args.batch_size : (step + 1) * args.batch_size]
-            loss = loss_fn(model(to_batch(images, idx, True)), torch.from_numpy(y[idx]))
-            optimizer.zero_grad()
-            loss.backward()
-            optimizer.step()
-            scheduler.step()
-            total += loss.item()
-        val = evaluate(y[val_idx], predict(model, images, val_idx), FRAME_TYPES)
-        history.append({"epoch": epoch + 1, "train_loss": total / (step + 1), "val_macro_f1": val["macro_f1"]})
-        print(f"epoch {epoch + 1}/{args.epochs} loss={total / (step + 1):.4f} val_acc={val['accuracy']:.4f} "
-              f"val_macro_f1={val['macro_f1']:.4f} ({time.time() - started:.0f}s)", flush=True)
-        if val["macro_f1"] > best_f1:
-            best_f1 = val["macro_f1"]
-            best_state = {k: v.clone() for k, v in model.state_dict().items()}
-
-    model.load_state_dict(best_state)
+    model, history = train(
+        images, y, train_idx, len(FRAME_TYPES),
+        lambda m: evaluate(y[val_idx], predict(m, images, val_idx), FRAME_TYPES)["macro_f1"],
+        args.epochs, args.batch_size, args.lr,
+    )
     result = evaluate(y[test_idx], predict(model, images, test_idx), FRAME_TYPES)
     result["history"] = history
     print_eval("frame type / EfficientNet-B0 fine-tuned (test)", result)
     (args.work_dir / "efficientnet_results.json").write_text(json.dumps(result, ensure_ascii=False, indent=2))
-    torch.save(best_state, args.work_dir / "efficientnet_b0_frame_type.pth")
+    torch.save(model.state_dict(), args.work_dir / "efficientnet_b0_frame_type.pth")
 
 
 if __name__ == "__main__":

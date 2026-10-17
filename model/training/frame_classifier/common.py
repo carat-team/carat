@@ -1,5 +1,6 @@
 """Shared data loading, splitting and metrics for the frame classifier experiments (task #38)."""
 
+import io
 import json
 from concurrent.futures import ThreadPoolExecutor
 from pathlib import Path
@@ -80,23 +81,36 @@ def make_splits(records: list[dict]) -> np.ndarray:
     return split.astype(str)
 
 
-def _load_one(path: Path) -> np.ndarray:
+def _load_one(path: Path, harmonize: bool) -> np.ndarray:
     with Image.open(path) as img:
+        img = img.convert("RGB")
+        if harmonize:
+            # Negatives come from a different source (256px JPEGs). Bring every image to the same
+            # size cap and one more JPEG pass so resolution/compression cannot give the source away.
+            img.thumbnail((256, 256), Image.LANCZOS)
+            img.info.clear()  # a 64 KB JPEG comment in one source photo makes the encoder fail
+            buf = io.BytesIO()
+            img.save(buf, "JPEG", quality=90)
+            img = Image.open(buf).convert("RGB")
         # Squash to a square without cropping: banners and labels keep their edges.
-        return np.asarray(img.convert("RGB").resize((IMAGE_SIZE, IMAGE_SIZE), Image.BICUBIC))
+        return np.asarray(img.resize((IMAGE_SIZE, IMAGE_SIZE), Image.BICUBIC))
 
 
-def load_images(dataset_dir: Path, records: list[dict], cache: Path) -> np.ndarray:
+def load_images_from_paths(paths: list[Path], cache: Path, harmonize: bool = False) -> np.ndarray:
     """uint8 array [N, 224, 224, 3]; decoded once and cached, shared by every model."""
     if cache.exists():
         cached = np.load(cache)
-        if len(cached) == len(records):
+        if len(cached) == len(paths):
             return cached
     with ThreadPoolExecutor(max_workers=8) as pool:
-        images = np.stack(list(pool.map(_load_one, (dataset_dir / r["uri"] for r in records))))
+        images = np.stack(list(pool.map(lambda p: _load_one(p, harmonize), paths)))
     cache.parent.mkdir(parents=True, exist_ok=True)
     np.save(cache, images)
     return images
+
+
+def load_images(dataset_dir: Path, records: list[dict], cache: Path) -> np.ndarray:
+    return load_images_from_paths([dataset_dir / r["uri"] for r in records], cache)
 
 
 def evaluate(y_true: np.ndarray, y_pred: np.ndarray, labels: list[str]) -> dict:
