@@ -46,10 +46,16 @@ frontend --REST--> backend --gRPC(:50051)--> inference
 
 ## Tools and skills
 
+- there is a `.agents/skills` directory present with predefined skills for this project. it is symlinked
+  to `.claude/skills` and `.codex/skills` for those specific agents to be able to use those skills
 - **graphify**: if a code graph exists, query it (report/graph) before broad grep/glob exploration,
   and use it to find callers and dependencies across services. Rebuild it after large structural changes.
 - **context-manager**: use it for complex or multi-session work (large features, refactors,
   investigations) to keep plans and progress in `.context/` so the next session can resume.
+- **stop-slop**: use this skill when writing lots of text: documentation, pull request description, etc.
+- **caveman**: use this skill when working on lots of text. pair it together with context-manager to
+  save tokens.
+- **investigate-first**: use this skill when planning, exploring or explaining the project to the user
 - Put agent-facing notes in `.context/`, never in `docs/`. Edit `docs/` only when asked.
 
 ## Git workflow
@@ -90,3 +96,13 @@ Never commit to `master` or `dev` directly. All work goes through a PR into `dev
   DB tables, resetting volumes) require explicit user confirmation.
 - Investigate before changing: read the code and existing tests, reproduce bugs, then fix.
 - Code, comments, identifiers, commits and PR titles are in English.
+
+## graphify
+
+This project has a knowledge graph at graphify-out/ with god nodes, community structure, and cross-file relationships.
+
+Rules:
+- For codebase questions, first run `graphify query "<question>"` when graphify-out/graph.json exists. Use `graphify path "<A>" "<B>"` for relationships and `graphify explain "<concept>"` for focused concepts. These return a scoped subgraph, usually much smaller than GRAPH_REPORT.md or raw grep output.
+- If graphify-out/wiki/index.md exists, use it for broad navigation instead of raw source browsing.
+- Read graphify-out/GRAPH_REPORT.md only for broad architecture review or when query/path/explain do not surface enough context.
+- After modifying code, run `graphify update .` to keep the graph current (AST-only, no API cost).
