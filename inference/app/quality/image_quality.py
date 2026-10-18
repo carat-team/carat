@@ -29,10 +29,10 @@ class QualityConfig:
     res_px_bad: int = 160_000 # Изображения ~400х400
     res_px_good: int = 2_000_000 # Изображения ~1920х1080
     res_curve_x: Tuple[float, ...] = (0.0, 30.0, 60.0, 100.0)
-    res_curve_y: Tuple[float, ...] = (55.0, 70.0, 90.0, 100.0)
+    res_curve_y: Tuple[float, ...] = (50.0, 70.0, 90.0, 100.0)
 
-    reject_max: int = 50
-    review_max: int = 70
+    reject_max: int = 60
+    review_max: int = 80
 
 
 @dataclass(frozen=True)

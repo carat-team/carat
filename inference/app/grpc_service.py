@@ -23,6 +23,9 @@ class AnalyzerServicer(analyzer_pb2_grpc.AnalyzerServicer):
         self.quality_config = quality_config
 
     def AnalyzePhoto(self, request, context):
+        if self.photo_detector is None:
+            return _detector_disabled(context, "Photo")
+
         image_bytes = request.image_data
 
         logging.info("=" * 60)
@@ -60,6 +63,9 @@ class AnalyzerServicer(analyzer_pb2_grpc.AnalyzerServicer):
                 logging.info("[Photo] Temp file deleted: %s", tmp_path)
 
     def AnalyzeVideo(self, request, context):
+        if self.video_detector is None:
+            return _detector_disabled(context, "Video")
+
         video_bytes = request.video_data
 
         logging.info("=" * 60)
@@ -97,6 +103,9 @@ class AnalyzerServicer(analyzer_pb2_grpc.AnalyzerServicer):
                 logging.info("[Video] Temp file deleted: %s", tmp_path)
 
     def AnalyzeText(self, request, context):
+        if self.text_detector is None:
+            return _detector_disabled(context, "Text")
+
         text = request.text
 
         logging.info("=" * 60)
@@ -191,6 +200,14 @@ def _reply_from_prediction(operation, start_time, confidence, pred):
     setattr(reply, "class", predicted_class)
     reply.confidence = float(confidence)
     return reply
+
+
+def _detector_disabled(context, operation):
+    message = f"{operation} detector is disabled (quality-only mode)"
+    logging.warning("[%s] %s", operation, message)
+    context.set_code(grpc.StatusCode.UNAVAILABLE)
+    context.set_details(message)
+    return analyzer_pb2.AnalyzeReply()
 
 
 def _set_internal_error(context, operation, start_time, error):
