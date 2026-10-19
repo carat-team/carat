@@ -1,0 +1,7 @@
+# Python 3.10+ (tested on 3.12). For CPU-only torch install it first, see README.md.
+torch>=2.7
+torchvision>=0.22
+transformers>=4.40
+safetensors>=0.4
+pillow>=11
+numpy

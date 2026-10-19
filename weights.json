@@ -24,5 +24,6 @@
       "bytes": 3212,
       "sha256": "9e38300ea8ff781cf5d9770e0f55b761e0c1ac9fd1fdf2552331716d9267e614"
     }
-  }
+  },
+  "efficientnet_perfume_threshold": 0.5
 }

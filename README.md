@@ -1,36 +1,170 @@
 # Веса классификатора кадра и «духи / нет» (задача #38)
 
-Ветка содержит только веса, без общей истории с `dev`, и в `dev` не сливается. Код обучения, оценки и использования лежит в
-`model/training/frame_classifier/` (PR [carat-team/carat#10](https://github.com/carat-team/carat/pull/10)).
+Эта ветка содержит только веса моделей и всё, что нужно для их запуска: `predict.py`, `requirements.txt` и эту инструкцию.
+Общей истории с `dev` у ветки нет, в `dev` она не сливается. Код обучения и отчёт об экспериментах лежат в `model/training/frame_classifier/` ветки `dev`.
+
+## Что здесь лежит
+
+| Файл | Размер | Что это |
+|---|---|---|
+| `siglip2_frame_type_head.safetensors` | 12 КБ | линейный слой поверх SigLIP 2: тип кадра (studio / casual / graphic / document) |
+| `siglip2_perfume_head.safetensors` | 3 КБ | линейный слой поверх SigLIP 2: «духи / нет» |
+| `efficientnet_b0_frame_type.pth` | 15.6 МБ | EfficientNet-B0 (бейзлайн): тип кадра |
+| `efficientnet_b0_perfume.pth` | 15.6 МБ | EfficientNet-B0 (бейзлайн): «духи / нет» |
+| `weights.json` | – | манифест: бэкбон, классы, пороги, контрольные суммы |
+| `predict.py` | – | запуск всех четырёх моделей на ваших фото |
+| `requirements.txt` | – | зависимости Python |
+
+Сам SigLIP 2 (`google/siglip2-base-patch16-224`, около 1.5 ГБ) в ветку не входит: `predict.py` скачает его с Hugging Face при первом запуске.
+Две головы SigLIP 2 без бэкбона работать не могут, поэтому без интернета при первом запуске ничего не получится.
+
+## Быстрый старт
+
+Нужны Git и Python 3.10+ (проверено на 3.12). Команды ниже выполняются по порядку.
+
+### Шаг 1. Скачать ветку с весами
+
+Одна команда создаёт новую папку `carat-weights` с весами внутри и скачивает только эту ветку (около 33 МБ):
+
+```bash
+git clone --branch chore/add-frame-classifier-weights --single-branch --depth 1 https://github.com/carat-team/carat.git carat-weights
+cd carat-weights
+```
+
+- Репозиторий приватный: Git спросит логин и токен GitHub (или использует сохранённые данные).
+- Без Git: откройте ветку на GitHub, нажмите **Code -> Download ZIP** (или перейдите в браузере по ссылке
+  `https://github.com/carat-team/carat/archive/refs/heads/chore/add-frame-classifier-weights.zip` под своим аккаунтом),
+  распакуйте архив и зайдите в распакованную папку.
+- Проверьте, что файлы на месте (в папке должны быть 4 файла весов, `weights.json`, `predict.py`, `requirements.txt`):
+  `ls` (Linux/macOS) или `dir` (Windows).
+
+Все следующие шаги выполняются внутри этой папки.
+
+### Шаг 2. Создать виртуальное окружение
+
+Linux / macOS:
+
+```bash
+python3 -m venv .venv
+source .venv/bin/activate
+```
+
+Windows (PowerShell):
+
+```powershell
+py -m venv .venv
+.venv\Scripts\Activate.ps1
+```
+
+Если PowerShell запрещает запуск скриптов, выполните `Set-ExecutionPolicy -Scope Process Bypass` и повторите активацию.
+В командной строке `cmd` активация: `.venv\Scripts\activate.bat`. После активации в начале строки появится `(.venv)`.
+
+### Шаг 3. Установить зависимости
+
+```bash
+pip install torch torchvision --index-url https://download.pytorch.org/whl/cpu
+pip install -r requirements.txt
+```
+
+Первая команда ставит облегчённый torch для процессора (около 200 МБ; обычный `pip install torch` на Linux тянет около 2 ГБ с CUDA).
+Если у вас есть видеокарта NVIDIA, первую команду можно пропустить и запускать скрипт с `--device cuda`.
+
+### Шаг 4. Запустить на фото
+
+```bash
+python predict.py photo.jpg
+python predict.py folder_with_photos/
+```
+
+Можно передать несколько файлов и папок сразу (jpg, jpeg, png, webp, bmp). Скрипт сам найдёт веса рядом с собой.
+Первый запуск скачивает SigLIP 2 (около 1.5 ГБ) в кэш Hugging Face (`~/.cache/huggingface`, на Windows `C:\Users\<имя>\.cache\huggingface`),
+дальше он берётся из кэша. Скорость на 4 ядрах CPU: около 1 секунды на фото на все четыре модели, плюс 20-30 секунд на загрузку моделей.
+
+### Шаг 5. Прочитать результат
+
+```
+photo.jpg
+  SigLIP 2        frame type: studio   (1.00)   perfume: YES (score +4.573)
+  EfficientNet-B0 frame type: studio   (0.97)   perfume: YES (prob +0.991)
+```
+
+Для каждого фото по две строки: одна на каждую модель.
+
+- `frame type` – тип кадра, в скобках уверенность модели (0-1): `studio` (предмет на нейтральном фоне), `casual` (в обычной обстановке), `graphic` (баннер или инфографика), `document` (скан или фото листа).
+- `perfume` – `YES`, если модель считает, что на фото духи, иначе `no`. SigLIP 2 показывает оценку (`score`, духи при значении 0 и выше), EfficientNet-B0 – вероятность (`prob`, духи при 0.5 и выше).
+- Если нужны данные для обработки программой, добавьте `--json`: на каждое фото одна JSON-строка с вероятностями всех классов.
+
+## Параметры `predict.py`
+
+| Параметр | Что делает |
+|---|---|
+| `images` | файлы и/или папки с фото (обязательно, можно несколько) |
+| `--models all` | какие модели запускать: `all` (по умолчанию, обе пары), `siglip2` (только SigLIP 2) или `efficientnet` (только EfficientNet-B0; SigLIP 2 тогда не скачивается) |
+| `--json` | вывод в JSON, по строке на фото |
+| `--weights-dir ПАПКА` | где лежат веса (по умолчанию рядом со скриптом) |
+| `--device cuda` | считать на видеокарте (по умолчанию `cpu`) |
+| `--batch-size N` | размер пачки (по умолчанию 16, уменьшите при нехватке памяти) |
+| `--skip-verify` | не проверять контрольные суммы весов |
+
+Примеры:
+
+```bash
+python predict.py photo.jpg --models efficientnet        # только EfficientNet-B0, без скачивания SigLIP 2
+python predict.py photos/ --json > result.jsonl          # результат для папки в файл (Windows: сначала `set PYTHONUTF8=1`)
+```
+
+## Что делает каждая модель
+
+| Модель | Вход | Выход | Порог |
+|---|---|---|---|
+| SigLIP 2 + голова «тип кадра» | эмбеддинг SigLIP 2 (фото сжато до 224x224) | вероятности 4 типов кадра | выбирается максимум |
+| SigLIP 2 + голова «духи / нет» | эмбеддинг SigLIP 2 (фото нормализовано: максимум 256 px и одно JPEG-сжатие) | оценка (логит) | духи при 0.0 и выше |
+| EfficientNet-B0 «тип кадра» | фото 224x224 | вероятности 4 типов кадра | выбирается максимум |
+| EfficientNet-B0 «духи / нет» | фото 224x224 (та же нормализация, что у SigLIP-головы «духи / нет») | вероятность духов | духи при 0.5 и выше |
+
+Нормализацию изображений скрипт делает сам, это нужно для совпадения с условиями обучения.
+
+## Качество (кратко)
+
+Тест на 550 фото датасета команды (тип кадра) и два теста «духи / нет»: основной (550 духов и 287 негативов из ABO) и внешний из другого источника (214 духов и 600 не-духов Myntra).
+
+| Модель | тип кадра, accuracy | духи: recall / FPR, основной | духи: recall / FPR, внешний |
+|---|---|---|---|
+| SigLIP 2 + линейный слой | 0.929 | 0.995 / 0.000 | 1.000 / 0.003 |
+| EfficientNet-B0 | 0.946 | 0.949 / 0.000 | 0.860 / 0.053 |
+
+FPR – доля не-духов, принятых за духи. Тип кадра у моделей статистически неразличим, а для «духи / нет» SigLIP 2 заметно устойчивее к смене источника фото.
+Полный отчёт с доверительными интервалами: [`model/training/frame_classifier/README.md`](https://github.com/carat-team/carat/blob/dev/model/training/frame_classifier/README.md) в ветке `dev`.
+
+Ограничения: негативы при обучении и проверке – публичные наборы (ABO, Myntra), а не реальные ошибочные заявки маркетплейса, поэтому порог «духи / нет» нужно калибровать на реальных данных.
+
+## Проверка файлов
+
+`predict.py` сам сверяет SHA-256 всех весов с `weights.json` и останавливается, если файл повреждён или отсутствует. Вручную:
+
+```bash
+sha256sum *.pth *.safetensors                              # Linux / macOS
+```
+
+```powershell
+Get-FileHash -Algorithm SHA256 *.pth,*.safetensors         # Windows PowerShell
+```
 
 | Файл | Размер | SHA-256 |
 |---|---|---|
-| `efficientnet_b0_frame_type.pth` | 15953 КБ | `d529298adc39d0ce43a7555643fb955455a20e05c042ccef0bdb2168b96f72ec` |
-| `efficientnet_b0_perfume.pth` | 15957 КБ | `fea8c4fbd67c3d0b9475c0b5baef62272aaa7630b813b4f5606d161d7c20363b` |
+| `efficientnet_b0_frame_type.pth` | 15.6 МБ | `d529298adc39d0ce43a7555643fb955455a20e05c042ccef0bdb2168b96f72ec` |
+| `efficientnet_b0_perfume.pth` | 15.6 МБ | `fea8c4fbd67c3d0b9475c0b5baef62272aaa7630b813b4f5606d161d7c20363b` |
 | `siglip2_frame_type_head.safetensors` | 12 КБ | `846f156fa378cd55e9f05a5a5c78257f0b4e486ce909db9a7385698039797002` |
 | `siglip2_perfume_head.safetensors` | 3 КБ | `9e38300ea8ff781cf5d9770e0f55b761e0c1ac9fd1fdf2552331716d9267e614` |
 
-## Что внутри
+## Частые проблемы
 
-- `siglip2_frame_type_head.safetensors` – линейный слой (`weight` [4, 768], `bias` [4]) поверх L2-нормированного эмбеддинга изображения
-  `google/siglip2-base-patch16-224`. Классы по порядку: studio, casual, graphic, document. Вероятности: softmax от `x @ weight.T + bias`.
-- `siglip2_perfume_head.safetensors` – линейный слой (`weight` [1, 768], `bias` [1]) «духи / нет»; духи при оценке >= `0.0`.
-- `efficientnet_b0_frame_type.pth`, `efficientnet_b0_perfume.pth` – `state_dict` EfficientNet-B0 (torchvision, `classifier[1]` заменён на `Linear(1280, 4)` и `Linear(1280, 2)`),
-  бейзлайны для сравнения. Для боевого использования рекомендуются головы SigLIP 2.
-- `weights.json` – манифест (бэкбон, классы, порог, размеры и контрольные суммы).
-
-Сам SigLIP 2 в ветку не входит: его скачивает `transformers` с Hugging Face (`google/siglip2-base-patch16-224`).
-
-## Как использовать
-
-```bash
-git fetch origin chore/add-frame-classifier-weights
-git worktree add /tmp/frame-weights origin/chore/add-frame-classifier-weights   # или: git checkout origin/... -- .
-cd model/training/frame_classifier
-python predict.py --weights-dir /tmp/frame-weights photo1.jpg photo2.jpg
-```
-
-`predict.py` печатает по одной JSON-строке на фото: тип кадра с вероятностями и оценку «духи / нет».
-Перед головой «духи / нет» применяется та же нормализация изображений, что при обучении (ограничение 256 px и одно JPEG-сжатие), перед головой типа кадра – обычное сжатие до 224x224.
-
-Проверка целостности: `sha256sum *.pth *.safetensors` и сравнение с таблицей выше.
+| Симптом | Причина и решение |
+|---|---|
+| `error: ... is missing` | скрипт запущен не из папки с весами или папка скачана не полностью; перейдите в `carat-weights` или укажите `--weights-dir` |
+| `error: ... is corrupted (SHA-256 mismatch)` | файл скачался с ошибкой; скачайте ветку заново (`git clone` повторно или ZIP) |
+| `ModuleNotFoundError` | не активировано окружение (`source .venv/bin/activate` / `.venv\Scripts\Activate.ps1`) или не выполнен `pip install -r requirements.txt` |
+| долгий первый запуск | идёт загрузка SigLIP 2 (около 1.5 ГБ); без интернета запустите только `--models efficientnet` |
+| ошибка скачивания с Hugging Face (лимит запросов) | повторите позже или создайте токен на huggingface.co и задайте переменную `HF_TOKEN` |
+| `CUDA ...` / нехватка памяти | запускайте с `--device cpu` или уменьшите `--batch-size` |
+| `UnicodeEncodeError` в Windows при выводе в файл | перед запуском выполните `set PYTHONUTF8=1` (cmd) или `$env:PYTHONUTF8=1` (PowerShell) |
