@@ -27,6 +27,19 @@ print(result["message"]) # 4 × 5 мл = 20 мл; заявлено 20 мл.
 current criterion. `check_quantity` is the generic entry point for other
 product categories and accepts an optional `QuantityProfile`.
 
+## Module structure
+
+| File | Responsibility |
+| --- | --- |
+| `checker.py` | Public validation flow, statuses, and result rules. |
+| `parsing.py` | Normalization, extraction, ambiguity checks, and set calculation. |
+| `config.py` | Units, compiled text patterns, field names, and category profiles. |
+| `__init__.py` | Stable public imports for other parts of the project. |
+
+Callers should import from `model.product_validation`, not from the internal
+files. The separation changes code organization only; validation behavior and
+the result contract remain unchanged.
+
 ## Statuses
 
 | Status | Meaning |

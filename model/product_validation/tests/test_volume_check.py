@@ -1,6 +1,6 @@
 import unittest
 
-from model.product_validation.volume_check import (
+from model.product_validation import (
     NAME,
     UNIT,
     VALUE,
