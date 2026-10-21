@@ -10,8 +10,18 @@
     "lint:fix": "eslint . --fix",
     "format": "prettier --write .",
     "format:check": "prettier --check .",
-    "ts:check": "tsc",
-    "preview": "vite preview"
+    "ts:check": "tsc -b --noEmit",
+    "preview": "vite preview",
+    "prepare": "cd .. && husky frontend/.husky"
+  },
+  "lint-staged": {
+    "*.{js,jsx,ts,tsx}": [
+      "yarn lint:fix",
+      "yarn format"
+    ],
+    "*.{css,scss,json,md}": [
+      "yarn format"
+    ]
   },
   "dependencies": {
     "normalize.css": "^8.0.1",
@@ -34,6 +44,8 @@
     "eslint-plugin-react-hooks": "^7.0.1",
     "eslint-plugin-react-refresh": "^0.5.2",
     "globals": "^17.4.0",
+    "husky": "^9.1.7",
+    "lint-staged": "^17.6.0",
     "prettier": "3.8.1",
     "typescript": "~5.9.3",
     "typescript-eslint": "^8.56.1",
