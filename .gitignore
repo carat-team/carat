@@ -2,6 +2,7 @@
 .vscode
 .venv
 .ipynb_checkpoints
+.worktrees
 
 __pycache__
 venv
@@ -9,6 +10,9 @@ node_modules
 
 .env
 .DS_Store
+
+graphify-out/.graphify_*
+graphify-out/cache
 
 inference/generated/
 
