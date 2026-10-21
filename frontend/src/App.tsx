@@ -1,6 +1,5 @@
 import { Container } from '@/components/ui';
-import { NotFoundPage, ProductListPage } from '@/pages';
-import { ProductPage } from '@/pages/ProductPage';
+import { NotFoundPage, ProductListPage, ProductPage } from '@/pages';
 import { Route, Switch } from 'wouter';
 
 function App() {
