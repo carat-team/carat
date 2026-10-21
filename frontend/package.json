@@ -24,15 +24,20 @@
     ]
   },
   "dependencies": {
+    "@hookform/resolvers": "^6.0.0",
     "@tabler/icons-react": "^3.49.0",
     "@tailwindcss/vite": "^4.3.3",
+    "axios": "^1.20.0",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
     "react": "^19.2.4",
     "react-dom": "^19.2.4",
+    "react-hook-form": "^7.90.0",
     "tailwind-merge": "^3.7.0",
     "tailwindcss": "^4.3.3",
-    "wouter": "^3.13.0"
+    "wouter": "^3.13.0",
+    "zod": "^4.6.7",
+    "zustand": "^5.0.15"
   },
   "devDependencies": {
     "@babel/core": "^7.29.0",
