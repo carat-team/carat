@@ -3,13 +3,6 @@
   "private": true,
   "version": "0.1.0",
   "type": "module",
-  "imports": {
-    "#/*": [
-      "./src/*",
-      "./src/*.ts",
-      "./src/*.tsx"
-    ]
-  },
   "scripts": {
     "dev": "vite",
     "build": "tsc -b && vite build",
@@ -31,10 +24,13 @@
     ]
   },
   "dependencies": {
+    "@tabler/icons-react": "^3.49.0",
     "@tailwindcss/vite": "^4.3.3",
-    "normalize.css": "^8.0.1",
+    "class-variance-authority": "^0.7.1",
+    "clsx": "^2.1.1",
     "react": "^19.2.4",
     "react-dom": "^19.2.4",
+    "tailwind-merge": "^3.7.0",
     "tailwindcss": "^4.3.3",
     "wouter": "^3.13.0"
   },
