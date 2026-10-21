@@ -1,0 +1,13 @@
+# Выходим, если нет изменений в frontend/
+if ! git diff --cached --name-only | grep --quiet '^frontend/'; then
+    exit 0
+fi
+
+# IMPORTANT!!
+cd frontend
+
+# 1. Проверка типов TypeScript
+yarn ts:check
+
+# 2. Запуск линтера и форматирования для измененных файлов
+npx lint-staged || exit 1
