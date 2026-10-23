@@ -1,5 +1,5 @@
-// TODO: ИНТЕРФЕЙСЫ НИЖЕ ЯВЛЯЕТСЯ ПОКАЗАТЕЛЬНЫМ ПРИМЕРОМ,
-// УДАЛИТЬ ВРЕМЕННЫЕ ДАННЫЕ ПЕРЕД ВНЕДРЕНИЕМ ПЕРВЫХ РУЧЕК
+// TODO: THE CODE BELOW IS A DEMONSTRATION EXAMPLE,
+// REMOVE THE TEMPORARY DATA BEFORE IMPLEMENTING THE FIRST ENDPOINTS
 
 export interface ExampleRequestData {
   exampleField: string;
