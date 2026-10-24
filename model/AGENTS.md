@@ -3,6 +3,9 @@
 ML research workspace: data exploration, training, evaluation and export of models.
 Nothing here is deployed. Read the root `AGENTS.md` first.
 
+Only model work lives here. Algorithms without a model (rules, validators, parsers, name or volume
+checks) do not belong in `model/`, even if meant to be ported later: write them in `backend/` (Java).
+
 ## Stack
 
 - Python 3.12 (same as `inference/`), PyTorch, torchvision, Hugging Face `transformers`, scikit-learn,
@@ -23,7 +26,7 @@ with a lower-bound version (`package>=X.Y`).
 
 - `notebooks/` - experiments, training and optimization notebooks (`<topic>_<purpose>.ipynb`)
 - `utils/` - research helpers grouped by modality: `image_utils/`, `text_utils/`, `video_utils/`
-- `prod_utils/` - code meant to be ported to production (model selection, text preprocessing)
+- `prod_utils/` - model-related code meant to be ported to `inference/` (model selection, preprocessing)
 - `workflow_model/` - model validation script and its CI workflow definition
 - `artifacts/` - local outputs (checkpoints, metrics, plots), never committed
 

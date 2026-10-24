@@ -45,10 +45,11 @@ yarn ts:check           # type check only
 - Keep API types in sync with backend DTOs (`backend/.../dto/`); all HTTP calls go through `src/api/`,
   never `fetch` directly inside components. Handle loading and error states.
 - GTIN and other codes are strings (they can have leading zeros); never parse them as numbers.
-- User-facing text is Russian; code, identifiers and comments are English.
+- User-facing text is Russian
 - Accessible markup: semantic elements, labels for inputs, `alt` for product photos.
 - Do not edit the Vite/TS/ESLint/Prettier configs unless the task is about tooling.
 
 ## Checks before pushing
 
 `yarn lint && yarn format:check && yarn build` must pass.
+

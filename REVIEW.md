@@ -12,6 +12,9 @@ Project rules live in `AGENTS.md` (root and per-service); a violation of them is
 - A `proto/` change that does not update both the backend and the inference servicer.
 - Layer violations: `io.github.duckysmacky.cogniflex` importing `io.github.carat_team.carat`;
   `inference/` importing from `model/`.
+- Misplaced code (see "Where code goes" in `AGENTS.md`): static logic in `inference/` or `model/`;
+  a new standalone service or directory with its own server/Dockerfile; backend logic not in Java;
+  a mixed feature not split into backend + inference.
 - Logic errors, unhandled exceptions that can crash the gRPC server or return a 500, leaked
   temp files or connections, models loaded per request.
 - Product data or request payloads written to logs.

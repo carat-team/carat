@@ -2,6 +2,11 @@
 
 Python gRPC service that serves the ML models to the backend. Read the root `AGENTS.md` first.
 
+Only model serving lives here: loading, model preprocessing, forward pass, result mapping. Static
+or model-free logic (rules, validators, heuristics, classical-CV checks) belongs in `backend/` (Java).
+Input arrives already prepared by the backend. Add an RPC only when a model is behind it; never add
+an HTTP/FastAPI API or a second service.
+
 ## Stack
 
 - Python **3.12** (`.python-version`), managed by **uv** (`pyproject.toml` + `uv.lock`, `package = false`)

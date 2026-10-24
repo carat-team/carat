@@ -2,6 +2,8 @@
 
 Spring Boot REST API and analysis pipeline. Read the root `AGENTS.md` first for workflow and guardrails.
 
+All static (model-free) analysis of product cards lives here, text and image alike, **in Java only**: no Python, scripts or sidecar services in the backend.
+
 ## Stack
 
 - Java **25** (Gradle toolchain), Spring Boot **4.0.x**, Gradle **9.x** via the wrapper (`build.gradle`, Groovy DSL)
@@ -53,6 +55,12 @@ Request flow: controller -> `AnalyzeService` -> preprocess -> `AnalysisOrchestra
   rule tests. `ZeroWidthCharacterRule` is a minimal example.
 - **New endpoint**: thin controller under `/api/...`, logic in a service, request/response as
   `record` DTOs with Bean Validation, errors through `GlobalExceptionHandler`.
+- **New static image/field check**: same recipe as a text rule, under `analysis/static_/image/` (or the
+  matching modality); classical CV in Java, not in `inference/`.
+- **Feature that needs a model**: endpoint, static part and data preparation here; model call through
+  `InferenceClient`/gRPC, with the inference side added in the same change.
+- **Pipeline unlike AI-detection** (e.g. image quality): its own service class and, if it needs gRPC,
+  its own `.proto`; do not extend `AnalyzeService`.
 - **Schema change**: add a new `V<n>__<snake_case_description>.sql`. Never edit an existing migration.
 - **Proto change**: edit `proto/`, rebuild here and regenerate inference stubs (`just proto`).
 

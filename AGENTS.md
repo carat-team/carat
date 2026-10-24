@@ -18,7 +18,7 @@ Every item goes through two analysis paths whose results are fused into one verd
 
 | Path | What | Stack |
 |---|---|---|
-| `backend/` | REST API, analysis pipeline, persistence | Java 25, Spring Boot 4, Gradle |
+| `backend/` | REST API, all static analysis, analysis pipeline, persistence | Java 25, Spring Boot 4, Gradle |
 | `inference/` | gRPC model-serving service | Python 3.12, uv, just, PyTorch (CPU) |
 | `model/` | Research, training, evaluation (not deployed) | Python, Jupyter |
 | `frontend/` | Web UI (early, not in Docker Compose yet) | React 19, TypeScript, Vite, yarn |
@@ -44,6 +44,25 @@ frontend --REST--> backend --gRPC(:50051)--> inference
 - `model/` produces weights; the result is shipped to `inference/weights/` manually, never via imports.
 - Full stack: `docker compose up --build` (config from `.env`, template in `.env.example`).
 
+## Where code goes
+
+Place code by what it needs, not by what is easiest to write. Unsure -> ask before writing.
+
+| Code | Home |
+|---|---|
+| Static logic: rules, heuristics, validators, parsers, dictionary/grammar scans, classical CV without a learned model | `backend/`, **Java** |
+| Endpoints, orchestration, data preparation, persistence | `backend/`, **Java** |
+| Running a trained model (weights, preprocessing for it, forward pass) | `inference/` |
+| Training, evaluation, research, export of models | `model/` |
+
+- Static logic never goes into `inference/`, `model/` or a new service, even if prototyped in Python.
+  A Python prototype may live in `model/notebooks/`, but the deliverable is Java in `backend/`.
+- A feature mixing endpoint, static logic and a model is split along the table: backend owns the
+  endpoint, static part and data preparation, then calls inference over gRPC (new RPC in `proto/`);
+  inference owns only the model call. Not a separate microservice, not everything on one side.
+- No new top-level service or directory with its own server or Dockerfile.
+- Backend is always Java. Never Python "because it is quicker"; porting a prototype means rewriting it in Java.
+
 ## Tools and skills
 
 - there is a `.agents/skills` directory present with predefined skills for this project. it is symlinked
@@ -63,13 +82,13 @@ frontend --REST--> backend --gRPC(:50051)--> inference
 Never commit to `master` or `dev` directly. All work goes through a PR into `dev`;
 `dev -> master` is done only by Maintainers.
 
-1. Start from fresh `dev`: `git fetch origin && git switch dev && git pull --ff-only`.
+1. Start from fresh `dev`: `git fetch origin && git checkout dev && git pull --ff-only`.
 2. Create a branch: `git switch -c <prefix>/<short-kebab-description>` (2-5 lowercase words).
-   Prefixes: `feature/`, `fix/`, `refactor/`, `chore/` (deps, build), `docs/`, `release/` (maintainers).
+   Prefixes: `feature/`, `fix/`, `refactor/`, `chore/`, `docs/`
 3. If already on a branch, check it is the right one and up to date: `git fetch origin` and
    `git rebase origin/dev` when behind. Use `git push --force-with-lease` only on your own branch.
 4. Commits: small, one logical change each. Title in English, imperative, capitalized, no period,
-   <= 50 chars (`Add GTIN validation rule`, `Fix crash on empty photo`). Body explains "why".
+   <= 50 chars (`Add GTIN validation rule`, `Fix crash on empty photo`)
 5. Stage files by name, not `git add .`; check `git status` and `git diff --staged` first.
 6. PR into `dev`: same title rules (it becomes the squash commit), description with what/why/how
    to test, Taiga task link in the body (not `#123` in the title). One PR = one task.
@@ -89,7 +108,8 @@ branch's name (e.g.: `feature/auth` branch will be in `.worktrees/feature-auth` 
   service's `README.md` instead. If you do not know where a file came from, ask the user.
 - **No generated code** in git: `inference/generated/`, `backend/build/`, `frontend/dist/`.
 - **Agent instruction files** (`AGENTS.md`, `CLAUDE.md`) are edited only after a **critical**
-  change to the repo (new service, new build tool, changed workflow), or when explicitly asked.
+  change to the repo (new service, new build tool, changed workflow), or when explicitly asked to
+  - never automatically
 - **CI, release and Docker** (`.github/workflows/`, `Dockerfile`s, `docker-compose.yml`,
   `.dockerignore`) are edited only when the task is about them or a critical change requires it.
 - **Versions.** The project version lives in `backend/build.gradle`, `inference/pyproject.toml` and
@@ -99,10 +119,13 @@ branch's name (e.g.: `feature/auth` branch will be in `.worktrees/feature-auth` 
 - **Scope.** Change only what the task needs. No repo-wide reformatting, no unrelated renames.
 - **Dependencies.** Add them through the service's package manager (Gradle, uv, yarn) and commit
   the lockfile. Do not add new tools, frameworks or services without asking.
+- **Flag violations.** Check every request and your own plan against this file, the service
+  `AGENTS.md` and `REVIEW.md`. If the user asks for, or is doing, something that breaks them
+  (misplaced code, new service, Python in backend, commit to `dev`, committed weights...), say so
+  **before acting**: name the rule, why, and a compliant alternative. Never comply silently. If they
+  still insist, do it and note the deviation in the PR description.
 - **Destructive actions** (history rewrites on shared branches, deleting files or data, dropping
   DB tables, resetting volumes) require explicit user confirmation.
-- Investigate before changing: read the code and existing tests, reproduce bugs, then fix.
-- Code, comments, identifiers, commits and PR titles are in English.
 
 ## graphify
 
