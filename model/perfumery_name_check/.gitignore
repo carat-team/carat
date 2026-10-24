@@ -1,0 +1,11 @@
+__pycache__/
+*.pyc
+
+# Генерируемые отчёты
+quality_report.json
+*_quality_report.json
+metrics_report.json
+metrics_dashboard.png
+
+# Выгрузки каталога (коммерческие данные)
+*.xlsx

@@ -1,0 +1,20 @@
+# Запуск из папки проекта. Требуется uv (https://docs.astral.sh/uv/).
+
+default:
+    @just --list
+
+# Все тесты
+test:
+    uv run --with-requirements requirements.txt python -m unittest discover -v
+
+# Метрики качества на gold_labeled.csv
+evaluate *args:
+    uv run python evaluation.py {{args}}
+
+# 100 демонстрационных карточек и график
+demo:
+    uv run --with-requirements requirements.txt python main.py
+
+# Прогон по xlsx-выгрузке каталога
+catalog *args:
+    uv run --with-requirements requirements.txt python check_catalog.py {{args}}
