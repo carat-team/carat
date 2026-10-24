@@ -19,6 +19,17 @@ export interface ProductPhoto {
   url?: string;
 }
 
+export type ProductTnVedCode10 = '3303001000' | '3303009000';
+
+export type ProductVolumeUnit = 'л' | 'мл' | 'г';
+
+export type ProductStandardNumber = 'ТР ТС 009/2011' | 'ТР ТС 029/2012' | 'ТР ТС 005/2011';
+
+export interface ProductVolume {
+  value: number;
+  unit: ProductVolumeUnit;
+}
+
 export interface Product {
   // строка, т.к. GTIN может начинаться с нуля
   gtin: string;
@@ -32,13 +43,13 @@ export interface Product {
   tnVedCode: string;
   brand?: string;
 
-  tnVedCode10?: '3303001000' | '3303009000';
+  tnVedCode10?: ProductTnVedCode10;
   perfumeryType?: PerfumeryType;
-  volume?: { value: number; unit: 'л' | 'мл' | 'г' };
+  volume?: ProductVolume;
   country?: string[];
   packageType?: string;
   packMaterial?: string;
-  standardNumber?: ('ТР ТС 009/2011' | 'ТР ТС 029/2012' | 'ТР ТС 005/2011')[];
+  standardNumber?: ProductStandardNumber[];
 
   photos: ProductPhoto[];
 }
