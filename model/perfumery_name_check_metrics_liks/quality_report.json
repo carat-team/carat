@@ -1,0 +1,78 @@
+{
+  "total": 15000,
+  "accuracy": 0.9999,
+  "macro_f1": 0.9643,
+  "per_class": {
+    "ok": {
+      "tp": 14380,
+      "fp": 1,
+      "fn": 0,
+      "support": 14380,
+      "precision": 0.9999,
+      "recall": 1.0,
+      "f1": 1.0
+    },
+    "warning": {
+      "tp": 104,
+      "fp": 0,
+      "fn": 0,
+      "support": 104,
+      "precision": 1.0,
+      "recall": 1.0,
+      "f1": 1.0
+    },
+    "manual_review": {
+      "tp": 3,
+      "fp": 0,
+      "fn": 1,
+      "support": 4,
+      "precision": 1.0,
+      "recall": 0.75,
+      "f1": 0.8571
+    },
+    "not_checked": {
+      "tp": 512,
+      "fp": 0,
+      "fn": 0,
+      "support": 512,
+      "precision": 1.0,
+      "recall": 1.0,
+      "f1": 1.0
+    }
+  },
+  "confusion_matrix": {
+    "ok": {
+      "ok": 14380,
+      "warning": 0,
+      "manual_review": 0,
+      "not_checked": 0
+    },
+    "warning": {
+      "ok": 0,
+      "warning": 104,
+      "manual_review": 0,
+      "not_checked": 0
+    },
+    "manual_review": {
+      "ok": 1,
+      "warning": 0,
+      "manual_review": 3,
+      "not_checked": 0
+    },
+    "not_checked": {
+      "ok": 0,
+      "warning": 0,
+      "manual_review": 0,
+      "not_checked": 512
+    }
+  },
+  "mistakes": [
+    {
+      "name": "духи с феромонами 3мл",
+      "declared_type": "КОМПЛЕКТ",
+      "expected": "manual_review",
+      "predicted": "ok",
+      "rule": "PERFUMERY_BUNDLE_TYPE_MATCH"
+    }
+  ]
+}
