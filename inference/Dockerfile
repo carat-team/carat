@@ -28,4 +28,6 @@ RUN python -c "from transformers import AutoTokenizer, AutoModel; \
     AutoTokenizer.from_pretrained('roberta-base'); \
     AutoModel.from_pretrained('roberta-base')"
 
+RUN python -c "import easyocr; easyocr.Reader(['ru', 'en'], gpu=False)"
+
 CMD ["python", "main.py"]

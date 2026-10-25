@@ -8,3 +8,10 @@ models:
   text:
     model_weights: weights/model_texts.safetensors
     model_name: roberta-base
+  ocr:
+    # EasyOCR language codes; the Dockerfile downloads models for the same languages
+    languages: [ru, en]
+    # Text blocks recognized with lower confidence are dropped
+    min_confidence: 0.3
+    # Longer image side in pixels; bigger photos are downscaled to keep CPU inference fast
+    max_image_side: 1600
