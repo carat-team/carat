@@ -9,3 +9,4 @@ metrics_dashboard.png
 
 # Выгрузки каталога (коммерческие данные)
 *.xlsx
+gold_labeled.csv
