@@ -1,6 +1,7 @@
 package io.github.carat_team.carat.services.barcode;
 
 import com.google.zxing.BarcodeFormat;
+import com.google.zxing.oned.UPCEReader;
 import org.springframework.stereotype.Component;
 
 import java.util.Optional;
@@ -26,7 +27,8 @@ public class BarcodeValidator {
 
         return switch (format) {
             case EAN_13 -> validateGs1Number(text, 13);
-            case EAN_8, UPC_E -> validateGs1Number(text, 8);
+            case EAN_8 -> validateGs1Number(text, 8);
+            case UPC_E -> validateUpcE(text);
             case UPC_A -> validateGs1Number(text, 12);
             case ITF -> validateItf(text);
             case DATA_MATRIX -> validateChestnyZnak(text);
@@ -45,6 +47,14 @@ public class BarcodeValidator {
             return Optional.of("Wrong check digit");
         }
         return Optional.empty();
+    }
+
+    private Optional<String> validateUpcE(String text) {
+        // UPC-E check digit is calculated over the code expanded to UPC-A
+        if (isDigits(text) && text.length() == 8) {
+            return validateGs1Number(UPCEReader.convertUPCEtoUPCA(text), 12);
+        }
+        return validateGs1Number(text, 8);
     }
 
     private Optional<String> validateItf(String text) {

@@ -36,6 +36,13 @@ class BarcodeValidatorTest {
     }
 
     @Test
+    void checksUpcECheckDigitOverExpandedUpcA() {
+        assertEquals(Optional.empty(), validator.validate("04252614", BarcodeFormat.UPC_E));
+        assertEquals(Optional.of("Wrong check digit"), validator.validate("04252610", BarcodeFormat.UPC_E));
+        assertEquals(Optional.of("Expected 8 digits, got 7"), validator.validate("0425261", BarcodeFormat.UPC_E));
+    }
+
+    @Test
     void checksItfLengthAndItf14CheckDigit() {
         assertEquals(Optional.empty(), validator.validate("8603095259", BarcodeFormat.ITF));
         assertEquals(Optional.empty(), validator.validate("14601234567890", BarcodeFormat.ITF));
