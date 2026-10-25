@@ -1,0 +1,24 @@
+syntax = "proto3";
+
+package carat.inference;
+
+option java_multiple_files = true;
+option java_package = "io.github.carat_team.carat.grpc";
+option java_outer_classname = "OcrProto";
+
+service Ocr {
+  rpc ReadText (OcrRequest) returns (OcrReply);
+}
+
+message OcrRequest {
+  bytes image_data = 1;
+}
+
+message TextBlock {
+  string text = 1;
+  float confidence = 2;
+}
+
+message OcrReply {
+  repeated TextBlock blocks = 1;
+}
