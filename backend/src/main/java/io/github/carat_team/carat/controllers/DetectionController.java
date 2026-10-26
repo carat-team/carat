@@ -2,6 +2,7 @@ package io.github.carat_team.carat.controllers;
 
 import io.github.carat_team.carat.dto.AnalysisResultResponse;
 import io.github.carat_team.carat.dto.CreateTextDetectionRequest;
+import io.github.carat_team.carat.dto.QualityResponse;
 import io.github.carat_team.carat.services.AnalyzeService;
 import jakarta.validation.Valid;
 import org.springframework.http.MediaType;
@@ -32,6 +33,14 @@ public class DetectionController {
             @RequestPart("file") MultipartFile file
     ) {
         AnalysisResultResponse response = analyzeService.analyzeMedia(file);
+        return ResponseEntity.ok(response);
+    }
+
+    @PostMapping(value = "/quality", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public ResponseEntity<QualityResponse> analyzeQuality(
+            @RequestPart("file") MultipartFile file
+    ) {
+        QualityResponse response = analyzeService.analyzeQuality(file);
         return ResponseEntity.ok(response);
     }
 }

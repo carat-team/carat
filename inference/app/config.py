@@ -4,6 +4,8 @@ from pathlib import Path
 
 import yaml
 
+from app.quality import QualityConfig
+
 
 @dataclass(frozen=True)
 class GrpcSettings:
@@ -29,6 +31,7 @@ class Settings:
     grpc: GrpcSettings
     image_model: ImageModelSettings
     text_model: TextModelSettings
+    quality: QualityConfig
 
 
 def load_env_file(path: Path) -> None:
@@ -75,4 +78,5 @@ def load_settings(service_root: Path, project_root: Path) -> Settings:
             model_weights=_resolve_service_path(service_root, text_config["model_weights"]),
             model_name=text_config.get("model_name", "roberta-base"),
         ),
+        quality=QualityConfig(**config.get("quality", {})),
     )

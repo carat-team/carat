@@ -4,20 +4,28 @@ import tempfile
 import time
 import threading
 
+import cv2
 import grpc
+import numpy as np
 from carat.inference import analyzer_pb2
 from carat.inference import analyzer_pb2_grpc
+
+from app.quality import analyze_quality
 
 _inference_lock = threading.Lock()
 
 
 class AnalyzerServicer(analyzer_pb2_grpc.AnalyzerServicer):
-    def __init__(self, photo_detector, video_detector, text_detector):
+    def __init__(self, photo_detector, video_detector, text_detector, quality_config):
         self.photo_detector = photo_detector
         self.video_detector = video_detector
         self.text_detector = text_detector
+        self.quality_config = quality_config
 
     def AnalyzePhoto(self, request, context):
+        if self.photo_detector is None:
+            return _detector_disabled(context, "Photo")
+
         image_bytes = request.image_data
 
         logging.info("=" * 60)
@@ -55,6 +63,9 @@ class AnalyzerServicer(analyzer_pb2_grpc.AnalyzerServicer):
                 logging.info("[Photo] Temp file deleted: %s", tmp_path)
 
     def AnalyzeVideo(self, request, context):
+        if self.video_detector is None:
+            return _detector_disabled(context, "Video")
+
         video_bytes = request.video_data
 
         logging.info("=" * 60)
@@ -92,6 +103,9 @@ class AnalyzerServicer(analyzer_pb2_grpc.AnalyzerServicer):
                 logging.info("[Video] Temp file deleted: %s", tmp_path)
 
     def AnalyzeText(self, request, context):
+        if self.text_detector is None:
+            return _detector_disabled(context, "Text")
+
         text = request.text
 
         logging.info("=" * 60)
@@ -116,6 +130,59 @@ class AnalyzerServicer(analyzer_pb2_grpc.AnalyzerServicer):
             _set_internal_error(context, "Text", start_time, e)
             return analyzer_pb2.AnalyzeReply()
 
+    def AnalyzeQuality(self, request, context):
+        image_bytes = request.image_data
+
+        logging.info("=" * 60)
+        logging.info("[Quality] New request received")
+        logging.info("[Quality] Peer: %s", context.peer())
+        logging.info(
+            "[Quality] Data size: %s bytes (%.2f MB)",
+            len(image_bytes),
+            len(image_bytes) / 1024 / 1024,
+        )
+
+        if not image_bytes:
+            logging.warning("[Quality] Empty request received, returning error")
+            context.set_code(grpc.StatusCode.INVALID_ARGUMENT)
+            context.set_details("Empty image bytes received")
+            return analyzer_pb2.QualityReply()
+
+        start_time = time.time()
+
+        try:
+            image = cv2.imdecode(np.frombuffer(image_bytes, np.uint8), cv2.IMREAD_COLOR)
+            if image is None:
+                logging.warning("[Quality] Cannot decode image, returning error")
+                context.set_code(grpc.StatusCode.INVALID_ARGUMENT)
+                context.set_details("Cannot decode image")
+                return analyzer_pb2.QualityReply()
+
+            result = analyze_quality(image, self.quality_config)
+        except Exception as e:
+            _set_internal_error(context, "Quality", start_time, e)
+            return analyzer_pb2.QualityReply()
+
+        logging.info("[Quality] Analysis completed in %.3fs", time.time() - start_time)
+        logging.info(
+            "[Quality] Result: overall=%s, verdict=%s, weakest=%s",
+            result.overall,
+            result.verdict,
+            result.weakest,
+        )
+
+        return analyzer_pb2.QualityReply(
+            sharpness=result.sharpness,
+            overexposure=result.overexposure,
+            underexposure=result.underexposure,
+            resolution=result.resolution,
+            overall=result.overall,
+            verdict=result.verdict,
+            weakest=result.weakest,
+            width=result.width,
+            height=result.height,
+        )
+
 
 def _reply_from_prediction(operation, start_time, confidence, pred):
     predicted_class = "human" if pred == 0 else "ai"
@@ -133,6 +200,14 @@ def _reply_from_prediction(operation, start_time, confidence, pred):
     setattr(reply, "class", predicted_class)
     reply.confidence = float(confidence)
     return reply
+
+
+def _detector_disabled(context, operation):
+    message = f"{operation} detector is disabled (quality-only mode)"
+    logging.warning("[%s] %s", operation, message)
+    context.set_code(grpc.StatusCode.UNAVAILABLE)
+    context.set_details(message)
+    return analyzer_pb2.AnalyzeReply()
 
 
 def _set_internal_error(context, operation, start_time, error):

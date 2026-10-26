@@ -8,3 +8,24 @@ models:
   text:
     model_weights: weights/model_texts.safetensors
     model_name: roberta-base
+
+quality:
+  analysis_max_side: 1024
+  sharp_grid: 8
+  sharp_percentile: 90.0
+  sharp_lo: 2.0
+  sharp_hi: 300.0
+  clip_level: 250
+  clip_ignore_background: true
+  bg_level: 235
+  min_object_fraction: 0.005
+  clip_frac_good: 0.05
+  clip_frac_bad: 0.50
+  dark_p95_bad: 40.0
+  dark_p95_good: 120.0
+  res_px_bad: 160000
+  res_px_good: 2000000
+  res_curve_x: [0, 30, 60, 100]
+  res_curve_y: [50, 70, 90, 100]
+  reject_max: 60
+  review_max: 80

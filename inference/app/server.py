@@ -19,7 +19,11 @@ def serve(service_root: Path, project_root: Path):
     settings = load_settings(service_root, project_root)
     max_message_length_bytes = settings.grpc.max_message_mb * 1024 * 1024
 
-    photo_detector, video_detector, text_detector = _preload_models(settings)
+    if _is_quality_only():
+        logging.warning("QUALITY_ONLY is set - skipping model loading, only AnalyzeQuality is available")
+        photo_detector = video_detector = text_detector = None
+    else:
+        photo_detector, video_detector, text_detector = _preload_models(settings)
 
     server = grpc.server(
         futures.ThreadPoolExecutor(max_workers=1),
@@ -29,7 +33,7 @@ def serve(service_root: Path, project_root: Path):
         ],
     )
     analyzer_pb2_grpc.add_AnalyzerServicer_to_server(
-        AnalyzerServicer(photo_detector, video_detector, text_detector),
+        AnalyzerServicer(photo_detector, video_detector, text_detector, settings.quality),
         server,
     )
     server.add_insecure_port(f"{settings.grpc.host}:{settings.grpc.port}")
@@ -39,7 +43,7 @@ def serve(service_root: Path, project_root: Path):
     logging.info("Python: %s", sys.version)
     logging.info("Platform: %s %s", platform.system(), platform.release())
     logging.info("Bind address: %s:%s", settings.grpc.host, settings.grpc.port)
-    logging.info("Endpoints: AnalyzePhoto, AnalyzeVideo, AnalyzeText")
+    logging.info("Endpoints: AnalyzePhoto, AnalyzeVideo, AnalyzeText, AnalyzeQuality")
     logging.info(
         "Max message size: %s MB (%s bytes)",
         settings.grpc.max_message_mb,
@@ -55,6 +59,10 @@ def serve(service_root: Path, project_root: Path):
     except KeyboardInterrupt:
         logging.info("Shutting down server...")
         os._exit(0)
+
+
+def _is_quality_only():
+    return os.getenv("QUALITY_ONLY", "").strip().lower() in ("1", "true", "yes")
 
 
 def _preload_models(settings):
