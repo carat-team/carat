@@ -15,3 +15,6 @@ models:
     min_confidence: 0.3
     # Longer image side in pixels; bigger photos are downscaled to keep CPU inference fast
     max_image_side: 1600
+  segmentation:
+    # rembg model name; rembg downloads it to $U2NET_HOME (~/.u2net), the Dockerfile does it at build time
+    model_name: isnet-general-use

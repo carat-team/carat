@@ -9,19 +9,23 @@ from pathlib import Path
 import grpc
 from carat.inference import analyzer_pb2_grpc
 from carat.inference import ocr_pb2_grpc
+from carat.inference import segmentation_pb2_grpc
 
 from app.config import Settings, load_settings
 from app.detectors.mocks import MockTextDetector, MockVideoDetector
 from app.detectors.ocr_detector import OcrDetector
 from app.detectors.photo_detector import MultitypePictureDetector
-from app.grpc_service import AnalyzerServicer, OcrServicer
+from app.detectors.segmentation_detector import SegmentationDetector
+from app.grpc_service import AnalyzerServicer, OcrServicer, SegmentationServicer
 
 
 def serve(service_root: Path, project_root: Path) -> None:
     settings = load_settings(service_root, project_root)
     max_message_length_bytes = settings.grpc.max_message_mb * 1024 * 1024
 
-    photo_detector, video_detector, text_detector, ocr_detector = _preload_models(settings)
+    photo_detector, video_detector, text_detector, ocr_detector, segmentation_detector = (
+        _preload_models(settings)
+    )
 
     server = grpc.server(
         futures.ThreadPoolExecutor(max_workers=1),
@@ -35,6 +39,9 @@ def serve(service_root: Path, project_root: Path) -> None:
         server,
     )
     ocr_pb2_grpc.add_OcrServicer_to_server(OcrServicer(ocr_detector), server)
+    segmentation_pb2_grpc.add_SegmentationServicer_to_server(
+        SegmentationServicer(segmentation_detector), server
+    )
     server.add_insecure_port(f"{settings.grpc.host}:{settings.grpc.port}")
 
     logging.info("=" * 60)
@@ -42,7 +49,7 @@ def serve(service_root: Path, project_root: Path) -> None:
     logging.info("Python: %s", sys.version)
     logging.info("Platform: %s %s", platform.system(), platform.release())
     logging.info("Bind address: %s:%s", settings.grpc.host, settings.grpc.port)
-    logging.info("Endpoints: AnalyzePhoto, AnalyzeVideo, AnalyzeText, ReadText")
+    logging.info("Endpoints: AnalyzePhoto, AnalyzeVideo, AnalyzeText, ReadText, SegmentProduct")
     logging.info(
         "Max message size: %s MB (%s bytes)",
         settings.grpc.max_message_mb,
@@ -60,24 +67,26 @@ def serve(service_root: Path, project_root: Path) -> None:
         os._exit(0)
 
 
-def _preload_models(settings: Settings) -> tuple[object, object, object, OcrDetector]:
+def _preload_models(settings: Settings) -> tuple[object, object, object, OcrDetector, SegmentationDetector]:
     logging.info("Preloading all models...")
     start = time.time()
 
-    with futures.ThreadPoolExecutor(max_workers=4) as executor:
+    with futures.ThreadPoolExecutor(max_workers=5) as executor:
         future_photo = executor.submit(_load_photo_model, settings)
         future_video = executor.submit(_load_video_model)
         future_text = executor.submit(_load_text_model, settings)
         future_ocr = executor.submit(_load_ocr_model, settings)
+        future_segmentation = executor.submit(_load_segmentation_model, settings)
 
         photo_detector = future_photo.result()
         video_detector = future_video.result()
         text_detector = future_text.result()
         ocr_detector = future_ocr.result()
+        segmentation_detector = future_segmentation.result()
 
     elapsed = time.time() - start
     logging.info("All models loaded in %.3fs", elapsed)
-    return photo_detector, video_detector, text_detector, ocr_detector
+    return photo_detector, video_detector, text_detector, ocr_detector, segmentation_detector
 
 
 def _load_photo_model(settings):
@@ -131,4 +140,12 @@ def _load_ocr_model(settings: Settings) -> OcrDetector:
         max_image_side=ocr_config.max_image_side,
     )
     logging.info("OCR model loaded successfully!")
+    return detector
+
+
+def _load_segmentation_model(settings: Settings) -> SegmentationDetector:
+    model_name = settings.segmentation_model.model_name
+    logging.info("Loading segmentation model (rembg %s)...", model_name)
+    detector = SegmentationDetector(model_name)
+    logging.info("Segmentation model loaded successfully!")
     return detector
