@@ -11,7 +11,7 @@ sync:
 # Generate Python gRPC stubs into generated/
 proto:
     mkdir -p generated
-    uv run python -m grpc_tools.protoc -I{{proto_dir}} --python_out=generated --grpc_python_out=generated {{proto_dir}}/carat/inference/analyzer.proto
+    uv run python -m grpc_tools.protoc -I{{proto_dir}} --python_out=generated --grpc_python_out=generated {{proto_dir}}/carat/inference/*.proto
 
 # Start the gRPC server on :50051
 run:
@@ -24,6 +24,10 @@ test-text text:
 # Send an image to a running server
 test-photo path:
     uv run tests/test_photo_client.py "{{path}}"
+
+# Read text (OCR) from an image on a running server
+test-ocr path:
+    uv run tests/test_ocr_client.py "{{path}}"
 
 # Send a video to a running server
 test-video path:

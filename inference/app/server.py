@@ -8,18 +8,20 @@ from pathlib import Path
 
 import grpc
 from carat.inference import analyzer_pb2_grpc
+from carat.inference import ocr_pb2_grpc
 
-from app.config import load_settings
+from app.config import Settings, load_settings
 from app.detectors.mocks import MockTextDetector, MockVideoDetector
+from app.detectors.ocr_detector import OcrDetector
 from app.detectors.photo_detector import MultitypePictureDetector
-from app.grpc_service import AnalyzerServicer
+from app.grpc_service import AnalyzerServicer, OcrServicer
 
 
-def serve(service_root: Path, project_root: Path):
+def serve(service_root: Path, project_root: Path) -> None:
     settings = load_settings(service_root, project_root)
     max_message_length_bytes = settings.grpc.max_message_mb * 1024 * 1024
 
-    photo_detector, video_detector, text_detector = _preload_models(settings)
+    photo_detector, video_detector, text_detector, ocr_detector = _preload_models(settings)
 
     server = grpc.server(
         futures.ThreadPoolExecutor(max_workers=1),
@@ -32,6 +34,7 @@ def serve(service_root: Path, project_root: Path):
         AnalyzerServicer(photo_detector, video_detector, text_detector),
         server,
     )
+    ocr_pb2_grpc.add_OcrServicer_to_server(OcrServicer(ocr_detector), server)
     server.add_insecure_port(f"{settings.grpc.host}:{settings.grpc.port}")
 
     logging.info("=" * 60)
@@ -39,7 +42,7 @@ def serve(service_root: Path, project_root: Path):
     logging.info("Python: %s", sys.version)
     logging.info("Platform: %s %s", platform.system(), platform.release())
     logging.info("Bind address: %s:%s", settings.grpc.host, settings.grpc.port)
-    logging.info("Endpoints: AnalyzePhoto, AnalyzeVideo, AnalyzeText")
+    logging.info("Endpoints: AnalyzePhoto, AnalyzeVideo, AnalyzeText, ReadText")
     logging.info(
         "Max message size: %s MB (%s bytes)",
         settings.grpc.max_message_mb,
@@ -57,22 +60,24 @@ def serve(service_root: Path, project_root: Path):
         os._exit(0)
 
 
-def _preload_models(settings):
+def _preload_models(settings: Settings) -> tuple[object, object, object, OcrDetector]:
     logging.info("Preloading all models...")
     start = time.time()
 
-    with futures.ThreadPoolExecutor(max_workers=3) as executor:
+    with futures.ThreadPoolExecutor(max_workers=4) as executor:
         future_photo = executor.submit(_load_photo_model, settings)
         future_video = executor.submit(_load_video_model)
         future_text = executor.submit(_load_text_model, settings)
+        future_ocr = executor.submit(_load_ocr_model, settings)
 
         photo_detector = future_photo.result()
         video_detector = future_video.result()
         text_detector = future_text.result()
+        ocr_detector = future_ocr.result()
 
     elapsed = time.time() - start
     logging.info("All models loaded in %.3fs", elapsed)
-    return photo_detector, video_detector, text_detector
+    return photo_detector, video_detector, text_detector, ocr_detector
 
 
 def _load_photo_model(settings):
@@ -112,4 +117,18 @@ def _load_text_model(settings):
     detector.predict_text("warmup")
     logging.info("Warmup done")
     
+    return detector
+
+
+def _load_ocr_model(settings: Settings) -> OcrDetector:
+    ocr_config = settings.ocr_model
+    logging.info("Loading OCR model (EasyOCR)...")
+    logging.info("  Languages: %s", ocr_config.languages)
+
+    detector = OcrDetector(
+        languages=ocr_config.languages,
+        min_confidence=ocr_config.min_confidence,
+        max_image_side=ocr_config.max_image_side,
+    )
+    logging.info("OCR model loaded successfully!")
     return detector

@@ -7,6 +7,11 @@ import threading
 import grpc
 from carat.inference import analyzer_pb2
 from carat.inference import analyzer_pb2_grpc
+from carat.inference import ocr_pb2
+from carat.inference import ocr_pb2_grpc
+from PIL import Image, UnidentifiedImageError
+
+from app.detectors.ocr_detector import OcrDetector
 
 _inference_lock = threading.Lock()
 
@@ -116,6 +121,49 @@ class AnalyzerServicer(analyzer_pb2_grpc.AnalyzerServicer):
             _set_internal_error(context, "Text", start_time, e)
             return analyzer_pb2.AnalyzeReply()
 
+
+
+class OcrServicer(ocr_pb2_grpc.OcrServicer):
+    def __init__(self, ocr_detector: OcrDetector) -> None:
+        self.ocr_detector = ocr_detector
+
+    def ReadText(
+        self, request: ocr_pb2.OcrRequest, context: grpc.ServicerContext
+    ) -> ocr_pb2.OcrReply:
+        image_bytes = request.image_data
+
+        logging.info("=" * 60)
+        logging.info("[OCR] New request received")
+        logging.info("[OCR] Peer: %s", context.peer())
+        logging.info("[OCR] Data size: %s bytes", len(image_bytes))
+
+        if not image_bytes:
+            logging.warning("[OCR] Empty request received, returning error")
+            context.set_code(grpc.StatusCode.INVALID_ARGUMENT)
+            context.set_details("Empty image bytes received")
+            return ocr_pb2.OcrReply()
+
+        start_time = time.time()
+
+        try:
+            with _inference_lock:
+                blocks = self.ocr_detector.read_text(image_bytes)
+        except (UnidentifiedImageError, Image.DecompressionBombError) as e:
+            logging.warning("[OCR] Cannot decode image: %s", e)
+            context.set_code(grpc.StatusCode.INVALID_ARGUMENT)
+            context.set_details("Data is not a supported image")
+            return ocr_pb2.OcrReply()
+        except Exception as e:
+            _set_internal_error(context, "OCR", start_time, e)
+            return ocr_pb2.OcrReply()
+
+        # Recognized text is product data, so only the block count is logged
+        logging.info(
+            "[OCR] Completed in %.3fs, %s text block(s)", time.time() - start_time, len(blocks)
+        )
+        return ocr_pb2.OcrReply(
+            blocks=[ocr_pb2.TextBlock(text=text, confidence=confidence) for text, confidence in blocks]
+        )
 
 def _reply_from_prediction(operation, start_time, confidence, pred):
     predicted_class = "human" if pred == 0 else "ai"

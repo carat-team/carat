@@ -25,10 +25,18 @@ class TextModelSettings:
 
 
 @dataclass(frozen=True)
+class OcrModelSettings:
+    languages: list[str]
+    min_confidence: float
+    max_image_side: int
+
+
+@dataclass(frozen=True)
 class Settings:
     grpc: GrpcSettings
     image_model: ImageModelSettings
     text_model: TextModelSettings
+    ocr_model: OcrModelSettings
 
 
 def load_env_file(path: Path) -> None:
@@ -60,6 +68,7 @@ def load_settings(service_root: Path, project_root: Path) -> Settings:
 
     image_config = config["models"]["image"]
     text_config = config["models"]["text"]
+    ocr_config = config["models"]["ocr"]
 
     return Settings(
         grpc=GrpcSettings(
@@ -74,5 +83,10 @@ def load_settings(service_root: Path, project_root: Path) -> Settings:
         text_model=TextModelSettings(
             model_weights=_resolve_service_path(service_root, text_config["model_weights"]),
             model_name=text_config.get("model_name", "roberta-base"),
+        ),
+        ocr_model=OcrModelSettings(
+            languages=list(ocr_config["languages"]),
+            min_confidence=float(ocr_config.get("min_confidence", 0.3)),
+            max_image_side=int(ocr_config.get("max_image_side", 1600)),
         ),
     )

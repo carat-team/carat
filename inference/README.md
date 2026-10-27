@@ -26,11 +26,16 @@ just proto                   # сгенерировать gRPC-код в generat
 just run                     # запустить gRPC-сервер на :50051
 just test-text "some text"   # отправить текст запущенному серверу
 just test-photo path/to.jpg  # отправить изображение
+just test-ocr path/to.jpg    # прочитать текст на изображении (OCR)
 just docker                  # собрать и запустить сервис в Docker
 just                         # список всех команд
 ```
 
 Перед запуском положите веса из `config.yaml` в `weights/`, иначе сервер не стартует.
+
+OCR (`ReadText` из `proto/carat/inference/ocr.proto`) работает на EasyOCR. Модели для языков из
+`config.yaml` (`models.ocr.languages`) EasyOCR скачивает сам при первом запуске в `~/.EasyOCR/model/`,
+в Docker-образ они скачиваются при сборке.
 
 Зависимости описаны в `pyproject.toml` и зафиксированы в `uv.lock`:
 
