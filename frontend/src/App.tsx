@@ -1,14 +1,11 @@
-import { Container } from '@/components/ui';
+import { Header } from '@/components/Header';
 import { NotFoundPage, ProductListPage, ProductPage } from '@/pages';
 import { Route, Switch } from 'wouter';
 
 function App() {
   return (
     <div className="h-screen flex flex-col">
-      {/* TODO: сверстать header */}
-      <header className="bg-secondary text-primary mb-5">
-        <Container className="py-2">Это будущий Header</Container>
-      </header>
+      <Header />
 
       <Switch>
         <Route path="/">
