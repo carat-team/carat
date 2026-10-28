@@ -10,7 +10,6 @@ service Analyzer {
   rpc AnalyzePhoto (PhotoRequest) returns (AnalyzeReply);
   rpc AnalyzeVideo (VideoRequest) returns (AnalyzeReply);
   rpc AnalyzeText (TextRequest) returns (AnalyzeReply);
-  rpc AnalyzeQuality (PhotoRequest) returns (QualityReply);
 }
 
 message PhotoRequest {
@@ -28,16 +27,4 @@ message TextRequest {
 message AnalyzeReply {
   string class = 1;
   float confidence = 2;
-}
-
-message QualityReply {
-  int32 sharpness = 1;
-  int32 overexposure = 2;
-  int32 underexposure = 3;
-  int32 resolution = 4;
-  int32 overall = 5;
-  string verdict = 6;
-  string weakest = 7;
-  int32 width = 8;
-  int32 height = 9;
 }

@@ -1,6 +1,6 @@
-package io.github.carat_team.carat.inference;
+package io.github.carat_team.carat.quality;
 
-public record ImageQuality(
+public record QualityResponse(
     int sharpness,
     int overexposure,
     int underexposure,

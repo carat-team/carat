@@ -8,20 +8,22 @@ from pathlib import Path
 
 import grpc
 from carat.inference import analyzer_pb2_grpc
+from carat.inference import image_quality_pb2_grpc
 
 from app.config import load_settings
 from app.detectors.mocks import MockTextDetector, MockVideoDetector
 from app.detectors.photo_detector import MultitypePictureDetector
 from app.grpc_service import AnalyzerServicer
+from app.quality.grpc_service import QualityServicer
 
 
 def serve(service_root: Path, project_root: Path):
     settings = load_settings(service_root, project_root)
     max_message_length_bytes = settings.grpc.max_message_mb * 1024 * 1024
 
-    if _is_quality_only():
-        logging.warning("QUALITY_ONLY is set - skipping model loading, only AnalyzeQuality is available")
-        photo_detector = video_detector = text_detector = None
+    quality_only = _is_quality_only()
+    if quality_only:
+        logging.warning("QUALITY_ONLY is set - skipping model loading, only ImageQuality is available")
     else:
         photo_detector, video_detector, text_detector = _preload_models(settings)
 
@@ -32,8 +34,13 @@ def serve(service_root: Path, project_root: Path):
             ("grpc.max_receive_message_length", max_message_length_bytes),
         ],
     )
-    analyzer_pb2_grpc.add_AnalyzerServicer_to_server(
-        AnalyzerServicer(photo_detector, video_detector, text_detector, settings.quality),
+    if not quality_only:
+        analyzer_pb2_grpc.add_AnalyzerServicer_to_server(
+            AnalyzerServicer(photo_detector, video_detector, text_detector),
+            server,
+        )
+    image_quality_pb2_grpc.add_ImageQualityServicer_to_server(
+        QualityServicer(settings.quality),
         server,
     )
     server.add_insecure_port(f"{settings.grpc.host}:{settings.grpc.port}")
@@ -43,7 +50,10 @@ def serve(service_root: Path, project_root: Path):
     logging.info("Python: %s", sys.version)
     logging.info("Platform: %s %s", platform.system(), platform.release())
     logging.info("Bind address: %s:%s", settings.grpc.host, settings.grpc.port)
-    logging.info("Endpoints: AnalyzePhoto, AnalyzeVideo, AnalyzeText, AnalyzeQuality")
+    if quality_only:
+        logging.info("Endpoints: ImageQuality.Analyze")
+    else:
+        logging.info("Endpoints: AnalyzePhoto, AnalyzeVideo, AnalyzeText, ImageQuality.Analyze")
     logging.info(
         "Max message size: %s MB (%s bytes)",
         settings.grpc.max_message_mb,
