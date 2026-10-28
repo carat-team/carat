@@ -10,7 +10,7 @@ export const Header = () => {
           <span className="flex items-center justify-center size-6 rounded-sm bg-primary text-secondary">
             <IconCheck className="size-3.5!" />
           </span>
-          Национальный каталог
+          Carat
         </Link>
       </Container>
     </header>
