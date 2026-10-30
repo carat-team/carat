@@ -52,4 +52,3 @@ yarn ts:check           # type check only
 ## Checks before pushing
 
 `yarn lint && yarn format:check && yarn build` must pass.
-
