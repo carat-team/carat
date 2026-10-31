@@ -22,7 +22,7 @@ Carat started as a fork of Cogniflex (an AI-content detector). The customer (Ð§Ð
 4. One result vocabulary for all checks: `PASS`, `WARNING`, `REVIEW`, `NOT_CHECKED`, `ERROR`.
 5. The database is PostgreSQL 18; Redis is not needed. Card attributes are stored in JSONB.
 6. One uvicorn process (`--workers 1`), only `def` handlers, heavy checks behind a semaphore.
-7. Valuable code already merged into `dev` is moved to the new structure; PRs still open at the time of the rewrite are out of scope and land after it, rebased onto the new layout (see `.context/local/port-table.md`). The old state is preserved under the `legacy/java-backend` tag.
+7. Valuable code already merged into `dev` is moved to the new structure; PRs still open at the time of the rewrite are out of scope and land after it, rebased onto the new layout (see `.context/python-rewrite/notes/port-table.md`). The old state is preserved under the `legacy/java-backend` tag.
 
 ## Consequences
 
@@ -32,7 +32,7 @@ Pros:
 - Checks are tested without running a server or database.
 
 Cons and risks:
-- Rewrite in one long-lived PR; open PRs #12, #16, #17, #19 are not part of it, so their authors must rebase onto the new layout once the rewrite is merged (their logic is listed in `.context/local/port-table.md`).
+- Rewrite in one long-lived PR; open PRs #12, #16, #17, #19 are not part of it, so their authors must rebase onto the new layout once the rewrite is merged (their logic is listed in `.context/python-rewrite/notes/port-table.md`).
 - Heavy models (SigLIP, EasyOCR, rembg) in one process may not fit in memory; measure before promising the set of checks.
 - The Taiga wiki will go stale; it is updated separately.
 
