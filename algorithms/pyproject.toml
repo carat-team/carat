@@ -13,6 +13,11 @@ vision = [
     "pillow>=13.0.0",
     "zxing-cpp>=3.1.1",
 ]
+ml = [
+    "easyocr>=1.7.2",
+    "torch>=2.15.0",
+    "torchvision>=0.29.2",
+]
 
 [build-system]
 requires = ["uv_build>=0.13.6,<0.14.0"]
@@ -42,3 +47,12 @@ include = ["src", "tests"]
 testpaths = ["tests"]
 # Test files in different directories may share a name (test_check.py)
 addopts = "--import-mode=importlib"
+
+[tool.uv.sources]
+torch = { index = "pytorch-cpu" }
+torchvision = { index = "pytorch-cpu" }
+
+[[tool.uv.index]]
+name = "pytorch-cpu"
+url = "https://download.pytorch.org/whl/cpu"
+explicit = true

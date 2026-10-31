@@ -113,7 +113,7 @@ The core install is small (pydantic) so the backend and the tests start fast. He
 | Extra | For | Install |
 |---|---|---|
 | `vision` | Image decoding and barcode reading: Pillow, zxing-cpp | `uv sync --extra vision` |
-| `ml` | Model runtimes for model-based checks | `uv sync --extra ml` |
+| `ml` | Model-based readers: EasyOCR on CPU torch | `uv sync --extra ml` |
 
 Add a dependency with `uv add <package>` or `uv add --optional vision <package>`, and commit `uv.lock` with
 `pyproject.toml`. Ask the team before adding anything that pulls in torch: it dominates the image size and memory.
@@ -129,5 +129,16 @@ Unit tests show that every rule works. Accuracy numbers (precision, recall) agai
 
 ## Model weights
 
-Weights are never committed. This section lists the source URL, file name, checksum and target directory for
-every model a check uses. The backend passes that directory to the check.
+Weights are never committed. Put every file below into one directory; the backend passes that directory to the
+reader (`OcrReader(weights_directory)`), which never downloads anything on its own.
+
+| Used by | File | Source | MD5 |
+|---|---|---|---|
+| `vision/ocr` (text detection) | `craft_mlt_25k.pth` | [craft_mlt_25k.zip](https://github.com/JaidedAI/EasyOCR/releases/download/pre-v1.1.6/craft_mlt_25k.zip) | `2f8227d2def4037cdb3b34389dcf9ec1` |
+| `vision/ocr` (Russian and English text) | `cyrillic_g2.pth` | [cyrillic_g2.zip](https://github.com/JaidedAI/EasyOCR/releases/download/v1.6.1/cyrillic_g2.zip) | `19f85f43d9128a89ac21b8d6a06973fe` |
+
+The quickest way to fetch both files is to let EasyOCR download them once:
+
+```sh
+uv run --extra ml python -c "import easyocr; easyocr.Reader(['ru', 'en'], gpu=False, model_storage_directory='<weights directory>')"
+```

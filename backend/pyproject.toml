@@ -5,7 +5,7 @@ description = "REST API that stores product cards and runs Carat checks"
 readme = "README.md"
 requires-python = ">=3.12"
 dependencies = [
-    "carat-algorithms[vision]",
+    "carat-algorithms[vision,ml]",
     "fastapi>=0.162.0",
     "pydantic-settings>=2.16.2",
     "uvicorn>=0.54.0",
@@ -17,6 +17,14 @@ build-backend = "uv_build"
 
 [tool.uv.sources]
 carat-algorithms = { path = "../algorithms", editable = true }
+# Same CPU-only torch as algorithms: sources of a path dependency do not apply here
+torch = { index = "pytorch-cpu" }
+torchvision = { index = "pytorch-cpu" }
+
+[[tool.uv.index]]
+name = "pytorch-cpu"
+url = "https://download.pytorch.org/whl/cpu"
+explicit = true
 
 [dependency-groups]
 dev = [

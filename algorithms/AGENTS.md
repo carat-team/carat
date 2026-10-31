@@ -25,7 +25,8 @@ Package `carat_algorithms`, Python 3.12, uv, `src/` layout. Human-facing explana
 ## Dependencies
 
 - Core group: pydantic (add rapidfuzz when a check needs it). `[vision]`: pillow, zxing-cpp (plus
-  opencv-python-headless, numpy when a check needs them). `[ml]`: model runtimes.
+  opencv-python-headless, numpy when a check needs them). `[ml]`: easyocr on CPU torch
+  (approved; torch comes from the explicit `pytorch-cpu` index).
 - `uv add <pkg>` / `uv add --optional <extra> <pkg>`; commit `uv.lock` with `pyproject.toml`.
 - Import heavy libraries inside the module that uses them, never in `core/` or a package `__init__`.
   `import carat_algorithms.core` must work with the core group only.
