@@ -45,7 +45,7 @@
   "reason_code": "VOLUME_MISMATCH",
   "explanation": "Объём в названии 50 мл, в атрибуте 100 мл",
   "field_refs": ["fullName", "volume"],
-  "algorithm_version": "1.0.0"
+  "algorithm_version": 1
 }
 ```
 
