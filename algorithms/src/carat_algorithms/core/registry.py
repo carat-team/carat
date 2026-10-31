@@ -4,4 +4,7 @@ from carat_algorithms.core.check import Check
 
 
 def get_checks() -> list[Check]:
-    return []
+    # Imported here: check modules import carat_algorithms.core, and core must stay import-light
+    from carat_algorithms.identifiers.gtin import GtinFormatCheck
+
+    return [GtinFormatCheck()]

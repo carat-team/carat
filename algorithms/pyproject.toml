@@ -34,3 +34,5 @@ include = ["src", "tests"]
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]
+# Test files in different directories may share a name (test_check.py)
+addopts = "--import-mode=importlib"

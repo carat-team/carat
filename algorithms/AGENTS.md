@@ -43,8 +43,11 @@ Package `carat_algorithms`, Python 3.12, uv, `src/` layout. Human-facing explana
 4. Bump `algorithm_version` by 1 on any change that can alter a result (rule, threshold, model, preprocessing).
 5. Register in `core/registry.py`; unregistered checks do not run.
 6. Tests, then `just algorithms check`.
-7. PR description: Taiga link and requirement number from `docs/requirements.md`; no requirement -> "inferred"
-   in the docstring.
+7. PR description: Taiga link and requirement number from `docs/requirements.md`.
+
+## Style
+
+- Quotes in code, comments and explanations are plain `"` or `'`, never `«»`.
 
 ## Statuses
 

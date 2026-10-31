@@ -40,7 +40,7 @@ from carat_algorithms.core import CheckResult, CheckStatus, ProductCard
 
 
 class BrandValueCheck:
-    """The brand value «Без товарного знака» is not allowed."""
+    """The brand value "Без товарного знака" is not allowed."""
 
     check_id = "brand_value"
     algorithm_version = 1
@@ -49,7 +49,7 @@ class BrandValueCheck:
         if card.brand is None:
             return self._result(CheckStatus.NOT_CHECKED, "BRAND_VALUE_MISSING", "Бренд не указан")
         if card.brand.strip().lower() == "без товарного знака":
-            return self._result(CheckStatus.WARNING, "BRAND_VALUE_FORBIDDEN", "Бренд «Без товарного знака» недопустим")
+            return self._result(CheckStatus.WARNING, "BRAND_VALUE_FORBIDDEN", 'Бренд "Без товарного знака" недопустим')
         return self._result(CheckStatus.PASS, "BRAND_VALUE_OK", "Бренд указан")
 
     def _result(self, status: CheckStatus, reason_code: str, explanation: str) -> CheckResult:
@@ -89,8 +89,8 @@ entered, so a rule that needs text treats it as a finding.
 
 When unsure, return `REVIEW`. Each false `WARNING` teaches users to ignore warnings.
 
-Every check maps to a customer requirement (R1 to R8) in [docs/requirements.md](../docs/requirements.md).
-A check that the team added on its own initiative says "inferred" in its docstring.
+The customer requirements (R1 to R8) live in [docs/requirements.md](../docs/requirements.md). Name the one your
+check covers in the pull request description.
 
 ## Project layout
 
