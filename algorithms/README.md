@@ -129,10 +129,12 @@ Unit tests show that every rule works. Accuracy numbers (precision, recall) agai
 
 ## Model weights
 
-Weights are never committed. Put every file below into one directory; the backend passes that directory to the
-reader (`OcrReader(weights_directory)`), which never downloads anything on its own.
+Weights are never committed. They live in the repository's `weights/` directory, one subdirectory per model
+family; docker mounts the same directory. The backend reads the subdirectory from its settings
+(`[weights] easyocr_dir` in `backend/settings.toml`) and passes it to the reader (`OcrReader(weights_directory)`),
+which never downloads anything on its own.
 
-| Used by | File | Source | MD5 |
+| Used by | File in `weights/easyocr/` | Source | MD5 |
 |---|---|---|---|
 | `vision/ocr` (text detection) | `craft_mlt_25k.pth` | [craft_mlt_25k.zip](https://github.com/JaidedAI/EasyOCR/releases/download/pre-v1.1.6/craft_mlt_25k.zip) | `2f8227d2def4037cdb3b34389dcf9ec1` |
 | `vision/ocr` (Russian and English text) | `cyrillic_g2.pth` | [cyrillic_g2.zip](https://github.com/JaidedAI/EasyOCR/releases/download/v1.6.1/cyrillic_g2.zip) | `19f85f43d9128a89ac21b8d6a06973fe` |
@@ -140,5 +142,5 @@ reader (`OcrReader(weights_directory)`), which never downloads anything on its o
 The quickest way to fetch both files is to let EasyOCR download them once:
 
 ```sh
-uv run --extra ml python -c "import easyocr; easyocr.Reader(['ru', 'en'], gpu=False, model_storage_directory='<weights directory>')"
+uv run --extra ml python -c "import easyocr; easyocr.Reader(['ru', 'en'], gpu=False, model_storage_directory='weights/easyocr')"
 ```

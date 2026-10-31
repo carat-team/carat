@@ -1,6 +1,8 @@
 # backend/justfile. Run from the repo root as `just backend <recipe>` or from this directory.
 
+# DB_* and S3_* come from the root .env, shared with docker compose
 set dotenv-load := true
+set dotenv-path := "../.env"
 
 default:
     @just --list
@@ -38,3 +40,13 @@ migrate:
 # Generate a migration, then READ it before committing
 migrate-new message:
     uv run alembic revision --autogenerate -m "{{message}}"
+
+# Throwaway PostgreSQL (port 55432) and S3-compatible RustFS (port 59000) for the tests; stop with `just stop-test-services`
+test-services:
+    docker run -d --rm --name carat-test-db -p 55432:5432 -e POSTGRES_USER=carat -e POSTGRES_PASSWORD=carat -e POSTGRES_DB=carat_test postgres:18
+    docker run -d --rm --name carat-test-s3 -p 59000:9000 -e RUSTFS_ACCESS_KEY=carat -e RUSTFS_SECRET_KEY=carat-secret rustfs/rustfs:1.0.4
+    @echo "export TEST_DATABASE_URL=postgresql+psycopg://carat:carat@localhost:55432/carat_test"
+    @echo "export TEST_OBJECT_STORAGE_URL=http://carat:carat-secret@localhost:59000"
+
+stop-test-services:
+    docker stop carat-test-db carat-test-s3

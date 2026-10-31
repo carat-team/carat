@@ -1,6 +1,6 @@
 from carat_algorithms.core import CheckResult, CheckStatus, ProductCard
 
-from carat_backend.services.check_runner import CheckRunner
+from carat_backend.services.checks import CheckRunner
 
 
 class PassingCheck:

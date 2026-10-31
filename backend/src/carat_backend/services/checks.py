@@ -1,9 +1,13 @@
 import logging
 import threading
 import time
+import uuid
 from collections.abc import Sequence
 
-from carat_algorithms.core import Check, CheckResult, CheckStatus, ProductCard
+from carat_algorithms.core import CardPhoto, Check, CheckResult, CheckStatus, ProductCard
+
+from carat_backend.services.products import ProductService
+from carat_backend.storage.object_store import PhotoObjectStore
 
 logger = logging.getLogger(__name__)
 
@@ -15,7 +19,6 @@ class CheckRunner:
 
     def __init__(self, checks: Sequence[Check], concurrency: int) -> None:
         self._checks = checks
-        # ponytail: one semaphore around the whole run; add a per-check heavy flag if text checks start queueing
         self._semaphore = threading.BoundedSemaphore(concurrency)
 
     def run(self, card: ProductCard) -> list[CheckResult]:
@@ -42,3 +45,22 @@ class CheckRunner:
             "Check finished: check_id=%s status=%s duration_ms=%.1f", check.check_id, result.status, duration_ms
         )
         return result
+
+
+class CheckService:
+    """Builds a ProductCard from a stored product and runs the checks on it."""
+
+    def __init__(self, products: ProductService, store: PhotoObjectStore, runner: CheckRunner) -> None:
+        self._products = products
+        self._store = store
+        self._runner = runner
+
+    def check(self, product_id: uuid.UUID) -> list[CheckResult]:
+        product = self._products.get(product_id)
+        photos = tuple(
+            CardPhoto(
+                content=self._store.get(photo.object_key), perspective=photo.perspective, package_id=photo.package_id
+            )
+            for photo in product.photos
+        )
+        return self._runner.run(ProductCard.model_validate({**product.attributes, "photos": photos}))

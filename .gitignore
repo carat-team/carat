@@ -21,5 +21,10 @@ graphify-out/cache
 **.pth
 **.safetensors
 
+# Model weights: only the per-model directories and their placeholders are committed
+weights/**
+!weights/**/
+!weights/**/.gitkeep
+
 !model/artifacts/.gitkeep
 !model/artifacts/**/.gitkeep

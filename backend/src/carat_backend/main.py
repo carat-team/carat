@@ -1,9 +1,5 @@
-from fastapi import FastAPI
+"""Entry point for `uvicorn carat_backend.main:create_app --factory`."""
 
-from carat_backend.api import health
+from carat_backend.rest.app import create_app
 
-
-def create_app() -> FastAPI:
-    app = FastAPI(title="Carat")
-    app.include_router(health.router)
-    return app
+__all__ = ["create_app"]

@@ -23,10 +23,11 @@ text signals, RoBERTa/ResNet detectors) back into this repository.
 | Path | What | Stack |
 |---|---|---|
 | `algorithms/` | Library of checks: pure logic, no transport, no database | Python 3.12, uv |
-| `backend/` | REST API, persistence, orchestration; imports `algorithms` | Python 3.12, FastAPI, uv, PostgreSQL |
+| `backend/` | REST API, persistence, orchestration; imports `algorithms` | Python 3.12, FastAPI, uv, PostgreSQL, S3 |
 | `model/` | Research, training, evaluation (not deployed, never imported) | Python, Jupyter |
 | `frontend/` | Web UI | React 19, TypeScript, Vite, yarn |
 | `docs/` | Documentation for **humans** (mostly Russian) | Markdown |
+| `weights/` | Model weights, one subdirectory per model family (`weights/easyocr/`). Only `.gitkeep` files are committed; docker mounts it | - |
 | `.context/` | Additional context for **agents** | Markdown |
 | `.github/workflows/` | CI per project, release image builds, Claude review | GitHub Actions |
 
@@ -39,7 +40,7 @@ and `uv.lock`. Run commands from the project directory or through the root `just
 ```
 frontend --REST--> backend --imports--> algorithms
                       |
-                 PostgreSQL 18      (later: gRPC interface for ЧЗ services, a second adapter over the same service layer)
+          PostgreSQL 18 + S3 (RustFS)      (later: gRPC interface for ЧЗ services, a second adapter over the same service layer)
 ```
 
 - `algorithms` knows nothing about HTTP, gRPC, databases or the backend. It exposes checks that take a
