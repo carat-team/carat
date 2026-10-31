@@ -1,0 +1,40 @@
+# backend/justfile. Run from the repo root as `just backend <recipe>` or from this directory.
+
+set dotenv-load := true
+
+default:
+    @just --list
+
+sync:
+    uv sync
+
+# Single worker on purpose: models are loaded in-process and must not be duplicated.
+# Do not add --workers N here without asking.
+run:
+    uv run uvicorn carat_backend.main:create_app --factory --host 0.0.0.0 --port 8080 --workers 1
+
+lint:
+    uv run ruff check .
+    uv run ruff format --check .
+
+fix:
+    uv run ruff check --fix .
+    uv run ruff format .
+
+typecheck:
+    uv run pyright
+
+test:
+    uv run pytest
+
+lock-check:
+    uv lock --check
+
+check: lock-check lint typecheck test
+
+migrate:
+    uv run alembic upgrade head
+
+# Generate a migration, then READ it before committing
+migrate-new message:
+    uv run alembic revision --autogenerate -m "{{message}}"
