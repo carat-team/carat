@@ -32,11 +32,17 @@ class OcrModelSettings:
 
 
 @dataclass(frozen=True)
+class SegmentationModelSettings:
+    model_name: str
+
+
+@dataclass(frozen=True)
 class Settings:
     grpc: GrpcSettings
     image_model: ImageModelSettings
     text_model: TextModelSettings
     ocr_model: OcrModelSettings
+    segmentation_model: SegmentationModelSettings
 
 
 def load_env_file(path: Path) -> None:
@@ -69,6 +75,7 @@ def load_settings(service_root: Path, project_root: Path) -> Settings:
     image_config = config["models"]["image"]
     text_config = config["models"]["text"]
     ocr_config = config["models"]["ocr"]
+    segmentation_config = config["models"]["segmentation"]
 
     return Settings(
         grpc=GrpcSettings(
@@ -88,5 +95,8 @@ def load_settings(service_root: Path, project_root: Path) -> Settings:
             languages=list(ocr_config["languages"]),
             min_confidence=float(ocr_config.get("min_confidence", 0.3)),
             max_image_side=int(ocr_config.get("max_image_side", 1600)),
+        ),
+        segmentation_model=SegmentationModelSettings(
+            model_name=segmentation_config.get("model_name", "isnet-general-use"),
         ),
     )

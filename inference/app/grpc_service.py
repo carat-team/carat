@@ -9,9 +9,12 @@ from carat.inference import analyzer_pb2
 from carat.inference import analyzer_pb2_grpc
 from carat.inference import ocr_pb2
 from carat.inference import ocr_pb2_grpc
+from carat.inference import segmentation_pb2
+from carat.inference import segmentation_pb2_grpc
 from PIL import Image, UnidentifiedImageError
 
 from app.detectors.ocr_detector import OcrDetector
+from app.detectors.segmentation_detector import SegmentationDetector
 
 _inference_lock = threading.Lock()
 
@@ -164,6 +167,46 @@ class OcrServicer(ocr_pb2_grpc.OcrServicer):
         return ocr_pb2.OcrReply(
             blocks=[ocr_pb2.TextBlock(text=text, confidence=confidence) for text, confidence in blocks]
         )
+
+class SegmentationServicer(segmentation_pb2_grpc.SegmentationServicer):
+    def __init__(self, segmentation_detector: SegmentationDetector) -> None:
+        self.segmentation_detector = segmentation_detector
+
+    def SegmentProduct(
+        self, request: segmentation_pb2.SegmentationRequest, context: grpc.ServicerContext
+    ) -> segmentation_pb2.SegmentationReply:
+        image_bytes = request.image_data
+
+        logging.info("=" * 60)
+        logging.info("[Segmentation] New request received")
+        logging.info("[Segmentation] Peer: %s", context.peer())
+        logging.info("[Segmentation] Data size: %s bytes", len(image_bytes))
+
+        if not image_bytes:
+            logging.warning("[Segmentation] Empty request received, returning error")
+            context.set_code(grpc.StatusCode.INVALID_ARGUMENT)
+            context.set_details("Empty image bytes received")
+            return segmentation_pb2.SegmentationReply()
+
+        start_time = time.time()
+
+        try:
+            with _inference_lock:
+                mask_png, width, height = self.segmentation_detector.segment(image_bytes)
+        except (UnidentifiedImageError, Image.DecompressionBombError) as e:
+            logging.warning("[Segmentation] Cannot decode image: %s", e)
+            context.set_code(grpc.StatusCode.INVALID_ARGUMENT)
+            context.set_details("Data is not a supported image")
+            return segmentation_pb2.SegmentationReply()
+        except Exception as e:
+            _set_internal_error(context, "Segmentation", start_time, e)
+            return segmentation_pb2.SegmentationReply()
+
+        logging.info(
+            "[Segmentation] Completed in %.3fs, mask %sx%s", time.time() - start_time, width, height
+        )
+        return segmentation_pb2.SegmentationReply(mask_png=mask_png, width=width, height=height)
+
 
 def _reply_from_prediction(operation, start_time, confidence, pred):
     predicted_class = "human" if pred == 0 else "ai"

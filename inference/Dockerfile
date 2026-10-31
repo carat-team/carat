@@ -30,4 +30,7 @@ RUN python -c "from transformers import AutoTokenizer, AutoModel; \
 
 RUN python -c "import easyocr; easyocr.Reader(['ru', 'en'], gpu=False)"
 
+ENV U2NET_HOME=/app/inference/models
+RUN python -c "from rembg import new_session; new_session('isnet-general-use')"
+
 CMD ["python", "main.py"]

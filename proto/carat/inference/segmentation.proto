@@ -1,0 +1,23 @@
+syntax = "proto3";
+
+package carat.inference;
+
+option java_multiple_files = true;
+option java_package = "io.github.carat_team.carat.grpc";
+option java_outer_classname = "SegmentationProto";
+
+// Salient object segmentation: separates the product from the background.
+service Segmentation {
+  rpc SegmentProduct (SegmentationRequest) returns (SegmentationReply);
+}
+
+message SegmentationRequest {
+  bytes image_data = 1;
+}
+
+message SegmentationReply {
+  // Grayscale PNG of the same size as the input image: 255 = object, 0 = background
+  bytes mask_png = 1;
+  int32 width = 2;
+  int32 height = 3;
+}

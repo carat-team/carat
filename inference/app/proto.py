@@ -5,15 +5,11 @@ import sys
 from pathlib import Path
 
 
-PROTO_NAMES = ("analyzer", "ocr")
-
-
 def ensure_generated_proto(proto_dir: Path, generated_dir: Path) -> bool:
-    proto_files = [proto_dir / "carat" / "inference" / f"{name}.proto" for name in PROTO_NAMES]
-    for proto_file in proto_files:
-        if not proto_file.exists():
-            logging.error("Proto file not found: %s", proto_file)
-            return False
+    proto_files = sorted((proto_dir / "carat" / "inference").glob("*.proto"))
+    if not proto_files:
+        logging.error("No proto files found in: %s", proto_dir / "carat" / "inference")
+        return False
 
     generated_dir.mkdir(parents=True, exist_ok=True)
 

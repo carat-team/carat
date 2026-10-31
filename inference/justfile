@@ -29,6 +29,10 @@ test-photo path:
 test-ocr path:
     uv run tests/test_ocr_client.py "{{path}}"
 
+# Segment the product on an image on a running server and save the mask
+test-segmentation path:
+    uv run tests/test_segmentation_client.py "{{path}}"
+
 # Send a video to a running server
 test-video path:
     uv run tests/test_video_client.py "{{path}}"
