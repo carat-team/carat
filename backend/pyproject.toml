@@ -1,0 +1,43 @@
+[project]
+name = "carat-backend"
+version = "0.1.0"
+description = "REST API that stores product cards and runs Carat checks"
+readme = "README.md"
+requires-python = ">=3.12"
+dependencies = [
+    "carat-algorithms",
+    "fastapi>=0.162.0",
+    "pydantic-settings>=2.16.2",
+    "uvicorn>=0.54.0",
+]
+
+[build-system]
+requires = ["uv_build>=0.13.6,<0.14.0"]
+build-backend = "uv_build"
+
+[tool.uv.sources]
+carat-algorithms = { path = "../algorithms", editable = true }
+
+[dependency-groups]
+dev = [
+    "httpx2>=2.16.0",
+    "pyright>=1.1.414",
+    "pytest>=9.2.0",
+    "ruff>=0.17.3",
+]
+
+[tool.ruff]
+line-length = 120
+target-version = "py312"
+extend-exclude = ["*.md"]
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "UP", "B", "N", "ANN"]
+
+[tool.pyright]
+pythonVersion = "3.12"
+typeCheckingMode = "strict"
+include = ["src", "tests"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
