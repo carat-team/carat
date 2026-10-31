@@ -4,6 +4,8 @@
 .ipynb_checkpoints
 .worktrees
 
+.context/local/
+
 __pycache__
 venv
 node_modules

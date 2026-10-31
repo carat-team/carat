@@ -1,60 +1,51 @@
 # model/AGENTS.md
 
-ML research workspace: data exploration, training, evaluation and export of models.
-Nothing here is deployed. Read the root `AGENTS.md` first.
+Research, training and evaluation. Read the root `AGENTS.md` first.
 
-Only model work lives here. Algorithms without a model (rules, validators, parsers, name or volume
-checks) do not belong in `model/`, even if meant to be ported later: write them in `backend/` (Java).
+`model/` is not deployed and is never imported by `algorithms/` or `backend/`. It produces three things:
+weights, measurements and decisions. Production inference code for a trained model lives in
+`algorithms/` (see `algorithms/AGENTS.md`, section "Model-based checks").
 
-## Stack
+## Where code goes
 
-- Python 3.12 (same as `inference/`), PyTorch, torchvision, Hugging Face `transformers`, scikit-learn,
-  NumPy, pandas, OpenCV, MediaPipe, matplotlib; Jupyter notebooks for experiments
-- Dependencies are listed in `requirements.txt`. Install them with **uv** into a local venv:
+| Code | Home |
+|---|---|
+| Training, fine-tuning, experiments, ablations | `model/` |
+| Evaluation against labeled sets: precision, recall, F1, confidence intervals | `model/` (or `algorithms/scripts/` for a single check) |
+| Dataset building and cleaning scripts | `model/` |
+| Weight export (ONNX, state_dict) and the checksum | `model/` |
+| A rule, parser or validator that needs no model | `algorithms/`, not here |
+| Running the trained model for a check at request time | `algorithms/` |
 
-```bash
-cd model
-uv venv --python 3.12
-uv pip install -r requirements.txt
-uv run jupyter lab              # or select .venv as the kernel in your IDE
-```
-
-Never install into the system Python. When adding a dependency, append it to `requirements.txt`
-with a lower-bound version (`package>=X.Y`).
-
-## Layout
-
-- `notebooks/` - experiments, training and optimization notebooks (`<topic>_<purpose>.ipynb`)
-- `utils/` - research helpers grouped by modality: `image_utils/`, `text_utils/`, `video_utils/`
-- `prod_utils/` - model-related code meant to be ported to `inference/` (model selection, preprocessing)
-- `workflow_model/` - model validation script and its CI workflow definition
-- `artifacts/` - local outputs (checkpoints, metrics, plots), never committed
-
-New experiments get their own clearly named subpackage or notebook; do not create `test2.py`,
-`new/`, `tmp/` or similar. Reusable logic moves out of notebooks into `utils/` modules.
-
-## Rules
-
-- **Never commit** datasets, weights, checkpoints, `*.npy`, `*.csv` dumps, Kaggle downloads or HF
-  caches. Code must load them from a configurable path. Document every dataset and model in
-  `model/README.md`: source URL (or how to obtain it), license if known, and where to place it
-  locally. If you do not know where a file came from, ask the user.
-- **Type hints on every function** in `.py` files and on functions defined in notebooks, using
-  modern syntax (`list[str]`, `X | None`).
-- Notebooks: keep them runnable top to bottom, put paths and hyperparameters in one config cell,
-  set random seeds, and clear heavy outputs (large images, long logs) before committing.
-- Report results with the exact dataset split, metrics and seed so experiments are reproducible.
-- `inference/` must never import from `model/`. To ship a model:
-  1. export weights (`.safetensors` preferred over pickled `.pth`) to `artifacts/`,
-  2. port the minimal typed inference/preprocessing code into `inference/app/detectors/`,
-  3. document the weights in `inference/README.md` and the path in `inference/config.yaml`,
-  4. keep preprocessing identical between training and inference and note it in the PR.
-- The production runtime is CPU-only; mention CPU latency and model size when proposing a model.
-- Training runs and large downloads are expensive - ask before starting them.
+If a check can be solved with rules, it goes to `algorithms/` first. Do not wrap a rule in a model "for later".
 
 ## Domain notes
 
-Inputs are product cards for the "Честный Знак" system: structured text fields (name, brand,
-category, codes such as GTIN / OKPD2 / TN VED) and product photos from fixed angles
-(front, left, right, back). Russian is the primary text language. Models should flag
-inconsistent, low-quality or generated content, not just classify "AI vs human".
+- Inputs are product cards for ЧЗ: name, brand, category, GTIN, OKPD2, TN VED codes and photos from fixed angles.
+- Primary language is Russian. Mixed Russian/Latin brand names are normal.
+- Only the perfumery category is in scope (R1 in `docs/requirements.md`).
+- Do not revive AI-content detection (human/ai verdicts, RoBERTa/ResNet detectors). It is not part of the customer request.
+
+## Python rules
+
+- uv only; `model/` has its own `pyproject.toml` and `uv.lock`. Notebooks are allowed, but strip outputs before commit.
+- Type hints on every function in `.py` files. `pathlib` for paths. `logging` instead of `print` in library code
+  (scripts may print results).
+- Fixed random seeds. Report the seed and the data split in the README of the experiment.
+- Report numbers with confidence intervals when the test set is under 1000 items.
+
+## Data and weights
+
+- Never commit weights, datasets, images, archives or CSV dumps. This includes small ones "just for now".
+- Each experiment folder has a `README.md` with: goal, data source and download link, command to reproduce,
+  results table, known limits.
+- Weights go to a separate branch or external storage (current example: branch
+  `chore/add-frame-classifier-weights`). Record filename and SHA-256 checksum in the README.
+- Results files (`results/*.json`) are small and may be committed.
+
+## Handing a model to `algorithms/`
+
+1. Export weights in the format `algorithms` expects (ONNX preferred) and record checksum and source.
+2. Write down the exact preprocessing and the threshold, with the evidence for the threshold.
+3. Open a PR in `algorithms/` that loads the weights from a caller-provided directory.
+4. The model name, preprocessing and threshold are part of the check's `algorithm_version`.
