@@ -5,7 +5,7 @@ description = "REST API that stores product cards and runs Carat checks"
 readme = "README.md"
 requires-python = ">=3.12"
 dependencies = [
-    "carat-algorithms",
+    "carat-algorithms[vision]",
     "fastapi>=0.162.0",
     "pydantic-settings>=2.16.2",
     "uvicorn>=0.54.0",

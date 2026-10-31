@@ -112,7 +112,7 @@ The core install is small (pydantic) so the backend and the tests start fast. He
 
 | Extra | For | Install |
 |---|---|---|
-| `vision` | OpenCV (headless), numpy, zxing-cpp | `uv sync --extra vision` |
+| `vision` | Image decoding and barcode reading: Pillow, zxing-cpp | `uv sync --extra vision` |
 | `ml` | Model runtimes for model-based checks | `uv sync --extra ml` |
 
 Add a dependency with `uv add <package>` or `uv add --optional vision <package>`, and commit `uv.lock` with
