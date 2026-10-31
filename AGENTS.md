@@ -12,7 +12,7 @@ Carat runs a set of independent checks and returns one result per check: `PASS`,
 accept or reject cards by itself; the consumer (our frontend, later ЧЗ services) applies its own policy.
 
 `docs/requirements.md` lists the customer requirements (R1-R8) and is the source of truth for which
-checks exist. Checks not on that list are allowed but lower priority and must be marked as such.
+checks exist. Checks not on that list are allowed but lower priority.
 
 Carat started as a fork of Cogniflex, an AI-generated content detector. That code is gone and is kept
 under the git tag `legacy/java-backend`. Do not port AI-content detection (human/ai verdicts, static
