@@ -1,17 +1,23 @@
 import { Container } from '@/components/ui';
-import { IconCheck } from '@tabler/icons-react';
-import { Link } from 'wouter';
 
 export const Header = () => {
   return (
-    <header className="bg-secondary mb-5">
-      <Container className="flex items-center h-12">
-        <Link href="/" className="flex items-center gap-3 text-primary text-xs">
-          <span className="flex items-center justify-center size-6 rounded-sm bg-primary text-secondary">
-            <IconCheck className="size-3.5!" />
+    <header className="bg-secondary">
+      <Container className="flex h-[72px] max-w-[1440px] items-center">
+        {/* Логотип */}
+        <div className="flex items-center gap-4">
+          <span className="flex size-10 items-center justify-center rounded-lg bg-primary text-xl font-bold text-secondary">
+            К
           </span>
-          Carat
-        </Link>
+
+          <span className="text-2xl font-bold text-white">КАРАТ</span>
+        </div>
+
+        {/* Название раздела */}
+        <span className="ml-8 text-sm text-white">Каталог продукции</span>
+
+        {/* Информация о проекте */}
+        <span className="ml-auto text-sm text-gray-200">MVP · Парфюмерная продукция</span>
       </Container>
     </header>
   );
