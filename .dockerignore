@@ -1,21 +1,22 @@
 .git
 .github
+.env*
+.aws
+.worktrees
+.context
+.agents
+.claude
+.codex
 
-**/.gradle
-**/.gradle-home
-**/.gradle-user-home
-**/.idea
-
-**/build
+**/.venv
+**/__pycache__
+**/.pytest_cache
+**/.ruff_cache
 **/node_modules
-**/release
 
 frontend
 docs
-
-model/notebooks
-model/build
-model/artifacts
-model/weights
-**/.venv
-inference/generated
+model
+weights
+graphify-out
+*.xlsx

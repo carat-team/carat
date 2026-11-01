@@ -3,7 +3,7 @@ import io
 from minio import Minio
 from minio.error import S3Error
 
-from carat_backend.settings import ObjectStorageCredentials, ObjectStorageSettings
+from carat_backend.settings import ObjectStorageSettings
 
 # Another request created the bucket between our check and our create
 _BUCKET_RACE_CODES = {"BucketAlreadyOwnedByYou", "BucketAlreadyExists"}
@@ -50,13 +50,11 @@ class PhotoObjectStore:
         self._bucket_ready = True
 
 
-def create_photo_object_store(
-    settings: ObjectStorageSettings, credentials: ObjectStorageCredentials
-) -> PhotoObjectStore:
+def create_photo_object_store(settings: ObjectStorageSettings) -> PhotoObjectStore:
     client = Minio(
         endpoint=settings.endpoint,
-        access_key=credentials.access_key,
-        secret_key=credentials.secret_key,
+        access_key=settings.access_key,
+        secret_key=settings.secret_key,
         secure=settings.secure,
     )
     return PhotoObjectStore(client, settings.bucket)

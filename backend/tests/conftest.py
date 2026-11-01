@@ -12,7 +12,6 @@ from sqlalchemy import create_engine, make_url, text
 from carat_backend.rest.app import create_app
 from carat_backend.settings import (
     DatabaseSettings,
-    ObjectStorageCredentials,
     ObjectStorageSettings,
     PhotoSettings,
     Settings,
@@ -58,10 +57,11 @@ def client(database_url: str, object_storage_url: str) -> Iterator[TestClient]:
             password=database.password or "",
         ),
         object_storage=ObjectStorageSettings(
-            endpoint=storage.netloc.rpartition("@")[2], bucket=TEST_BUCKET, secure=storage.scheme == "https"
-        ),
-        object_storage_credentials=ObjectStorageCredentials(
-            access_key=storage.username or "", secret_key=storage.password or ""
+            endpoint=storage.netloc.rpartition("@")[2],
+            bucket=TEST_BUCKET,
+            secure=storage.scheme == "https",
+            access_key=storage.username or "",
+            secret_key=storage.password or "",
         ),
         photos=PhotoSettings(max_size_mb=1),
     )

@@ -25,7 +25,7 @@ class Services:
 
 def build_services(settings: Settings) -> Services:
     session_factory = create_session_factory(settings.database.url)
-    store = create_photo_object_store(settings.object_storage, settings.object_storage_credentials)
+    store = create_photo_object_store(settings.object_storage)
     products = ProductService(session_factory)
     return Services(
         products=products,

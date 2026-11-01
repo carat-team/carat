@@ -1,18 +1,7 @@
-# Backend settings for local development. Docker mounts its own file and points SETTINGS_FILE at it.
-# Secrets are not stored here: the database connection (DB_*) and object storage keys (S3_ACCESS_KEY,
-# S3_SECRET_KEY) come from environment variables, see the root .env.example.
-# Relative paths resolve against the directory of this file.
-
-[object_storage]
-endpoint = "localhost:9000"
-bucket = "carat-photos"
-secure = false
+# Backend settings for local development.
 
 [photos]
 max_size_mb = 10
-
-[weights]
-easyocr_dir = "../weights/easyocr"
 
 [checks]
 concurrency = 2

@@ -1,7 +1,7 @@
 """Backend settings.
 
 Non-secret settings live in a TOML file (backend/settings.toml, or the file named by SETTINGS_FILE).
-The database connection and object storage credentials come from environment variables (.env).
+The database and object storage connections come from environment variables (.env).
 """
 
 import os
@@ -39,29 +39,28 @@ class DatabaseSettings(BaseSettings):
         )
 
 
-class ObjectStorageCredentials(BaseSettings):
-    """S3_ACCESS_KEY, S3_SECRET_KEY."""
+class ObjectStorageSettings(BaseSettings):
+    """S3_ENDPOINT (host:port), S3_BUCKET, S3_SECURE, S3_ACCESS_KEY, S3_SECRET_KEY."""
 
     model_config = SettingsConfigDict(env_prefix="S3_")
 
-    access_key: str = ""
-    secret_key: str = ""
-
-
-class ObjectStorageSettings(BaseModel):
     endpoint: str = "localhost:9000"
     bucket: str = "carat-photos"
     secure: bool = False
+    access_key: str = ""
+    secret_key: str = ""
 
 
 class PhotoSettings(BaseModel):
     max_size_mb: int = 10
 
 
-class WeightsSettings(BaseModel):
-    """One directory per model family under the repository's weights/ directory."""
+class WeightsSettings(BaseSettings):
+    """WEIGHTS_DIR: the repository's weights/ directory; each model family picks its own subdirectory."""
 
-    easyocr_dir: Path = Path("../weights/easyocr")
+    model_config = SettingsConfigDict(env_prefix="WEIGHTS_")
+
+    dir: Path = Path("../weights")
 
 
 class CheckSettings(BaseModel):
@@ -71,22 +70,19 @@ class CheckSettings(BaseModel):
 
 class Settings(BaseModel):
     database: DatabaseSettings = Field(default_factory=DatabaseSettings)
-    object_storage: ObjectStorageSettings = ObjectStorageSettings()
-    object_storage_credentials: ObjectStorageCredentials = Field(default_factory=ObjectStorageCredentials)
+    object_storage: ObjectStorageSettings = Field(default_factory=ObjectStorageSettings)
     photos: PhotoSettings = PhotoSettings()
-    weights: WeightsSettings = WeightsSettings()
+    weights: WeightsSettings = Field(default_factory=WeightsSettings)
     checks: CheckSettings = CheckSettings()
 
 
 def load_settings(path: Path) -> Settings:
-    """Read a settings TOML file. Relative weight paths resolve against the file's directory."""
+    """Read a settings TOML file. A relative WEIGHTS_DIR resolves against the file's directory."""
     settings = Settings.model_validate(tomllib.loads(path.read_text()))
-    resolved = {
-        name: path.parent / value
-        for name, value in settings.weights.model_dump().items()
-        if isinstance(value, Path) and not value.is_absolute()
-    }
-    return settings.model_copy(update={"weights": settings.weights.model_copy(update=resolved)})
+    if settings.weights.dir.is_absolute():
+        return settings
+    weights = settings.weights.model_copy(update={"dir": path.parent / settings.weights.dir})
+    return settings.model_copy(update={"weights": weights})
 
 
 @lru_cache

@@ -9,6 +9,8 @@ from dataclasses import dataclass
 from pathlib import Path
 from typing import Protocol, cast
 
+# Subdirectory of the weights directory that holds this model family
+WEIGHTS_SUBDIRECTORY = "easyocr"
 DEFAULT_LANGUAGES = ("ru", "en")
 DEFAULT_MIN_CONFIDENCE = 0.3
 # Large phone photos make OCR on CPU slow, so it runs on a downscaled copy
@@ -32,16 +34,16 @@ def downscaled_size(width: int, height: int, max_side: int) -> tuple[int, int]:
 
 
 class OcrReader:
-    """Loads the EasyOCR model on first use, once per instance, from weights_directory (no downloads)."""
+    """Loads the EasyOCR model on first use, once per instance, from <weights_dir>/easyocr (no downloads)."""
 
     def __init__(
         self,
-        weights_directory: Path,
+        weights_dir: Path,
         languages: Sequence[str] = DEFAULT_LANGUAGES,
         min_confidence: float = DEFAULT_MIN_CONFIDENCE,
         max_image_side: int = DEFAULT_MAX_IMAGE_SIDE,
     ) -> None:
-        self.weights_directory = weights_directory
+        self.weights_directory = weights_dir / WEIGHTS_SUBDIRECTORY
         self.languages = tuple(languages)
         self.min_confidence = min_confidence
         self.max_image_side = max_image_side

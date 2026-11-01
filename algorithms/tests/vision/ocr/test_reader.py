@@ -21,9 +21,10 @@ def test_downscaled_size(size: tuple[int, int], expected: tuple[int, int]) -> No
 
 
 def test_creating_a_reader_does_not_load_the_model(tmp_path: Path) -> None:
-    OcrReader(tmp_path)
+    reader = OcrReader(tmp_path)
 
     assert "easyocr" not in sys.modules
+    assert reader.weights_directory == tmp_path / "easyocr"
 
 
 class FakeEasyOcr:
