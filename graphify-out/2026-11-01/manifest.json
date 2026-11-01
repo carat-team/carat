@@ -430,43 +430,43 @@
     "semantic_hash": ""
   },
   "AGENTS.md": {
-    "mtime": 1793468266.048547,
-    "ast_hash": "aa82c59ecb2c5408465634023458ac9e",
+    "mtime": 1793540301.0871878,
+    "ast_hash": "0b1fc22c8b243212869e8fc5577d1242",
     "semantic_hash": ""
   },
   "CLAUDE.md": {
-    "mtime": 1793468266.048547,
-    "ast_hash": "aa82c59ecb2c5408465634023458ac9e",
+    "mtime": 1793540301.0871878,
+    "ast_hash": "0b1fc22c8b243212869e8fc5577d1242",
     "semantic_hash": ""
   },
   "README.md": {
-    "mtime": 1793445321.8046603,
-    "ast_hash": "ef45480bf277c5809a5d012016490ed1",
+    "mtime": 1793540234.7298872,
+    "ast_hash": "d90a9e1ac8a5d13853f7dfb8c5743465",
     "semantic_hash": ""
   },
   "backend/AGENTS.md": {
-    "mtime": 1793539844.885582,
-    "ast_hash": "b1dd886f4e9998e72af6f893700e1b82",
+    "mtime": 1793540337.5692341,
+    "ast_hash": "ddfbc0f2c8d33383a87ce7a736c8beb8",
     "semantic_hash": ""
   },
   "backend/CLAUDE.md": {
-    "mtime": 1793539844.885582,
-    "ast_hash": "b1dd886f4e9998e72af6f893700e1b82",
+    "mtime": 1793540337.5692341,
+    "ast_hash": "ddfbc0f2c8d33383a87ce7a736c8beb8",
     "semantic_hash": ""
   },
   "docker-compose.yml": {
-    "mtime": 1793539793.6120346,
+    "mtime": 1793540317.106954,
     "ast_hash": "30fff70657b1bc41a6947d4162d6d71f",
     "semantic_hash": ""
   },
   "frontend/AGENTS.md": {
-    "mtime": 1793445321.8073046,
-    "ast_hash": "12f9f38a007dd81ba6c6b74b8026b06f",
+    "mtime": 1793540344.963292,
+    "ast_hash": "f0294706a4592276e4b02a6f72dfc346",
     "semantic_hash": ""
   },
   "frontend/CLAUDE.md": {
-    "mtime": 1793445321.8073046,
-    "ast_hash": "12f9f38a007dd81ba6c6b74b8026b06f",
+    "mtime": 1793540344.963292,
+    "ast_hash": "f0294706a4592276e4b02a6f72dfc346",
     "semantic_hash": ""
   },
   "frontend/README.md": {
@@ -480,13 +480,13 @@
     "semantic_hash": ""
   },
   "model/AGENTS.md": {
-    "mtime": 1793209261.0,
-    "ast_hash": "d65985a1dc1ca9e01e4d568b4f15d04c",
+    "mtime": 1793540361.2888243,
+    "ast_hash": "9c34e9f801dcf792ecbec3d357372f6d",
     "semantic_hash": ""
   },
   "model/CLAUDE.md": {
-    "mtime": 1793209261.0,
-    "ast_hash": "d65985a1dc1ca9e01e4d568b4f15d04c",
+    "mtime": 1793540361.2888243,
+    "ast_hash": "9c34e9f801dcf792ecbec3d357372f6d",
     "semantic_hash": ""
   },
   "model/README.md": {
@@ -765,8 +765,8 @@
     "semantic_hash": ""
   },
   ".context/python-rewrite/DECISIONS.md": {
-    "mtime": 1793539978.4693239,
-    "ast_hash": "967997c0d16f17c9ccc12d447ecb2e1f",
+    "mtime": 1793540370.6276278,
+    "ast_hash": "0ff0d7c27e6ff31c97b3ac4128f6ee0b",
     "semantic_hash": ""
   },
   ".context/python-rewrite/FINDINGS.md": {
@@ -800,8 +800,8 @@
     "semantic_hash": ""
   },
   ".context/python-rewrite/notes/rewrite-progress.md": {
-    "mtime": 1793537733.5929425,
-    "ast_hash": "1899ff2d77f8bd16e44561bfa026f9a1",
+    "mtime": 1793540370.621918,
+    "ast_hash": "a114f6c64402bd4e9a90f35c9170b22e",
     "semantic_hash": ""
   },
   ".github/instructions/review.instructions.md": {
@@ -810,13 +810,13 @@
     "semantic_hash": ""
   },
   "REVIEW.md": {
-    "mtime": 1793537694.8787136,
-    "ast_hash": "5a66d7e7fef98a6665f0308ec278eeb7",
+    "mtime": 1793540361.5848753,
+    "ast_hash": "12dfa634659c65897eb45ff4ae1c9124",
     "semantic_hash": ""
   },
   "algorithms/AGENTS.md": {
-    "mtime": 1793539776.5884056,
-    "ast_hash": "e6ad9bf42d9004944b2e7f8d12dafafc",
+    "mtime": 1793540316.1154017,
+    "ast_hash": "e7b72ce7c4d4bc338e1ea2c8fad25411",
     "semantic_hash": ""
   },
   "docs/api.md": {
@@ -830,8 +830,8 @@
     "semantic_hash": ""
   },
   "model/training/frame_classifier/README.md": {
-    "mtime": 1792583759.6630628,
-    "ast_hash": "44b481d930b21fbb02fd177e4607866f",
+    "mtime": 1793540361.5652258,
+    "ast_hash": "eaa97715ac3c8bbd32a724c5509ddd26",
     "semantic_hash": ""
   },
   "algorithms/pyproject.toml": {
@@ -910,8 +910,8 @@
     "semantic_hash": ""
   },
   "algorithms/CLAUDE.md": {
-    "mtime": 1793539776.5884056,
-    "ast_hash": "e6ad9bf42d9004944b2e7f8d12dafafc",
+    "mtime": 1793540316.1154017,
+    "ast_hash": "e7b72ce7c4d4bc338e1ea2c8fad25411",
     "semantic_hash": ""
   },
   "algorithms/README.md": {
@@ -1182,6 +1182,11 @@
   ".github/workflows/backend-tests.yml": {
     "mtime": 1793538384.493568,
     "ast_hash": "a5905820595f6c9636d2b8b15b2696ac",
+    "semantic_hash": ""
+  },
+  "docs/how-to-add-a-check.md": {
+    "mtime": 1793540264.5638835,
+    "ast_hash": "c357db7715c742435b5f6b0e5a187757",
     "semantic_hash": ""
   }
 }

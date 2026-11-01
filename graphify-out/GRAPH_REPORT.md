@@ -1,16 +1,16 @@
 # Graph Report - carat  (2026-11-01)
 
 ## Corpus Check
-- 227 files · ~68,628 words
+- 228 files · ~68,761 words
 - Verdict: corpus is large enough that graph structure adds value.
 
 ## Summary
-- 1540 nodes · 1752 edges · 265 communities (109 shown, 156 thin omitted)
-- Extraction: 90% EXTRACTED · 10% INFERRED · 0% AMBIGUOUS · INFERRED: 180 edges (avg confidence: 0.71)
+- 1556 nodes · 1796 edges · 273 communities (116 shown, 157 thin omitted)
+- Extraction: 89% EXTRACTED · 11% INFERRED · 0% AMBIGUOUS · INFERRED: 200 edges (avg confidence: 0.7)
 - Token cost: 0 input · 0 output
 
 ## Graph Freshness
-- Built from commit: `55ff5aaf`
+- Built from commit: `aef7f903`
 - Run `git rev-parse HEAD` and compare to check if the graph is stale.
 - Run `graphify update .` after code changes (no API cost).
 
@@ -258,30 +258,38 @@
 - Carat
 - Требования заказчика (Честный Знак)
 - React + TypeScript + Vite
+- CheckService
+- ProductCard
+- Check
+- CheckRunner
+- build_negatives.py
+- card.py
+- BarcodeOnPhotoCheck
+- check_product
 
 ## God Nodes (most connected - your core abstractions)
 1. `ProductRepository` - 24 edges
 2. `compilerOptions` - 21 edges
-3. `Static Analysis Rule Configuration` - 20 edges
-4. `ProductCard` - 19 edges
+3. `ProductCard` - 20 edges
+4. `Static Analysis Rule Configuration` - 20 edges
 5. `Decisions` - 19 edges
 6. `compilerOptions` - 18 edges
-7. `CheckResult` - 15 edges
-8. `ProductStatus` - 14 edges
-9. `PhotoObjectStore` - 14 edges
-10. `Findings` - 14 edges
+7. `ProductStatus` - 17 edges
+8. `PhotoObjectStore` - 17 edges
+9. `CheckResult` - 16 edges
+10. `Photo` - 16 edges
 
 ## Surprising Connections (you probably didn't know these)
 - `build_services()` --calls--> `get_checks()`  [INFERRED]
   backend/src/carat_backend/bootstrap.py → algorithms/src/carat_algorithms/core/registry.py
 - `test_check_returns_one_result_per_registered_check()` --calls--> `get_checks()`  [INFERRED]
   backend/tests/test_check_api.py → algorithms/src/carat_algorithms/core/registry.py
+- `test_result_serializes_with_api_keys()` --calls--> `CheckResult`  [INFERRED]
+  algorithms/tests/core/test_core.py → algorithms/src/carat_algorithms/core/result.py
+- `check_product()` --references--> `CheckResult`  [EXTRACTED]
+  backend/src/carat_backend/rest/routers/checks.py → algorithms/src/carat_algorithms/core/result.py
 - `test_committed_settings_file_loads()` --calls--> `load_settings()`  [INFERRED]
   backend/tests/test_settings.py → backend/src/carat_backend/settings.py
-- `Inference gRPC Endpoint` --conceptually_related_to--> `Inference Container`  [INFERRED]
-  backend/src/main/resources/application.yml → docker-compose.yml
-- `carat-backend` --depends_on--> `carat-algorithms`  [EXTRACTED]
-  backend/pyproject.toml → algorithms/pyproject.toml
 
 ## Import Cycles
 - None detected.
@@ -293,7 +301,7 @@
 - **Static Text Rule Dictionaries** — backend_src_main_resources_analysis_static_analysis_config_direct_ai_leakage, backend_src_main_resources_analysis_static_analysis_config_knowledge_cutoff, backend_src_main_resources_analysis_static_analysis_config_ai_lexical_markers, backend_src_main_resources_analysis_static_analysis_config_ai_phrases, backend_src_main_resources_analysis_static_analysis_config_hedging_density, backend_src_main_resources_analysis_text_leakage_direct_ai_direct_ai_leakage_phrase_dictionary, backend_src_main_resources_analysis_text_leakage_knowledge_cutoff_knowledge_cutoff_phrase_dictionary, backend_src_main_resources_analysis_text_lexical_markers_en_english_ai_lexical_marker_dictionary, backend_src_main_resources_analysis_text_phrasing_transitions_en_english_ai_transition_phrase_dictionary, backend_src_main_resources_analysis_text_stylometry_hedges_en_english_hedging_term_dictionary [EXTRACTED 1.00]
 - **Static AI Artifact Checks** — docs_ai_artifacts_research_ru_c2pa_provenance, docs_ai_artifacts_research_ru_exif_camera_metadata, docs_ai_artifacts_research_ru_gop_encoding_artifacts, docs_ai_artifacts_research_ru_zero_width_characters, docs_ai_artifacts_research_ru_lexical_ai_markers [EXTRACTED 1.00]
 
-## Communities (265 total, 156 thin omitted)
+## Communities (273 total, 157 thin omitted)
 
 ### Community 0 - "ApplicationAvailability"
 Cohesion: 0.06
@@ -392,8 +400,8 @@ Cohesion: 0.13
 Nodes (14): catalogue_path, context_dir, core_files, die(), issue_dir, now, require_value(), script_dir (+6 more)
 
 ### Community 24 - "Analyzer.java"
-Cohesion: 0.05
-Nodes (41): CardModel, CardPhoto, ProductCard, BaseModel, Product card as the checks see it. Field names follow docs/api.md (camelCase on, A field set to None is absent from the card, which is not the same as an empty v, Volume, Check (+33 more)
+Cohesion: 0.18
+Nodes (9): CheckResult, CheckStatus, BaseModel, StrEnum, The single result vocabulary shared by every check., GtinFormatCheck, The card's GTIN has a valid GS1 length and check digit., test_explanation_names_the_gtin_and_the_problem() (+1 more)
 
 ### Community 25 - "LexicalMarkerRule.java"
 Cohesion: 0.06
@@ -461,11 +469,11 @@ Nodes (5): SessionFactory, create_photo_object_store(), PhotoObjectStore, Photo 
 
 ### Community 42 - ".calculate()"
 Cohesion: 0.07
-Nodes (40): InvalidInputError, NotFoundError, Input that passed schema validation but breaks a service rule, keyed by field na, Photo, FastAPI, register_error_handlers(), validation_error_response(), PhotoService (+32 more)
+Nodes (38): InvalidInputError, NotFoundError, Input that passed schema validation but breaks a service rule, keyed by field na, Photo, ProductStatus, StrEnum, FastAPI, register_error_handlers() (+30 more)
 
 ### Community 43 - "HiddenCharacterScanner.java"
 Cohesion: 0.22
-Nodes (9): API, carat-backend, Code layout, Configuration, Database and migrations, Design choices, How checks run, Setup (+1 more)
+Nodes (9): API, Backend, Code layout, Configuration, Database and migrations, Design choices, How checks run, Setup (+1 more)
 
 ### Community 44 - "ParagraphSplitter.java"
 Cohesion: 0.33
@@ -541,23 +549,23 @@ Nodes (28): `ATTEMPTS.md` - append-only log, `CONNECTIONS.md` - living document,
 
 ### Community 226 - "__init__.py"
 Cohesion: 0.09
-Nodes (37): alias, Product, ProductStatus, StrEnum, delete_photo(), get_photo_content(), Response, ServicesDependency (+29 more)
+Nodes (35): alias, Product, delete_photo(), get_photo_content(), Response, ServicesDependency, UUID, upload_photo() (+27 more)
 
 ### Community 228 - "ISSUE.md"
 Cohesion: 0.13
 Nodes (14): downscaled_size(), _EasyOcrReader, OcrReader, Path, Protocol, Label text recognition with EasyOCR. Ported from inference/app/detectors/ocr_det, Size that fits the longer side into max_side; images that already fit keep their, Loads the EasyOCR model on first use, once per instance, from <weights_dir>/easy (+6 more)
 
 ### Community 230 - "test_photos_api.py"
-Cohesion: 0.53
-Nodes (9): create_product(), Response, TestClient, test_delete_removes_photo_and_its_content(), test_missing_perspective_is_a_validation_error(), test_unknown_product_or_photo_returns_404(), test_upload_returns_url_that_serves_the_same_bytes(), test_wrong_type_empty_and_oversize_files_are_rejected() (+1 more)
+Cohesion: 0.47
+Nodes (10): create_product(), encode_image(), Response, TestClient, test_delete_removes_photo_and_its_content(), test_missing_perspective_is_a_validation_error(), test_unknown_product_or_photo_returns_404(), test_upload_returns_url_that_serves_the_same_bytes() (+2 more)
 
 ### Community 231 - "test_products_api.py"
 Cohesion: 0.35
 Nodes (11): create(), Any, TestClient, test_create_stores_every_mvp_attribute(), test_create_without_body_makes_an_empty_draft(), test_format_errors_are_reported_by_field_path(), test_list_returns_catalog_rows_newest_first(), test_patch_merges_and_null_removes() (+3 more)
 
 ### Community 232 - "ISSUE.md"
-Cohesion: 0.40
-Nodes (4): Boot matrix, FW-1427 verification procedure, Linux, UEFI Shell
+Cohesion: 0.22
+Nodes (5): Boot matrix, FW-1427 verification procedure, Linux, UEFI Shell, Starting prompt
 
 ### Community 233 - "Findings"
 Cohesion: 0.25
@@ -584,8 +592,8 @@ Cohesion: 0.33
 Nodes (6): Follow-up, Interpretation, Recovery failure investigation — 2026-07-24, Required changes, Results, Test context
 
 ### Community 242 - "Reliable discovery of cascaded external NVMe shelves"
-Cohesion: 0.22
-Nodes (6): Acceptance criteria, Links, Reliable discovery of cascaded external NVMe shelves, Scope, Summary, Starting prompt
+Cohesion: 0.40
+Nodes (5): Acceptance criteria, Links, Reliable discovery of cascaded external NVMe shelves, Scope, Summary
 
 ### Community 243 - "2026_10_31_1741-290dc8b86531_create_products_tables.py"
 Cohesion: 0.15
@@ -621,7 +629,7 @@ Nodes (4): ADR 0002. Store product photos in S3-compatible object storage, Conse
 
 ### Community 252 - "carat-algorithms"
 Cohesion: 0.25
-Nodes (8): carat-algorithms, Choosing a status, Dependencies, How a check works, Model weights, Project layout, Setup, Tests
+Nodes (8): Algorithms, Choosing a status, Dependencies, How a check works, Model weights, Project layout, Setup, Tests
 
 ### Community 259 - "REST API бэкенда"
 Cohesion: 0.25
@@ -643,20 +651,46 @@ Nodes (4): Выведено командой (не требование зака
 Cohesion: 0.50
 Nodes (3): Expanding the ESLint configuration, React Compiler, React + TypeScript + Vite
 
+### Community 265 - "CheckService"
+Cohesion: 0.22
+Nodes (8): CheckService, Builds a ProductCard from a stored product and runs the checks on it., BlockingCheck, CountingStore, FixedProducts, Product, UUID, test_waiting_request_loads_no_photos_until_it_gets_a_slot()
+
+### Community 266 - "ProductCard"
+Cohesion: 0.26
+Nodes (9): ProductCard, A field set to None is absent from the card, which is not the same as an empty v, test_absent_fields_stay_none_and_empty_text_is_kept(), test_card_parses_api_field_names(), test_result_serializes_with_api_keys(), CrashingCheck, PassingCheck, test_crashing_check_becomes_error_and_others_still_run() (+1 more)
+
+### Community 267 - "Check"
+Cohesion: 0.17
+Nodes (8): Check, Protocol, get_checks(), Checks that run on every card. A check that is not listed here does not run., test_registered_check_ids_are_unique(), TestClient, test_check_of_unknown_product_returns_404(), test_check_returns_one_result_per_registered_check()
+
+### Community 268 - "CheckRunner"
+Cohesion: 0.32
+Nodes (3): CheckRunner, UUID, Runs every check on a card. A crashing check becomes an ERROR result, never a fa
+
+### Community 269 - "build_negatives.py"
+Cohesion: 0.43
+Nodes (6): listing_text(), main(), Path, Build a "not perfume" negative set from Amazon Berkeley Objects (ABO, CC BY 4.0), read_listings(), select()
+
+### Community 270 - "card.py"
+Cohesion: 0.47
+Nodes (5): CardModel, CardPhoto, BaseModel, Product card as the checks see it. Field names follow docs/api.md (camelCase on, Volume
+
+### Community 272 - "check_product"
+Cohesion: 0.67
+Nodes (3): check_product(), ServicesDependency, UUID
+
 ## Knowledge Gaps
 - **684 isolated node(s):** `VALID_KINDS`, `script_dir`, `templates_dir`, `context_dir`, `issue_dir` (+679 more)
   These have ≤1 connection - possible missing edges or undocumented components.
-- **156 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
+- **157 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
 
 ## Suggested Questions
 _Questions this graph is uniquely positioned to answer:_
 
-- **Why does `build_services()` connect `build_services` to `card.py`, `Combination of Weak Signals`, `.calculate()`, `CheckRunner`, `Analyzer.java`?**
-  _High betweenness centrality (0.020) - this node is a cross-community bridge._
-- **Why does `get_checks()` connect `Analyzer.java` to `build_services`?**
-  _High betweenness centrality (0.013) - this node is a cross-community bridge._
-- **Why does `PhotoService` connect `.calculate()` to `Combination of Weak Signals`, `build_services`?**
-  _High betweenness centrality (0.012) - this node is a cross-community bridge._
+- **Why does `build_services()` connect `build_services` to `CheckService`, `.calculate()`, `Check`, `CheckRunner`, `Combination of Weak Signals`, `CheckRunner`, `card.py`?**
+  _High betweenness centrality (0.014) - this node is a cross-community bridge._
+- **Why does `BlockingCheck` connect `CheckService` to `__init__.py`, `Combination of Weak Signals`, `.calculate()`, `CheckRunner`, `Analyzer.java`?**
+  _High betweenness centrality (0.010) - this node is a cross-community bridge._
 - **Are the 13 inferred relationships involving `ProductRepository` (e.g. with `.add()` and `.delete()`) actually correct?**
   _`ProductRepository` has 13 INFERRED edges - model-reasoned connections that need verification._
 - **Are the 4 inferred relationships involving `ProductCard` (e.g. with `Check` and `test_explanation_names_the_gtin_and_the_problem()`) actually correct?**
@@ -665,3 +699,5 @@ _Questions this graph is uniquely positioned to answer:_
   _684 weakly-connected nodes found - possible documentation gaps or missing edges._
 - **Should `ApplicationAvailability` be split into smaller, more focused modules?**
   _Cohesion score 0.05859969558599695 - nodes in this community are weakly interconnected._
+- **Should `DetectionController.java` be split into smaller, more focused modules?**
+  _Cohesion score 0.07394957983193277 - nodes in this community are weakly interconnected._

@@ -1,9 +1,18 @@
+import io
 import uuid
 
 import httpx2
 from fastapi.testclient import TestClient
+from PIL import Image
 
-PNG = b"\x89PNG\r\n\x1a\n" + b"\x00" * 64
+
+def encode_image(image_format: str) -> bytes:
+    buffer = io.BytesIO()
+    Image.new("RGB", (1, 1)).save(buffer, format=image_format)
+    return buffer.getvalue()
+
+
+PNG = encode_image("PNG")
 
 
 def create_product(client: TestClient) -> str:
@@ -45,9 +54,11 @@ def test_wrong_type_empty_and_oversize_files_are_rejected(client: TestClient) ->
         upload(client, product_id, b"<html></html>", "text/html"),
         upload(client, product_id, b""),
         upload(client, product_id, b"\x00" * (1024 * 1024 + 1)),
+        upload(client, product_id, b"\x89PNG\r\n\x1a\n" + b"\x00" * 64),
+        upload(client, product_id, encode_image("JPEG")),
     ]
 
-    assert [response.status_code for response in responses] == [422, 422, 422]
+    assert [response.status_code for response in responses] == [422, 422, 422, 422, 422]
     assert all(list(response.json()["fields"]) == ["file"] for response in responses)
     assert client.get(f"/api/products/{product_id}").json()["photos"] == []
 

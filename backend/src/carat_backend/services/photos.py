@@ -1,4 +1,7 @@
+import io
 import uuid
+
+from PIL import Image
 
 from carat_backend.domain.errors import InvalidInputError, NotFoundError
 from carat_backend.domain.models import Photo
@@ -6,7 +9,8 @@ from carat_backend.storage.database import SessionFactory
 from carat_backend.storage.object_store import PhotoObjectStore
 from carat_backend.storage.repositories.products import ProductRepository
 
-EXTENSIONS = {"image/jpeg": "jpg", "image/png": "png", "image/webp": "webp"}
+# Content type -> (object key extension, Pillow format)
+FORMATS = {"image/jpeg": ("jpg", "JPEG"), "image/png": ("png", "PNG"), "image/webp": ("webp", "WEBP")}
 
 
 class PhotoService:
@@ -23,13 +27,16 @@ class PhotoService:
         perspective: str,
         package_id: str | None,
     ) -> Photo:
-        extension = EXTENSIONS.get(content_type or "")
-        if content_type is None or extension is None:
+        known_format = FORMATS.get(content_type or "")
+        if content_type is None or known_format is None:
             raise InvalidInputError({"file": "Допустимы только фото в формате JPEG, PNG или WEBP"})
+        extension, image_format = known_format
         if not content:
             raise InvalidInputError({"file": "Файл пустой"})
         if len(content) > self.max_size_bytes:
             raise InvalidInputError({"file": f"Файл больше {self.max_size_bytes // (1024 * 1024)} МБ"})
+        if _decoded_format(content) != image_format:
+            raise InvalidInputError({"file": "Файл повреждён или не совпадает с указанным форматом"})
 
         photo_id = uuid.uuid4()
         photo = Photo(
@@ -74,3 +81,13 @@ class PhotoService:
             raise NotFoundError(f"Photo {photo_id} not found")
         # After the commit: a failed delete leaves an orphan object, never a row without its image
         self._store.delete(photo.object_key)
+
+
+def _decoded_format(content: bytes) -> str | None:
+    """The Pillow format of the image, or None when the bytes do not decode."""
+    try:
+        with Image.open(io.BytesIO(content)) as image:
+            image.load()
+            return image.format
+    except (OSError, SyntaxError, ValueError, Image.DecompressionBombError):
+        return None

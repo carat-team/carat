@@ -249,11 +249,19 @@
   "247": "CheckRunner",
   "248": "card.py",
   "249": "Handoff",
+  "250": "Как добавить проверку",
   "251": "ADR 0002. Store product photos in S3-compatible object storage",
+  "252": "carat-algorithms",
   "253": "2026_10_31_1835-a82f5d9e609e_create_products_tables.py",
   "254": "__init__.py",
   "255": "__init__.py",
   "256": "__init__.py",
   "257": "__init__.py",
-  "258": "__init__.py"
+  "258": "__init__.py",
+  "259": "REST API бэкенда",
+  "260": "Blocking (must be fixed before merge)",
+  "261": "README.md",
+  "262": "Carat",
+  "263": "Требования заказчика (Честный Знак)",
+  "264": "React + TypeScript + Vite"
 }

@@ -1869,8 +1869,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "backend_src_carat_backend_domain_models",
-      "community": 42,
-      "community_name": ".calculate()",
+      "community": 226,
+      "community_name": "__init__.py",
       "norm_label": "models.py"
     },
     {
@@ -1880,8 +1880,8 @@
       "source_location": "L8",
       "_origin": "ast",
       "id": "backend_src_carat_backend_domain_models_productstatus",
-      "community": 42,
-      "community_name": ".calculate()",
+      "community": 226,
+      "community_name": "__init__.py",
       "norm_label": "productstatus"
     },
     {
@@ -1891,8 +1891,8 @@
       "source_location": "",
       "_origin": "ast",
       "id": "backend_src_carat_backend_domain_models_py_strenum",
-      "community": 42,
-      "community_name": ".calculate()",
+      "community": 226,
+      "community_name": "__init__.py",
       "norm_label": "strenum"
     },
     {
@@ -7083,8 +7083,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "model_training_frame_classifier_build_negatives",
-      "community": 35,
-      "community_name": ".collectEvidence()",
+      "community": 42,
+      "community_name": ".calculate()",
       "norm_label": "build_negatives.py"
     },
     {
@@ -7094,8 +7094,8 @@
       "source_location": "L40",
       "_origin": "ast",
       "id": "model_training_frame_classifier_build_negatives_listing_text",
-      "community": 35,
-      "community_name": ".collectEvidence()",
+      "community": 42,
+      "community_name": ".calculate()",
       "norm_label": "listing_text()"
     },
     {
@@ -7105,8 +7105,8 @@
       "source_location": "L44",
       "_origin": "ast",
       "id": "model_training_frame_classifier_build_negatives_read_listings",
-      "community": 35,
-      "community_name": ".collectEvidence()",
+      "community": 42,
+      "community_name": ".calculate()",
       "norm_label": "read_listings()"
     },
     {
@@ -7116,8 +7116,8 @@
       "source_location": "",
       "_origin": "ast",
       "id": "model_training_frame_classifier_build_negatives_py_path",
-      "community": 35,
-      "community_name": ".collectEvidence()",
+      "community": 42,
+      "community_name": ".calculate()",
       "norm_label": "path"
     },
     {
@@ -7127,8 +7127,8 @@
       "source_location": "L54",
       "_origin": "ast",
       "id": "model_training_frame_classifier_build_negatives_select",
-      "community": 35,
-      "community_name": ".collectEvidence()",
+      "community": 42,
+      "community_name": ".calculate()",
       "norm_label": "select()"
     },
     {
@@ -7138,8 +7138,8 @@
       "source_location": "L74",
       "_origin": "ast",
       "id": "model_training_frame_classifier_build_negatives_main",
-      "community": 35,
-      "community_name": ".collectEvidence()",
+      "community": 42,
+      "community_name": ".calculate()",
       "norm_label": "main()"
     },
     {
@@ -7149,8 +7149,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "model_training_frame_classifier_build_negatives_rationale_1",
-      "community": 35,
-      "community_name": ".collectEvidence()",
+      "community": 42,
+      "community_name": ".calculate()",
       "norm_label": "build a \"not perfume\" negative set from amazon berkeley objects (abo, cc by 4.0)"
     },
     {
@@ -9448,8 +9448,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "agents_skills_context_manager_examples_fw_1427_issue",
-      "community": 232,
-      "community_name": "ISSUE.md",
+      "community": 242,
+      "community_name": "Reliable discovery of cascaded external NVMe shelves",
       "norm_label": "issue.md"
     },
     {
@@ -9569,8 +9569,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "agents_skills_context_manager_examples_fw_1427_notes_bus_rebalance_solution_report",
-      "community": 232,
-      "community_name": "ISSUE.md",
+      "community": 242,
+      "community_name": "Reliable discovery of cascaded external NVMe shelves",
       "norm_label": "bus-rebalance-solution-report.md"
     },
     {
@@ -10394,8 +10394,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "agents_skills_context_manager_examples_fw_1427_sources_starting_prompt",
-      "community": 232,
-      "community_name": "ISSUE.md",
+      "community": 242,
+      "community_name": "Reliable discovery of cascaded external NVMe shelves",
       "norm_label": "starting-prompt.md"
     },
     {
@@ -10405,8 +10405,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "agents_skills_context_manager_examples_fw_1427_sources_starting_prompt_starting_prompt",
-      "community": 232,
-      "community_name": "ISSUE.md",
+      "community": 242,
+      "community_name": "Reliable discovery of cascaded external NVMe shelves",
       "norm_label": "starting prompt"
     },
     {
@@ -13006,6 +13006,17 @@
       "norm_label": "2026-11-01 - one settings file, weights_dir by convention"
     },
     {
+      "label": "2026-11-01 - Writing style rule",
+      "file_type": "document",
+      "source_file": ".context/python-rewrite/DECISIONS.md",
+      "source_location": "L185",
+      "_origin": "ast",
+      "id": "context_python_rewrite_decisions_2026_11_01_writing_style_rule",
+      "community": 27,
+      "community_name": "VideoAnalysisContext.java",
+      "norm_label": "2026-11-01 - writing style rule"
+    },
+    {
       "label": "FINDINGS.md",
       "file_type": "document",
       "source_file": ".context/python-rewrite/FINDINGS.md",
@@ -13622,125 +13633,125 @@
       "norm_label": "comments"
     },
     {
-      "label": "AGENTS.md",
+      "label": "CLAUDE.md",
       "file_type": "document",
-      "source_file": "AGENTS.md",
+      "source_file": "CLAUDE.md",
       "source_location": "L1",
       "_origin": "ast",
       "id": "claude",
-      "community": 3,
-      "community_name": "TextPreprocessingException",
-      "norm_label": "agents.md"
+      "community": 35,
+      "community_name": ".collectEvidence()",
+      "norm_label": "claude.md"
     },
     {
       "label": "AGENTS.md",
       "file_type": "document",
-      "source_file": "AGENTS.md",
+      "source_file": "CLAUDE.md",
       "source_location": "L1",
       "_origin": "ast",
       "id": "claude_agents_md",
-      "community": 3,
-      "community_name": "TextPreprocessingException",
+      "community": 35,
+      "community_name": ".collectEvidence()",
       "norm_label": "agents.md"
     },
     {
       "label": "What Carat is",
       "file_type": "document",
-      "source_file": "AGENTS.md",
+      "source_file": "CLAUDE.md",
       "source_location": "L6",
       "_origin": "ast",
       "id": "claude_what_carat_is",
-      "community": 3,
-      "community_name": "TextPreprocessingException",
+      "community": 35,
+      "community_name": ".collectEvidence()",
       "norm_label": "what carat is"
     },
     {
       "label": "Repository map",
       "file_type": "document",
-      "source_file": "AGENTS.md",
-      "source_location": "L21",
+      "source_file": "CLAUDE.md",
+      "source_location": "L17",
       "_origin": "ast",
       "id": "claude_repository_map",
-      "community": 3,
-      "community_name": "TextPreprocessingException",
+      "community": 35,
+      "community_name": ".collectEvidence()",
       "norm_label": "repository map"
     },
     {
       "label": "Architecture",
       "file_type": "document",
-      "source_file": "AGENTS.md",
-      "source_location": "L38",
+      "source_file": "CLAUDE.md",
+      "source_location": "L33",
       "_origin": "ast",
       "id": "claude_architecture",
-      "community": 3,
-      "community_name": "TextPreprocessingException",
+      "community": 35,
+      "community_name": ".collectEvidence()",
       "norm_label": "architecture"
     },
     {
       "label": "Where code goes",
       "file_type": "document",
-      "source_file": "AGENTS.md",
-      "source_location": "L53",
+      "source_file": "CLAUDE.md",
+      "source_location": "L47",
       "_origin": "ast",
       "id": "claude_where_code_goes",
-      "community": 3,
-      "community_name": "TextPreprocessingException",
+      "community": 35,
+      "community_name": ".collectEvidence()",
       "norm_label": "where code goes"
     },
     {
-      "label": "Python rules (all Python projects)",
+      "label": "Python rules",
       "file_type": "document",
-      "source_file": "AGENTS.md",
-      "source_location": "L70",
+      "source_file": "CLAUDE.md",
+      "source_location": "L61",
       "_origin": "ast",
-      "id": "claude_python_rules_all_python_projects",
-      "community": 3,
-      "community_name": "TextPreprocessingException",
-      "norm_label": "python rules (all python projects)"
+      "id": "claude_python_rules",
+      "community": 35,
+      "community_name": ".collectEvidence()",
+      "norm_label": "python rules"
+    },
+    {
+      "label": "Writing style",
+      "file_type": "document",
+      "source_file": "CLAUDE.md",
+      "source_location": "L72",
+      "_origin": "ast",
+      "id": "claude_writing_style",
+      "community": 35,
+      "community_name": ".collectEvidence()",
+      "norm_label": "writing style"
     },
     {
       "label": "Tools and skills",
       "file_type": "document",
-      "source_file": "AGENTS.md",
-      "source_location": "L83",
+      "source_file": "CLAUDE.md",
+      "source_location": "L80",
       "_origin": "ast",
       "id": "claude_tools_and_skills",
-      "community": 3,
-      "community_name": "TextPreprocessingException",
+      "community": 35,
+      "community_name": ".collectEvidence()",
       "norm_label": "tools and skills"
     },
     {
       "label": "Git workflow",
       "file_type": "document",
-      "source_file": "AGENTS.md",
-      "source_location": "L97",
+      "source_file": "CLAUDE.md",
+      "source_location": "L92",
       "_origin": "ast",
       "id": "claude_git_workflow",
-      "community": 3,
-      "community_name": "TextPreprocessingException",
+      "community": 35,
+      "community_name": ".collectEvidence()",
       "norm_label": "git workflow"
     },
     {
       "label": "Guardrails",
       "file_type": "document",
-      "source_file": "AGENTS.md",
-      "source_location": "L120",
+      "source_file": "CLAUDE.md",
+      "source_location": "L109",
       "_origin": "ast",
       "id": "claude_guardrails",
-      "community": 3,
-      "community_name": "TextPreprocessingException",
+      "community": 35,
+      "community_name": ".collectEvidence()",
       "norm_label": "guardrails"
-    },
-    {
-      "label": "graphify",
-      "file_type": "document",
-      "source_file": "AGENTS.md",
-      "source_location": "L148",
-      "_origin": "ast",
-      "id": "claude_graphify",
-      "community": 3,
-      "community_name": "TextPreprocessingException",
-      "norm_label": "graphify"
     },
     {
       "label": "README.md",
@@ -13749,8 +13760,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "readme",
-      "community": 3,
-      "community_name": "TextPreprocessingException",
+      "community": 261,
+      "community_name": "README.md",
       "norm_label": "readme.md"
     },
     {
@@ -13760,63 +13771,63 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "readme_carat",
-      "community": 3,
-      "community_name": "TextPreprocessingException",
+      "community": 262,
+      "community_name": "Carat",
       "norm_label": "carat"
-    },
-    {
-      "label": "Project documentation",
-      "file_type": "document",
-      "source_file": "README.md",
-      "source_location": "L7",
-      "_origin": "ast",
-      "id": "readme_project_documentation",
-      "community": 3,
-      "community_name": "TextPreprocessingException",
-      "norm_label": "project documentation"
     },
     {
       "label": "Repository layout",
       "file_type": "document",
       "source_file": "README.md",
-      "source_location": "L16",
+      "source_location": "L11",
       "_origin": "ast",
       "id": "readme_repository_layout",
-      "community": 3,
-      "community_name": "TextPreprocessingException",
+      "community": 262,
+      "community_name": "Carat",
       "norm_label": "repository layout"
     },
     {
-      "label": "Development status",
+      "label": "Run with Docker",
       "file_type": "document",
       "source_file": "README.md",
-      "source_location": "L34",
+      "source_location": "L31",
       "_origin": "ast",
-      "id": "readme_development_status",
-      "community": 3,
-      "community_name": "TextPreprocessingException",
-      "norm_label": "development status"
+      "id": "readme_run_with_docker",
+      "community": 262,
+      "community_name": "Carat",
+      "norm_label": "run with docker"
     },
     {
-      "label": "Run the current services",
+      "label": "Develop",
       "file_type": "document",
       "source_file": "README.md",
-      "source_location": "L42",
+      "source_location": "L46",
       "_origin": "ast",
-      "id": "readme_run_the_current_services",
-      "community": 3,
-      "community_name": "TextPreprocessingException",
-      "norm_label": "run the current services"
+      "id": "readme_develop",
+      "community": 262,
+      "community_name": "Carat",
+      "norm_label": "develop"
+    },
+    {
+      "label": "Documentation",
+      "file_type": "document",
+      "source_file": "README.md",
+      "source_location": "L60",
+      "_origin": "ast",
+      "id": "readme_documentation",
+      "community": 262,
+      "community_name": "Carat",
+      "norm_label": "documentation"
     },
     {
       "label": "Contributing",
       "file_type": "document",
       "source_file": "README.md",
-      "source_location": "L56",
+      "source_location": "L68",
       "_origin": "ast",
       "id": "readme_contributing",
-      "community": 3,
-      "community_name": "TextPreprocessingException",
+      "community": 262,
+      "community_name": "Carat",
       "norm_label": "contributing"
     },
     {
@@ -13859,8 +13870,8 @@
       "source_location": "L12",
       "_origin": "ast",
       "id": "review_blocking_must_be_fixed_before_merge",
-      "community": 11,
-      "community_name": "ContentItem",
+      "community": 260,
+      "community_name": "Blocking (must be fixed before merge)",
       "norm_label": "blocking (must be fixed before merge)"
     },
     {
@@ -13870,8 +13881,8 @@
       "source_location": "L14",
       "_origin": "ast",
       "id": "review_invalid_placement_and_architecture_consistency",
-      "community": 11,
-      "community_name": "ContentItem",
+      "community": 260,
+      "community_name": "Blocking (must be fixed before merge)",
       "norm_label": "invalid placement and architecture consistency"
     },
     {
@@ -13881,8 +13892,8 @@
       "source_location": "L23",
       "_origin": "ast",
       "id": "review_python_backend_rules",
-      "community": 11,
-      "community_name": "ContentItem",
+      "community": 260,
+      "community_name": "Blocking (must be fixed before merge)",
       "norm_label": "python backend rules"
     },
     {
@@ -13892,8 +13903,8 @@
       "source_location": "L30",
       "_origin": "ast",
       "id": "review_results_and_vocabulary",
-      "community": 11,
-      "community_name": "ContentItem",
+      "community": 260,
+      "community_name": "Blocking (must be fixed before merge)",
       "norm_label": "results and vocabulary"
     },
     {
@@ -13903,8 +13914,8 @@
       "source_location": "L38",
       "_origin": "ast",
       "id": "review_dependencies_and_files",
-      "community": 11,
-      "community_name": "ContentItem",
+      "community": 260,
+      "community_name": "Blocking (must be fixed before merge)",
       "norm_label": "dependencies and files"
     },
     {
@@ -13914,8 +13925,8 @@
       "source_location": "L47",
       "_origin": "ast",
       "id": "review_tests",
-      "community": 11,
-      "community_name": "ContentItem",
+      "community": 260,
+      "community_name": "Blocking (must be fixed before merge)",
       "norm_label": "tests"
     },
     {
@@ -13925,8 +13936,8 @@
       "source_location": "L53",
       "_origin": "ast",
       "id": "review_process",
-      "community": 11,
-      "community_name": "ContentItem",
+      "community": 260,
+      "community_name": "Blocking (must be fixed before merge)",
       "norm_label": "process"
     },
     {
@@ -13955,7 +13966,7 @@
       "label": "Do not report",
       "file_type": "document",
       "source_file": "REVIEW.md",
-      "source_location": "L72",
+      "source_location": "L73",
       "_origin": "ast",
       "id": "review_do_not_report",
       "community": 11,
@@ -13966,7 +13977,7 @@
       "label": "PR title and description",
       "file_type": "document",
       "source_file": "REVIEW.md",
-      "source_location": "L80",
+      "source_location": "L81",
       "_origin": "ast",
       "id": "review_pr_title_and_description",
       "community": 11,
@@ -13974,20 +13985,20 @@
       "norm_label": "pr title and description"
     },
     {
-      "label": "CLAUDE.md",
+      "label": "AGENTS.md",
       "file_type": "document",
-      "source_file": "algorithms/CLAUDE.md",
+      "source_file": "algorithms/AGENTS.md",
       "source_location": "L1",
       "_origin": "ast",
       "id": "algorithms_claude",
       "community": 26,
       "community_name": "AttributeConverter",
-      "norm_label": "claude.md"
+      "norm_label": "agents.md"
     },
     {
       "label": "algorithms/AGENTS.md",
       "file_type": "document",
-      "source_file": "algorithms/CLAUDE.md",
+      "source_file": "algorithms/AGENTS.md",
       "source_location": "L1",
       "_origin": "ast",
       "id": "algorithms_claude_algorithms_agents_md",
@@ -13998,8 +14009,8 @@
     {
       "label": "Purity",
       "file_type": "document",
-      "source_file": "algorithms/CLAUDE.md",
-      "source_location": "L7",
+      "source_file": "algorithms/AGENTS.md",
+      "source_location": "L6",
       "_origin": "ast",
       "id": "algorithms_claude_purity",
       "community": 26,
@@ -14009,8 +14020,8 @@
     {
       "label": "Layout",
       "file_type": "document",
-      "source_file": "algorithms/CLAUDE.md",
-      "source_location": "L19",
+      "source_file": "algorithms/AGENTS.md",
+      "source_location": "L18",
       "_origin": "ast",
       "id": "algorithms_claude_layout",
       "community": 26,
@@ -14020,8 +14031,8 @@
     {
       "label": "Dependencies",
       "file_type": "document",
-      "source_file": "algorithms/CLAUDE.md",
-      "source_location": "L26",
+      "source_file": "algorithms/AGENTS.md",
+      "source_location": "L25",
       "_origin": "ast",
       "id": "algorithms_claude_dependencies",
       "community": 26,
@@ -14031,8 +14042,8 @@
     {
       "label": "Adding a check",
       "file_type": "document",
-      "source_file": "algorithms/CLAUDE.md",
-      "source_location": "L36",
+      "source_file": "algorithms/AGENTS.md",
+      "source_location": "L33",
       "_origin": "ast",
       "id": "algorithms_claude_adding_a_check",
       "community": 26,
@@ -14040,21 +14051,10 @@
       "norm_label": "adding a check"
     },
     {
-      "label": "Style",
-      "file_type": "document",
-      "source_file": "algorithms/CLAUDE.md",
-      "source_location": "L50",
-      "_origin": "ast",
-      "id": "algorithms_claude_style",
-      "community": 26,
-      "community_name": "AttributeConverter",
-      "norm_label": "style"
-    },
-    {
       "label": "Statuses",
       "file_type": "document",
-      "source_file": "algorithms/CLAUDE.md",
-      "source_location": "L54",
+      "source_file": "algorithms/AGENTS.md",
+      "source_location": "L46",
       "_origin": "ast",
       "id": "algorithms_claude_statuses",
       "community": 26,
@@ -14064,8 +14064,8 @@
     {
       "label": "Tests",
       "file_type": "document",
-      "source_file": "algorithms/CLAUDE.md",
-      "source_location": "L62",
+      "source_file": "algorithms/AGENTS.md",
+      "source_location": "L53",
       "_origin": "ast",
       "id": "algorithms_claude_tests",
       "community": 26,
@@ -14075,8 +14075,8 @@
     {
       "label": "Model-based checks",
       "file_type": "document",
-      "source_file": "algorithms/CLAUDE.md",
-      "source_location": "L71",
+      "source_file": "algorithms/AGENTS.md",
+      "source_location": "L61",
       "_origin": "ast",
       "id": "algorithms_claude_model_based_checks",
       "community": 26,
@@ -14090,8 +14090,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "algorithms_readme",
-      "community": 43,
-      "community_name": "HiddenCharacterScanner.java",
+      "community": 261,
+      "community_name": "README.md",
       "norm_label": "readme.md"
     },
     {
@@ -14101,8 +14101,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "algorithms_readme_carat_algorithms",
-      "community": 43,
-      "community_name": "HiddenCharacterScanner.java",
+      "community": 252,
+      "community_name": "carat-algorithms",
       "norm_label": "carat-algorithms"
     },
     {
@@ -14112,8 +14112,8 @@
       "source_location": "L12",
       "_origin": "ast",
       "id": "algorithms_readme_setup",
-      "community": 43,
-      "community_name": "HiddenCharacterScanner.java",
+      "community": 252,
+      "community_name": "carat-algorithms",
       "norm_label": "setup"
     },
     {
@@ -14123,8 +14123,8 @@
       "source_location": "L34",
       "_origin": "ast",
       "id": "algorithms_readme_how_a_check_works",
-      "community": 43,
-      "community_name": "HiddenCharacterScanner.java",
+      "community": 252,
+      "community_name": "carat-algorithms",
       "norm_label": "how a check works"
     },
     {
@@ -14134,8 +14134,8 @@
       "source_location": "L77",
       "_origin": "ast",
       "id": "algorithms_readme_choosing_a_status",
-      "community": 43,
-      "community_name": "HiddenCharacterScanner.java",
+      "community": 252,
+      "community_name": "carat-algorithms",
       "norm_label": "choosing a status"
     },
     {
@@ -14145,8 +14145,8 @@
       "source_location": "L95",
       "_origin": "ast",
       "id": "algorithms_readme_project_layout",
-      "community": 43,
-      "community_name": "HiddenCharacterScanner.java",
+      "community": 252,
+      "community_name": "carat-algorithms",
       "norm_label": "project layout"
     },
     {
@@ -14156,8 +14156,8 @@
       "source_location": "L109",
       "_origin": "ast",
       "id": "algorithms_readme_dependencies",
-      "community": 43,
-      "community_name": "HiddenCharacterScanner.java",
+      "community": 252,
+      "community_name": "carat-algorithms",
       "norm_label": "dependencies"
     },
     {
@@ -14167,8 +14167,8 @@
       "source_location": "L121",
       "_origin": "ast",
       "id": "algorithms_readme_tests",
-      "community": 43,
-      "community_name": "HiddenCharacterScanner.java",
+      "community": 252,
+      "community_name": "carat-algorithms",
       "norm_label": "tests"
     },
     {
@@ -14178,8 +14178,8 @@
       "source_location": "L130",
       "_origin": "ast",
       "id": "algorithms_readme_model_weights",
-      "community": 43,
-      "community_name": "HiddenCharacterScanner.java",
+      "community": 252,
+      "community_name": "carat-algorithms",
       "norm_label": "model weights"
     },
     {
@@ -14219,7 +14219,7 @@
       "label": "Layout",
       "file_type": "document",
       "source_file": "backend/CLAUDE.md",
-      "source_location": "L15",
+      "source_location": "L14",
       "_origin": "ast",
       "id": "backend_claude_layout",
       "community": 3,
@@ -14230,7 +14230,7 @@
       "label": "Handlers",
       "file_type": "document",
       "source_file": "backend/CLAUDE.md",
-      "source_location": "L37",
+      "source_location": "L36",
       "_origin": "ast",
       "id": "backend_claude_handlers",
       "community": 3,
@@ -14241,7 +14241,7 @@
       "label": "API",
       "file_type": "document",
       "source_file": "backend/CLAUDE.md",
-      "source_location": "L45",
+      "source_location": "L43",
       "_origin": "ast",
       "id": "backend_claude_api",
       "community": 3,
@@ -14252,7 +14252,7 @@
       "label": "CheckRunner",
       "file_type": "document",
       "source_file": "backend/CLAUDE.md",
-      "source_location": "L53",
+      "source_location": "L51",
       "_origin": "ast",
       "id": "backend_claude_checkrunner",
       "community": 3,
@@ -14263,7 +14263,7 @@
       "label": "Database",
       "file_type": "document",
       "source_file": "backend/CLAUDE.md",
-      "source_location": "L59",
+      "source_location": "L57",
       "_origin": "ast",
       "id": "backend_claude_database",
       "community": 3,
@@ -14274,7 +14274,7 @@
       "label": "Photos",
       "file_type": "document",
       "source_file": "backend/CLAUDE.md",
-      "source_location": "L68",
+      "source_location": "L65",
       "_origin": "ast",
       "id": "backend_claude_photos",
       "community": 3,
@@ -14285,7 +14285,7 @@
       "label": "Settings",
       "file_type": "document",
       "source_file": "backend/CLAUDE.md",
-      "source_location": "L75",
+      "source_location": "L72",
       "_origin": "ast",
       "id": "backend_claude_settings",
       "community": 3,
@@ -14296,7 +14296,7 @@
       "label": "Tests",
       "file_type": "document",
       "source_file": "backend/CLAUDE.md",
-      "source_location": "L84",
+      "source_location": "L81",
       "_origin": "ast",
       "id": "backend_claude_tests",
       "community": 3,
@@ -14310,8 +14310,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "backend_readme",
-      "community": 43,
-      "community_name": "HiddenCharacterScanner.java",
+      "community": 261,
+      "community_name": "README.md",
       "norm_label": "readme.md"
     },
     {
@@ -14420,8 +14420,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "docs_api",
-      "community": 43,
-      "community_name": "HiddenCharacterScanner.java",
+      "community": 261,
+      "community_name": "README.md",
       "norm_label": "api.md"
     },
     {
@@ -14431,8 +14431,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "docs_api_rest_api_\u0431\u044d\u043a\u0435\u043d\u0434\u0430",
-      "community": 43,
-      "community_name": "HiddenCharacterScanner.java",
+      "community": 259,
+      "community_name": "REST API \u0431\u044d\u043a\u0435\u043d\u0434\u0430",
       "norm_label": "rest api \u0431\u044d\u043a\u0435\u043d\u0434\u0430"
     },
     {
@@ -14442,8 +14442,8 @@
       "source_location": "L6",
       "_origin": "ast",
       "id": "docs_api_\u043a\u0430\u0440\u0442\u043e\u0447\u043a\u0430_\u0442\u043e\u0432\u0430\u0440\u0430",
-      "community": 43,
-      "community_name": "HiddenCharacterScanner.java",
+      "community": 259,
+      "community_name": "REST API \u0431\u044d\u043a\u0435\u043d\u0434\u0430",
       "norm_label": "\u043a\u0430\u0440\u0442\u043e\u0447\u043a\u0430 \u0442\u043e\u0432\u0430\u0440\u0430"
     },
     {
@@ -14453,8 +14453,8 @@
       "source_location": "L33",
       "_origin": "ast",
       "id": "docs_api_\u044d\u043d\u0434\u043f\u043e\u0438\u043d\u0442\u044b",
-      "community": 43,
-      "community_name": "HiddenCharacterScanner.java",
+      "community": 259,
+      "community_name": "REST API \u0431\u044d\u043a\u0435\u043d\u0434\u0430",
       "norm_label": "\u044d\u043d\u0434\u043f\u043e\u0438\u043d\u0442\u044b"
     },
     {
@@ -14464,8 +14464,8 @@
       "source_location": "L48",
       "_origin": "ast",
       "id": "docs_api_\u043a\u0430\u0440\u0442\u043e\u0447\u043a\u0430",
-      "community": 43,
-      "community_name": "HiddenCharacterScanner.java",
+      "community": 259,
+      "community_name": "REST API \u0431\u044d\u043a\u0435\u043d\u0434\u0430",
       "norm_label": "\u043a\u0430\u0440\u0442\u043e\u0447\u043a\u0430"
     },
     {
@@ -14475,8 +14475,8 @@
       "source_location": "L74",
       "_origin": "ast",
       "id": "docs_api_\u0441\u0442\u0440\u043e\u043a\u0430_\u043a\u0430\u0442\u0430\u043b\u043e\u0433\u0430",
-      "community": 43,
-      "community_name": "HiddenCharacterScanner.java",
+      "community": 259,
+      "community_name": "REST API \u0431\u044d\u043a\u0435\u043d\u0434\u0430",
       "norm_label": "\u0441\u0442\u0440\u043e\u043a\u0430 \u043a\u0430\u0442\u0430\u043b\u043e\u0433\u0430"
     },
     {
@@ -14486,8 +14486,8 @@
       "source_location": "L94",
       "_origin": "ast",
       "id": "docs_api_\u0444\u043e\u0442\u043e",
-      "community": 43,
-      "community_name": "HiddenCharacterScanner.java",
+      "community": 259,
+      "community_name": "REST API \u0431\u044d\u043a\u0435\u043d\u0434\u0430",
       "norm_label": "\u0444\u043e\u0442\u043e"
     },
     {
@@ -14497,8 +14497,8 @@
       "source_location": "L101",
       "_origin": "ast",
       "id": "docs_api_\u0440\u0435\u0437\u0443\u043b\u044c\u0442\u0430\u0442_\u043f\u0440\u043e\u0432\u0435\u0440\u043a\u0438",
-      "community": 43,
-      "community_name": "HiddenCharacterScanner.java",
+      "community": 259,
+      "community_name": "REST API \u0431\u044d\u043a\u0435\u043d\u0434\u0430",
       "norm_label": "\u0440\u0435\u0437\u0443\u043b\u044c\u0442\u0430\u0442 \u043f\u0440\u043e\u0432\u0435\u0440\u043a\u0438"
     },
     {
@@ -14508,9 +14508,119 @@
       "source_location": "L119",
       "_origin": "ast",
       "id": "docs_api_\u043e\u0448\u0438\u0431\u043a\u0438",
-      "community": 43,
-      "community_name": "HiddenCharacterScanner.java",
+      "community": 259,
+      "community_name": "REST API \u0431\u044d\u043a\u0435\u043d\u0434\u0430",
       "norm_label": "\u043e\u0448\u0438\u0431\u043a\u0438"
+    },
+    {
+      "label": "how-to-add-a-check.md",
+      "file_type": "document",
+      "source_file": "docs/how-to-add-a-check.md",
+      "source_location": "L1",
+      "_origin": "ast",
+      "id": "docs_how_to_add_a_check",
+      "community": 261,
+      "community_name": "README.md",
+      "norm_label": "how-to-add-a-check.md"
+    },
+    {
+      "label": "\u041a\u0430\u043a \u0434\u043e\u0431\u0430\u0432\u0438\u0442\u044c \u043f\u0440\u043e\u0432\u0435\u0440\u043a\u0443",
+      "file_type": "document",
+      "source_file": "docs/how-to-add-a-check.md",
+      "source_location": "L1",
+      "_origin": "ast",
+      "id": "docs_how_to_add_a_check_\u043a\u0430\u043a_\u0434\u043e\u0431\u0430\u0432\u0438\u0442\u044c_\u043f\u0440\u043e\u0432\u0435\u0440\u043a\u0443",
+      "community": 250,
+      "community_name": "\u041a\u0430\u043a \u0434\u043e\u0431\u0430\u0432\u0438\u0442\u044c \u043f\u0440\u043e\u0432\u0435\u0440\u043a\u0443",
+      "norm_label": "\u043a\u0430\u043a \u0434\u043e\u0431\u0430\u0432\u0438\u0442\u044c \u043f\u0440\u043e\u0432\u0435\u0440\u043a\u0443"
+    },
+    {
+      "label": "1. \u0412\u044b\u0431\u0435\u0440\u0438\u0442\u0435 \u0442\u0440\u0435\u0431\u043e\u0432\u0430\u043d\u0438\u0435",
+      "file_type": "document",
+      "source_file": "docs/how-to-add-a-check.md",
+      "source_location": "L10",
+      "_origin": "ast",
+      "id": "docs_how_to_add_a_check_1_\u0432\u044b\u0431\u0435\u0440\u0438\u0442\u0435_\u0442\u0440\u0435\u0431\u043e\u0432\u0430\u043d\u0438\u0435",
+      "community": 250,
+      "community_name": "\u041a\u0430\u043a \u0434\u043e\u0431\u0430\u0432\u0438\u0442\u044c \u043f\u0440\u043e\u0432\u0435\u0440\u043a\u0443",
+      "norm_label": "1. \u0432\u044b\u0431\u0435\u0440\u0438\u0442\u0435 \u0442\u0440\u0435\u0431\u043e\u0432\u0430\u043d\u0438\u0435"
+    },
+    {
+      "label": "2. \u0421\u043e\u0437\u0434\u0430\u0439\u0442\u0435 \u043f\u0430\u043a\u0435\u0442",
+      "file_type": "document",
+      "source_file": "docs/how-to-add-a-check.md",
+      "source_location": "L19",
+      "_origin": "ast",
+      "id": "docs_how_to_add_a_check_2_\u0441\u043e\u0437\u0434\u0430\u0439\u0442\u0435_\u043f\u0430\u043a\u0435\u0442",
+      "community": 250,
+      "community_name": "\u041a\u0430\u043a \u0434\u043e\u0431\u0430\u0432\u0438\u0442\u044c \u043f\u0440\u043e\u0432\u0435\u0440\u043a\u0443",
+      "norm_label": "2. \u0441\u043e\u0437\u0434\u0430\u0438\u0442\u0435 \u043f\u0430\u043a\u0435\u0442"
+    },
+    {
+      "label": "3. \u041d\u0430\u043f\u0438\u0448\u0438\u0442\u0435 \u043f\u0440\u043e\u0432\u0435\u0440\u043a\u0443",
+      "file_type": "document",
+      "source_file": "docs/how-to-add-a-check.md",
+      "source_location": "L35",
+      "_origin": "ast",
+      "id": "docs_how_to_add_a_check_3_\u043d\u0430\u043f\u0438\u0448\u0438\u0442\u0435_\u043f\u0440\u043e\u0432\u0435\u0440\u043a\u0443",
+      "community": 250,
+      "community_name": "\u041a\u0430\u043a \u0434\u043e\u0431\u0430\u0432\u0438\u0442\u044c \u043f\u0440\u043e\u0432\u0435\u0440\u043a\u0443",
+      "norm_label": "3. \u043d\u0430\u043f\u0438\u0448\u0438\u0442\u0435 \u043f\u0440\u043e\u0432\u0435\u0440\u043a\u0443"
+    },
+    {
+      "label": "4. \u0412\u044b\u0431\u0435\u0440\u0438\u0442\u0435 \u0441\u0442\u0430\u0442\u0443\u0441",
+      "file_type": "document",
+      "source_file": "docs/how-to-add-a-check.md",
+      "source_location": "L80",
+      "_origin": "ast",
+      "id": "docs_how_to_add_a_check_4_\u0432\u044b\u0431\u0435\u0440\u0438\u0442\u0435_\u0441\u0442\u0430\u0442\u0443\u0441",
+      "community": 250,
+      "community_name": "\u041a\u0430\u043a \u0434\u043e\u0431\u0430\u0432\u0438\u0442\u044c \u043f\u0440\u043e\u0432\u0435\u0440\u043a\u0443",
+      "norm_label": "4. \u0432\u044b\u0431\u0435\u0440\u0438\u0442\u0435 \u0441\u0442\u0430\u0442\u0443\u0441"
+    },
+    {
+      "label": "5. \u0417\u0430\u0440\u0435\u0433\u0438\u0441\u0442\u0440\u0438\u0440\u0443\u0439\u0442\u0435 \u043f\u0440\u043e\u0432\u0435\u0440\u043a\u0443",
+      "file_type": "document",
+      "source_file": "docs/how-to-add-a-check.md",
+      "source_location": "L97",
+      "_origin": "ast",
+      "id": "docs_how_to_add_a_check_5_\u0437\u0430\u0440\u0435\u0433\u0438\u0441\u0442\u0440\u0438\u0440\u0443\u0439\u0442\u0435_\u043f\u0440\u043e\u0432\u0435\u0440\u043a\u0443",
+      "community": 250,
+      "community_name": "\u041a\u0430\u043a \u0434\u043e\u0431\u0430\u0432\u0438\u0442\u044c \u043f\u0440\u043e\u0432\u0435\u0440\u043a\u0443",
+      "norm_label": "5. \u0437\u0430\u0440\u0435\u0433\u0438\u0441\u0442\u0440\u0438\u0440\u0443\u0438\u0442\u0435 \u043f\u0440\u043e\u0432\u0435\u0440\u043a\u0443"
+    },
+    {
+      "label": "6. \u041d\u0430\u043f\u0438\u0448\u0438\u0442\u0435 \u0442\u0435\u0441\u0442\u044b",
+      "file_type": "document",
+      "source_file": "docs/how-to-add-a-check.md",
+      "source_location": "L113",
+      "_origin": "ast",
+      "id": "docs_how_to_add_a_check_6_\u043d\u0430\u043f\u0438\u0448\u0438\u0442\u0435_\u0442\u0435\u0441\u0442\u044b",
+      "community": 250,
+      "community_name": "\u041a\u0430\u043a \u0434\u043e\u0431\u0430\u0432\u0438\u0442\u044c \u043f\u0440\u043e\u0432\u0435\u0440\u043a\u0443",
+      "norm_label": "6. \u043d\u0430\u043f\u0438\u0448\u0438\u0442\u0435 \u0442\u0435\u0441\u0442\u044b"
+    },
+    {
+      "label": "7. \u041f\u0440\u043e\u0432\u0435\u0440\u044c\u0442\u0435 \u0438 \u043e\u0442\u043a\u0440\u043e\u0439\u0442\u0435 PR",
+      "file_type": "document",
+      "source_file": "docs/how-to-add-a-check.md",
+      "source_location": "L141",
+      "_origin": "ast",
+      "id": "docs_how_to_add_a_check_7_\u043f\u0440\u043e\u0432\u0435\u0440\u044c\u0442\u0435_\u0438_\u043e\u0442\u043a\u0440\u043e\u0439\u0442\u0435_pr",
+      "community": 250,
+      "community_name": "\u041a\u0430\u043a \u0434\u043e\u0431\u0430\u0432\u0438\u0442\u044c \u043f\u0440\u043e\u0432\u0435\u0440\u043a\u0443",
+      "norm_label": "7. \u043f\u0440\u043e\u0432\u0435\u0440\u044c\u0442\u0435 \u0438 \u043e\u0442\u043a\u0440\u043e\u0438\u0442\u0435 pr"
+    },
+    {
+      "label": "\u0415\u0441\u043b\u0438 \u043d\u0443\u0436\u043d\u0430 \u043c\u043e\u0434\u0435\u043b\u044c \u0438\u043b\u0438 \u0442\u044f\u0436\u0451\u043b\u0430\u044f \u0431\u0438\u0431\u043b\u0438\u043e\u0442\u0435\u043a\u0430",
+      "file_type": "document",
+      "source_file": "docs/how-to-add-a-check.md",
+      "source_location": "L150",
+      "_origin": "ast",
+      "id": "docs_how_to_add_a_check_\u0435\u0441\u043b\u0438_\u043d\u0443\u0436\u043d\u0430_\u043c\u043e\u0434\u0435\u043b\u044c_\u0438\u043b\u0438_\u0442\u044f\u0436\u0451\u043b\u0430\u044f_\u0431\u0438\u0431\u043b\u0438\u043e\u0442\u0435\u043a\u0430",
+      "community": 250,
+      "community_name": "\u041a\u0430\u043a \u0434\u043e\u0431\u0430\u0432\u0438\u0442\u044c \u043f\u0440\u043e\u0432\u0435\u0440\u043a\u0443",
+      "norm_label": "\u0435\u0441\u043b\u0438 \u043d\u0443\u0436\u043d\u0430 \u043c\u043e\u0434\u0435\u043b\u044c \u0438\u043b\u0438 \u0442\u044f\u0436\u0435\u043b\u0430\u044f \u0431\u0438\u0431\u043b\u0438\u043e\u0442\u0435\u043a\u0430"
     },
     {
       "label": "requirements.md",
@@ -14519,8 +14629,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "docs_requirements",
-      "community": 43,
-      "community_name": "HiddenCharacterScanner.java",
+      "community": 261,
+      "community_name": "README.md",
       "norm_label": "requirements.md"
     },
     {
@@ -14530,8 +14640,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "docs_requirements_\u0442\u0440\u0435\u0431\u043e\u0432\u0430\u043d\u0438\u044f_\u0437\u0430\u043a\u0430\u0437\u0447\u0438\u043a\u0430_\u0447\u0435\u0441\u0442\u043d\u044b\u0439_\u0437\u043d\u0430\u043a",
-      "community": 43,
-      "community_name": "HiddenCharacterScanner.java",
+      "community": 263,
+      "community_name": "\u0422\u0440\u0435\u0431\u043e\u0432\u0430\u043d\u0438\u044f \u0437\u0430\u043a\u0430\u0437\u0447\u0438\u043a\u0430 (\u0427\u0435\u0441\u0442\u043d\u044b\u0439 \u0417\u043d\u0430\u043a)",
       "norm_label": "\u0442\u0440\u0435\u0431\u043e\u0432\u0430\u043d\u0438\u044f \u0437\u0430\u043a\u0430\u0437\u0447\u0438\u043a\u0430 (\u0447\u0435\u0441\u0442\u043d\u044b\u0438 \u0437\u043d\u0430\u043a)"
     },
     {
@@ -14541,8 +14651,8 @@
       "source_location": "L6",
       "_origin": "ast",
       "id": "docs_requirements_\u0442\u0440\u0435\u0431\u043e\u0432\u0430\u043d\u0438\u044f",
-      "community": 43,
-      "community_name": "HiddenCharacterScanner.java",
+      "community": 263,
+      "community_name": "\u0422\u0440\u0435\u0431\u043e\u0432\u0430\u043d\u0438\u044f \u0437\u0430\u043a\u0430\u0437\u0447\u0438\u043a\u0430 (\u0427\u0435\u0441\u0442\u043d\u044b\u0439 \u0417\u043d\u0430\u043a)",
       "norm_label": "\u0442\u0440\u0435\u0431\u043e\u0432\u0430\u043d\u0438\u044f"
     },
     {
@@ -14552,8 +14662,8 @@
       "source_location": "L19",
       "_origin": "ast",
       "id": "docs_requirements_\u0432\u044b\u0432\u0435\u0434\u0435\u043d\u043e_\u043a\u043e\u043c\u0430\u043d\u0434\u043e\u0439_\u043d\u0435_\u0442\u0440\u0435\u0431\u043e\u0432\u0430\u043d\u0438\u0435_\u0437\u0430\u043a\u0430\u0437\u0447\u0438\u043a\u0430",
-      "community": 43,
-      "community_name": "HiddenCharacterScanner.java",
+      "community": 263,
+      "community_name": "\u0422\u0440\u0435\u0431\u043e\u0432\u0430\u043d\u0438\u044f \u0437\u0430\u043a\u0430\u0437\u0447\u0438\u043a\u0430 (\u0427\u0435\u0441\u0442\u043d\u044b\u0439 \u0417\u043d\u0430\u043a)",
       "norm_label": "\u0432\u044b\u0432\u0435\u0434\u0435\u043d\u043e \u043a\u043e\u043c\u0430\u043d\u0434\u043e\u0438 (\u043d\u0435 \u0442\u0440\u0435\u0431\u043e\u0432\u0430\u043d\u0438\u0435 \u0437\u0430\u043a\u0430\u0437\u0447\u0438\u043a\u0430)"
     },
     {
@@ -14563,8 +14673,8 @@
       "source_location": "L30",
       "_origin": "ast",
       "id": "docs_requirements_\u043a\u0430\u043a_\u043f\u043e\u043b\u044c\u0437\u043e\u0432\u0430\u0442\u044c\u0441\u044f",
-      "community": 43,
-      "community_name": "HiddenCharacterScanner.java",
+      "community": 263,
+      "community_name": "\u0422\u0440\u0435\u0431\u043e\u0432\u0430\u043d\u0438\u044f \u0437\u0430\u043a\u0430\u0437\u0447\u0438\u043a\u0430 (\u0427\u0435\u0441\u0442\u043d\u044b\u0439 \u0417\u043d\u0430\u043a)",
       "norm_label": "\u043a\u0430\u043a \u043f\u043e\u043b\u044c\u0437\u043e\u0432\u0430\u0442\u044c\u0441\u044f"
     },
     {
@@ -14593,7 +14703,7 @@
       "label": "Stack",
       "file_type": "document",
       "source_file": "frontend/CLAUDE.md",
-      "source_location": "L6",
+      "source_location": "L5",
       "_origin": "ast",
       "id": "frontend_claude_stack",
       "community": 32,
@@ -14604,7 +14714,7 @@
       "label": "Build and run",
       "file_type": "document",
       "source_file": "frontend/CLAUDE.md",
-      "source_location": "L13",
+      "source_location": "L12",
       "_origin": "ast",
       "id": "frontend_claude_build_and_run",
       "community": 32,
@@ -14615,7 +14725,7 @@
       "label": "Layout",
       "file_type": "document",
       "source_file": "frontend/CLAUDE.md",
-      "source_location": "L31",
+      "source_location": "L30",
       "_origin": "ast",
       "id": "frontend_claude_layout",
       "community": 32,
@@ -14626,7 +14736,7 @@
       "label": "Rules",
       "file_type": "document",
       "source_file": "frontend/CLAUDE.md",
-      "source_location": "L39",
+      "source_location": "L38",
       "_origin": "ast",
       "id": "frontend_claude_rules",
       "community": 32,
@@ -14637,7 +14747,7 @@
       "label": "Checks before pushing",
       "file_type": "document",
       "source_file": "frontend/CLAUDE.md",
-      "source_location": "L52",
+      "source_location": "L51",
       "_origin": "ast",
       "id": "frontend_claude_checks_before_pushing",
       "community": 32,
@@ -14651,8 +14761,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "frontend_readme",
-      "community": 3,
-      "community_name": "TextPreprocessingException",
+      "community": 264,
+      "community_name": "React + TypeScript + Vite",
       "norm_label": "readme.md"
     },
     {
@@ -14662,8 +14772,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "frontend_readme_react_typescript_vite",
-      "community": 3,
-      "community_name": "TextPreprocessingException",
+      "community": 264,
+      "community_name": "React + TypeScript + Vite",
       "norm_label": "react + typescript + vite"
     },
     {
@@ -14673,8 +14783,8 @@
       "source_location": "L10",
       "_origin": "ast",
       "id": "frontend_readme_react_compiler",
-      "community": 3,
-      "community_name": "TextPreprocessingException",
+      "community": 264,
+      "community_name": "React + TypeScript + Vite",
       "norm_label": "react compiler"
     },
     {
@@ -14684,8 +14794,8 @@
       "source_location": "L16",
       "_origin": "ast",
       "id": "frontend_readme_expanding_the_eslint_configuration",
-      "community": 3,
-      "community_name": "TextPreprocessingException",
+      "community": 264,
+      "community_name": "React + TypeScript + Vite",
       "norm_label": "expanding the eslint configuration"
     },
     {
@@ -14714,7 +14824,7 @@
       "label": "Where code goes",
       "file_type": "document",
       "source_file": "model/CLAUDE.md",
-      "source_location": "L9",
+      "source_location": "L8",
       "_origin": "ast",
       "id": "model_claude_where_code_goes",
       "community": 33,
@@ -14725,7 +14835,7 @@
       "label": "Domain notes",
       "file_type": "document",
       "source_file": "model/CLAUDE.md",
-      "source_location": "L22",
+      "source_location": "L20",
       "_origin": "ast",
       "id": "model_claude_domain_notes",
       "community": 33,
@@ -14736,7 +14846,7 @@
       "label": "Python rules",
       "file_type": "document",
       "source_file": "model/CLAUDE.md",
-      "source_location": "L29",
+      "source_location": "L27",
       "_origin": "ast",
       "id": "model_claude_python_rules",
       "community": 33,
@@ -14747,7 +14857,7 @@
       "label": "Data and weights",
       "file_type": "document",
       "source_file": "model/CLAUDE.md",
-      "source_location": "L37",
+      "source_location": "L34",
       "_origin": "ast",
       "id": "model_claude_data_and_weights",
       "community": 33,
@@ -14758,7 +14868,7 @@
       "label": "Handing a model to `algorithms/`",
       "file_type": "document",
       "source_file": "model/CLAUDE.md",
-      "source_location": "L46",
+      "source_location": "L43",
       "_origin": "ast",
       "id": "model_claude_handing_a_model_to_algorithms",
       "community": 33,
@@ -16554,7 +16664,7 @@
       "community": 171,
       "norm_label": "claude skill invocation guidance",
       "community_name": "Claude skill invocation guidance",
-      "id": "claude_claude_claude_claude_claude_claude_claude_claude_claude_claude_claude_claude_claude_claude_claude_claude_skill_invocation_guidance"
+      "id": "claude_claude_claude_claude_claude_claude_claude_claude_claude_claude_claude_claude_claude_claude_claude_claude_claude_skill_invocation_guidance"
     },
     {
       "label": "Backend JUnit Tests Workflow",
@@ -33303,6 +33413,16 @@
     {
       "relation": "contains",
       "confidence": "EXTRACTED",
+      "source_file": ".context/python-rewrite/DECISIONS.md",
+      "source_location": "L185",
+      "weight": 1.0,
+      "source": "context_python_rewrite_decisions_decisions",
+      "target": "context_python_rewrite_decisions_2026_11_01_writing_style_rule",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
       "source_file": ".context/python-rewrite/FINDINGS.md",
       "source_location": "L1",
       "weight": 1.0,
@@ -33823,7 +33943,7 @@
     {
       "relation": "contains",
       "confidence": "EXTRACTED",
-      "source_file": "AGENTS.md",
+      "source_file": "CLAUDE.md",
       "source_location": "L1",
       "weight": 1.0,
       "source": "claude",
@@ -33831,20 +33951,10 @@
       "confidence_score": 1.0
     },
     {
-      "relation": "references",
-      "confidence": "EXTRACTED",
-      "source_file": "README.md",
-      "source_location": "L58",
-      "weight": 1.0,
-      "source": "readme",
-      "target": "claude",
-      "confidence_score": 1.0
-    },
-    {
       "relation": "contains",
       "confidence": "EXTRACTED",
-      "source_file": "AGENTS.md",
-      "source_location": "L38",
+      "source_file": "CLAUDE.md",
+      "source_location": "L33",
       "weight": 1.0,
       "source": "claude_agents_md",
       "target": "claude_architecture",
@@ -33853,8 +33963,8 @@
     {
       "relation": "contains",
       "confidence": "EXTRACTED",
-      "source_file": "AGENTS.md",
-      "source_location": "L97",
+      "source_file": "CLAUDE.md",
+      "source_location": "L92",
       "weight": 1.0,
       "source": "claude_agents_md",
       "target": "claude_git_workflow",
@@ -33863,18 +33973,8 @@
     {
       "relation": "contains",
       "confidence": "EXTRACTED",
-      "source_file": "AGENTS.md",
-      "source_location": "L148",
-      "weight": 1.0,
-      "source": "claude_agents_md",
-      "target": "claude_graphify",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "AGENTS.md",
-      "source_location": "L120",
+      "source_file": "CLAUDE.md",
+      "source_location": "L109",
       "weight": 1.0,
       "source": "claude_agents_md",
       "target": "claude_guardrails",
@@ -33883,18 +33983,18 @@
     {
       "relation": "contains",
       "confidence": "EXTRACTED",
-      "source_file": "AGENTS.md",
-      "source_location": "L70",
+      "source_file": "CLAUDE.md",
+      "source_location": "L61",
       "weight": 1.0,
       "source": "claude_agents_md",
-      "target": "claude_python_rules_all_python_projects",
+      "target": "claude_python_rules",
       "confidence_score": 1.0
     },
     {
       "relation": "contains",
       "confidence": "EXTRACTED",
-      "source_file": "AGENTS.md",
-      "source_location": "L21",
+      "source_file": "CLAUDE.md",
+      "source_location": "L17",
       "weight": 1.0,
       "source": "claude_agents_md",
       "target": "claude_repository_map",
@@ -33903,8 +34003,8 @@
     {
       "relation": "contains",
       "confidence": "EXTRACTED",
-      "source_file": "AGENTS.md",
-      "source_location": "L83",
+      "source_file": "CLAUDE.md",
+      "source_location": "L80",
       "weight": 1.0,
       "source": "claude_agents_md",
       "target": "claude_tools_and_skills",
@@ -33913,7 +34013,7 @@
     {
       "relation": "contains",
       "confidence": "EXTRACTED",
-      "source_file": "AGENTS.md",
+      "source_file": "CLAUDE.md",
       "source_location": "L6",
       "weight": 1.0,
       "source": "claude_agents_md",
@@ -33923,31 +34023,91 @@
     {
       "relation": "contains",
       "confidence": "EXTRACTED",
-      "source_file": "AGENTS.md",
-      "source_location": "L53",
+      "source_file": "CLAUDE.md",
+      "source_location": "L47",
       "weight": 1.0,
       "source": "claude_agents_md",
       "target": "claude_where_code_goes",
       "confidence_score": 1.0
     },
     {
-      "relation": "references",
+      "relation": "contains",
       "confidence": "EXTRACTED",
-      "source_file": "README.md",
-      "source_location": "L54",
+      "source_file": "CLAUDE.md",
+      "source_location": "L72",
       "weight": 1.0,
-      "source": "readme",
-      "target": "backend_claude",
+      "source": "claude_agents_md",
+      "target": "claude_writing_style",
       "confidence_score": 1.0
     },
     {
       "relation": "references",
       "confidence": "EXTRACTED",
       "source_file": "README.md",
-      "source_location": "L54",
+      "source_location": "L15",
+      "weight": 1.0,
+      "source": "readme",
+      "target": "algorithms_readme",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "source_file": "README.md",
+      "source_location": "L16",
+      "weight": 1.0,
+      "source": "readme",
+      "target": "backend_readme",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "source_file": "README.md",
+      "source_location": "L62",
+      "weight": 1.0,
+      "source": "readme",
+      "target": "docs_api",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "source_file": "README.md",
+      "source_location": "L64",
+      "weight": 1.0,
+      "source": "readme",
+      "target": "docs_how_to_add_a_check",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "source_file": "README.md",
+      "source_location": "L63",
+      "weight": 1.0,
+      "source": "readme",
+      "target": "docs_requirements",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "source_file": "README.md",
+      "source_location": "L17",
       "weight": 1.0,
       "source": "readme",
       "target": "frontend_readme",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "source_file": "README.md",
+      "source_location": "L18",
+      "weight": 1.0,
+      "source": "readme",
+      "target": "model_readme",
       "confidence_score": 1.0
     },
     {
@@ -33961,10 +34121,20 @@
       "confidence_score": 1.0
     },
     {
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "source_file": "README.md",
+      "source_location": "L71",
+      "weight": 1.0,
+      "source": "readme",
+      "target": "review",
+      "confidence_score": 1.0
+    },
+    {
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "README.md",
-      "source_location": "L56",
+      "source_location": "L68",
       "weight": 1.0,
       "source": "readme_carat",
       "target": "readme_contributing",
@@ -33974,27 +34144,27 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "README.md",
-      "source_location": "L34",
+      "source_location": "L46",
       "weight": 1.0,
       "source": "readme_carat",
-      "target": "readme_development_status",
+      "target": "readme_develop",
       "confidence_score": 1.0
     },
     {
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "README.md",
-      "source_location": "L7",
+      "source_location": "L60",
       "weight": 1.0,
       "source": "readme_carat",
-      "target": "readme_project_documentation",
+      "target": "readme_documentation",
       "confidence_score": 1.0
     },
     {
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "README.md",
-      "source_location": "L16",
+      "source_location": "L11",
       "weight": 1.0,
       "source": "readme_carat",
       "target": "readme_repository_layout",
@@ -34004,10 +34174,10 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "README.md",
-      "source_location": "L42",
+      "source_location": "L31",
       "weight": 1.0,
       "source": "readme_carat",
-      "target": "readme_run_the_current_services",
+      "target": "readme_run_with_docker",
       "confidence_score": 1.0
     },
     {
@@ -34034,7 +34204,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "REVIEW.md",
-      "source_location": "L72",
+      "source_location": "L73",
       "weight": 1.0,
       "source": "review_review_md",
       "target": "review_do_not_report",
@@ -34074,7 +34244,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "REVIEW.md",
-      "source_location": "L80",
+      "source_location": "L81",
       "weight": 1.0,
       "source": "review_review_md",
       "target": "review_pr_title_and_description",
@@ -34143,7 +34313,7 @@
     {
       "relation": "contains",
       "confidence": "EXTRACTED",
-      "source_file": "algorithms/CLAUDE.md",
+      "source_file": "algorithms/AGENTS.md",
       "source_location": "L1",
       "weight": 1.0,
       "source": "algorithms_claude",
@@ -34153,8 +34323,8 @@
     {
       "relation": "contains",
       "confidence": "EXTRACTED",
-      "source_file": "algorithms/CLAUDE.md",
-      "source_location": "L36",
+      "source_file": "algorithms/AGENTS.md",
+      "source_location": "L33",
       "weight": 1.0,
       "source": "algorithms_claude_algorithms_agents_md",
       "target": "algorithms_claude_adding_a_check",
@@ -34163,8 +34333,8 @@
     {
       "relation": "contains",
       "confidence": "EXTRACTED",
-      "source_file": "algorithms/CLAUDE.md",
-      "source_location": "L26",
+      "source_file": "algorithms/AGENTS.md",
+      "source_location": "L25",
       "weight": 1.0,
       "source": "algorithms_claude_algorithms_agents_md",
       "target": "algorithms_claude_dependencies",
@@ -34173,8 +34343,8 @@
     {
       "relation": "contains",
       "confidence": "EXTRACTED",
-      "source_file": "algorithms/CLAUDE.md",
-      "source_location": "L19",
+      "source_file": "algorithms/AGENTS.md",
+      "source_location": "L18",
       "weight": 1.0,
       "source": "algorithms_claude_algorithms_agents_md",
       "target": "algorithms_claude_layout",
@@ -34183,8 +34353,8 @@
     {
       "relation": "contains",
       "confidence": "EXTRACTED",
-      "source_file": "algorithms/CLAUDE.md",
-      "source_location": "L71",
+      "source_file": "algorithms/AGENTS.md",
+      "source_location": "L61",
       "weight": 1.0,
       "source": "algorithms_claude_algorithms_agents_md",
       "target": "algorithms_claude_model_based_checks",
@@ -34193,8 +34363,8 @@
     {
       "relation": "contains",
       "confidence": "EXTRACTED",
-      "source_file": "algorithms/CLAUDE.md",
-      "source_location": "L7",
+      "source_file": "algorithms/AGENTS.md",
+      "source_location": "L6",
       "weight": 1.0,
       "source": "algorithms_claude_algorithms_agents_md",
       "target": "algorithms_claude_purity",
@@ -34203,8 +34373,8 @@
     {
       "relation": "contains",
       "confidence": "EXTRACTED",
-      "source_file": "algorithms/CLAUDE.md",
-      "source_location": "L54",
+      "source_file": "algorithms/AGENTS.md",
+      "source_location": "L46",
       "weight": 1.0,
       "source": "algorithms_claude_algorithms_agents_md",
       "target": "algorithms_claude_statuses",
@@ -34213,18 +34383,8 @@
     {
       "relation": "contains",
       "confidence": "EXTRACTED",
-      "source_file": "algorithms/CLAUDE.md",
-      "source_location": "L50",
-      "weight": 1.0,
-      "source": "algorithms_claude_algorithms_agents_md",
-      "target": "algorithms_claude_style",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "algorithms/CLAUDE.md",
-      "source_location": "L62",
+      "source_file": "algorithms/AGENTS.md",
+      "source_location": "L53",
       "weight": 1.0,
       "source": "algorithms_claude_algorithms_agents_md",
       "target": "algorithms_claude_tests",
@@ -34257,6 +34417,16 @@
       "source_location": "L4",
       "weight": 1.0,
       "source": "backend_readme",
+      "target": "algorithms_readme",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/how-to-add-a-check.md",
+      "source_location": "L157",
+      "weight": 1.0,
+      "source": "docs_how_to_add_a_check",
       "target": "algorithms_readme",
       "confidence_score": 1.0
     },
@@ -34344,7 +34514,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "backend/CLAUDE.md",
-      "source_location": "L45",
+      "source_location": "L43",
       "weight": 1.0,
       "source": "backend_claude_backend_agents_md",
       "target": "backend_claude_api",
@@ -34354,7 +34524,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "backend/CLAUDE.md",
-      "source_location": "L53",
+      "source_location": "L51",
       "weight": 1.0,
       "source": "backend_claude_backend_agents_md",
       "target": "backend_claude_checkrunner",
@@ -34364,7 +34534,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "backend/CLAUDE.md",
-      "source_location": "L59",
+      "source_location": "L57",
       "weight": 1.0,
       "source": "backend_claude_backend_agents_md",
       "target": "backend_claude_database",
@@ -34374,7 +34544,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "backend/CLAUDE.md",
-      "source_location": "L37",
+      "source_location": "L36",
       "weight": 1.0,
       "source": "backend_claude_backend_agents_md",
       "target": "backend_claude_handlers",
@@ -34384,7 +34554,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "backend/CLAUDE.md",
-      "source_location": "L15",
+      "source_location": "L14",
       "weight": 1.0,
       "source": "backend_claude_backend_agents_md",
       "target": "backend_claude_layout",
@@ -34394,7 +34564,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "backend/CLAUDE.md",
-      "source_location": "L68",
+      "source_location": "L65",
       "weight": 1.0,
       "source": "backend_claude_backend_agents_md",
       "target": "backend_claude_photos",
@@ -34404,7 +34574,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "backend/CLAUDE.md",
-      "source_location": "L75",
+      "source_location": "L72",
       "weight": 1.0,
       "source": "backend_claude_backend_agents_md",
       "target": "backend_claude_settings",
@@ -34424,7 +34594,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "backend/CLAUDE.md",
-      "source_location": "L84",
+      "source_location": "L81",
       "weight": 1.0,
       "source": "backend_claude_backend_agents_md",
       "target": "backend_claude_tests",
@@ -34541,6 +34711,16 @@
       "confidence_score": 1.0
     },
     {
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/how-to-add-a-check.md",
+      "source_location": "L77",
+      "weight": 1.0,
+      "source": "docs_how_to_add_a_check",
+      "target": "docs_api",
+      "confidence_score": 1.0
+    },
+    {
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "docs/api.md",
@@ -34613,6 +34793,106 @@
     {
       "relation": "contains",
       "confidence": "EXTRACTED",
+      "source_file": "docs/how-to-add-a-check.md",
+      "source_location": "L1",
+      "weight": 1.0,
+      "source": "docs_how_to_add_a_check",
+      "target": "docs_how_to_add_a_check_\u043a\u0430\u043a_\u0434\u043e\u0431\u0430\u0432\u0438\u0442\u044c_\u043f\u0440\u043e\u0432\u0435\u0440\u043a\u0443",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/how-to-add-a-check.md",
+      "source_location": "L7",
+      "weight": 1.0,
+      "source": "docs_how_to_add_a_check",
+      "target": "docs_requirements",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/how-to-add-a-check.md",
+      "source_location": "L10",
+      "weight": 1.0,
+      "source": "docs_how_to_add_a_check_\u043a\u0430\u043a_\u0434\u043e\u0431\u0430\u0432\u0438\u0442\u044c_\u043f\u0440\u043e\u0432\u0435\u0440\u043a\u0443",
+      "target": "docs_how_to_add_a_check_1_\u0432\u044b\u0431\u0435\u0440\u0438\u0442\u0435_\u0442\u0440\u0435\u0431\u043e\u0432\u0430\u043d\u0438\u0435",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/how-to-add-a-check.md",
+      "source_location": "L19",
+      "weight": 1.0,
+      "source": "docs_how_to_add_a_check_\u043a\u0430\u043a_\u0434\u043e\u0431\u0430\u0432\u0438\u0442\u044c_\u043f\u0440\u043e\u0432\u0435\u0440\u043a\u0443",
+      "target": "docs_how_to_add_a_check_2_\u0441\u043e\u0437\u0434\u0430\u0439\u0442\u0435_\u043f\u0430\u043a\u0435\u0442",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/how-to-add-a-check.md",
+      "source_location": "L35",
+      "weight": 1.0,
+      "source": "docs_how_to_add_a_check_\u043a\u0430\u043a_\u0434\u043e\u0431\u0430\u0432\u0438\u0442\u044c_\u043f\u0440\u043e\u0432\u0435\u0440\u043a\u0443",
+      "target": "docs_how_to_add_a_check_3_\u043d\u0430\u043f\u0438\u0448\u0438\u0442\u0435_\u043f\u0440\u043e\u0432\u0435\u0440\u043a\u0443",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/how-to-add-a-check.md",
+      "source_location": "L80",
+      "weight": 1.0,
+      "source": "docs_how_to_add_a_check_\u043a\u0430\u043a_\u0434\u043e\u0431\u0430\u0432\u0438\u0442\u044c_\u043f\u0440\u043e\u0432\u0435\u0440\u043a\u0443",
+      "target": "docs_how_to_add_a_check_4_\u0432\u044b\u0431\u0435\u0440\u0438\u0442\u0435_\u0441\u0442\u0430\u0442\u0443\u0441",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/how-to-add-a-check.md",
+      "source_location": "L97",
+      "weight": 1.0,
+      "source": "docs_how_to_add_a_check_\u043a\u0430\u043a_\u0434\u043e\u0431\u0430\u0432\u0438\u0442\u044c_\u043f\u0440\u043e\u0432\u0435\u0440\u043a\u0443",
+      "target": "docs_how_to_add_a_check_5_\u0437\u0430\u0440\u0435\u0433\u0438\u0441\u0442\u0440\u0438\u0440\u0443\u0439\u0442\u0435_\u043f\u0440\u043e\u0432\u0435\u0440\u043a\u0443",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/how-to-add-a-check.md",
+      "source_location": "L113",
+      "weight": 1.0,
+      "source": "docs_how_to_add_a_check_\u043a\u0430\u043a_\u0434\u043e\u0431\u0430\u0432\u0438\u0442\u044c_\u043f\u0440\u043e\u0432\u0435\u0440\u043a\u0443",
+      "target": "docs_how_to_add_a_check_6_\u043d\u0430\u043f\u0438\u0448\u0438\u0442\u0435_\u0442\u0435\u0441\u0442\u044b",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/how-to-add-a-check.md",
+      "source_location": "L141",
+      "weight": 1.0,
+      "source": "docs_how_to_add_a_check_\u043a\u0430\u043a_\u0434\u043e\u0431\u0430\u0432\u0438\u0442\u044c_\u043f\u0440\u043e\u0432\u0435\u0440\u043a\u0443",
+      "target": "docs_how_to_add_a_check_7_\u043f\u0440\u043e\u0432\u0435\u0440\u044c\u0442\u0435_\u0438_\u043e\u0442\u043a\u0440\u043e\u0439\u0442\u0435_pr",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/how-to-add-a-check.md",
+      "source_location": "L150",
+      "weight": 1.0,
+      "source": "docs_how_to_add_a_check_\u043a\u0430\u043a_\u0434\u043e\u0431\u0430\u0432\u0438\u0442\u044c_\u043f\u0440\u043e\u0432\u0435\u0440\u043a\u0443",
+      "target": "docs_how_to_add_a_check_\u0435\u0441\u043b\u0438_\u043d\u0443\u0436\u043d\u0430_\u043c\u043e\u0434\u0435\u043b\u044c_\u0438\u043b\u0438_\u0442\u044f\u0436\u0451\u043b\u0430\u044f_\u0431\u0438\u0431\u043b\u0438\u043e\u0442\u0435\u043a\u0430",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
       "source_file": "docs/requirements.md",
       "source_location": "L1",
       "weight": 1.0,
@@ -34664,7 +34944,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "frontend/CLAUDE.md",
-      "source_location": "L13",
+      "source_location": "L12",
       "weight": 1.0,
       "source": "frontend_claude_frontend_agents_md",
       "target": "frontend_claude_build_and_run",
@@ -34674,7 +34954,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "frontend/CLAUDE.md",
-      "source_location": "L52",
+      "source_location": "L51",
       "weight": 1.0,
       "source": "frontend_claude_frontend_agents_md",
       "target": "frontend_claude_checks_before_pushing",
@@ -34684,7 +34964,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "frontend/CLAUDE.md",
-      "source_location": "L31",
+      "source_location": "L30",
       "weight": 1.0,
       "source": "frontend_claude_frontend_agents_md",
       "target": "frontend_claude_layout",
@@ -34694,7 +34974,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "frontend/CLAUDE.md",
-      "source_location": "L39",
+      "source_location": "L38",
       "weight": 1.0,
       "source": "frontend_claude_frontend_agents_md",
       "target": "frontend_claude_rules",
@@ -34704,7 +34984,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "frontend/CLAUDE.md",
-      "source_location": "L6",
+      "source_location": "L5",
       "weight": 1.0,
       "source": "frontend_claude_frontend_agents_md",
       "target": "frontend_claude_stack",
@@ -34754,7 +35034,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "model/CLAUDE.md",
-      "source_location": "L37",
+      "source_location": "L34",
       "weight": 1.0,
       "source": "model_claude_model_agents_md",
       "target": "model_claude_data_and_weights",
@@ -34764,7 +35044,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "model/CLAUDE.md",
-      "source_location": "L22",
+      "source_location": "L20",
       "weight": 1.0,
       "source": "model_claude_model_agents_md",
       "target": "model_claude_domain_notes",
@@ -34774,7 +35054,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "model/CLAUDE.md",
-      "source_location": "L46",
+      "source_location": "L43",
       "weight": 1.0,
       "source": "model_claude_model_agents_md",
       "target": "model_claude_handing_a_model_to_algorithms",
@@ -34784,7 +35064,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "model/CLAUDE.md",
-      "source_location": "L29",
+      "source_location": "L27",
       "weight": 1.0,
       "source": "model_claude_model_agents_md",
       "target": "model_claude_python_rules",
@@ -34794,7 +35074,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "model/CLAUDE.md",
-      "source_location": "L9",
+      "source_location": "L8",
       "weight": 1.0,
       "source": "model_claude_model_agents_md",
       "target": "model_claude_where_code_goes",

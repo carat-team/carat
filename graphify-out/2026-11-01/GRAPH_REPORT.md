@@ -1,11 +1,11 @@
 # Graph Report - carat  (2026-11-01)
 
 ## Corpus Check
-- 226 files · ~69,133 words
+- 227 files · ~68,628 words
 - Verdict: corpus is large enough that graph structure adds value.
 
 ## Summary
-- 1530 nodes · 1735 edges · 257 communities (101 shown, 156 thin omitted)
+- 1540 nodes · 1752 edges · 265 communities (109 shown, 156 thin omitted)
 - Extraction: 90% EXTRACTED · 10% INFERRED · 0% AMBIGUOUS · INFERRED: 180 edges (avg confidence: 0.71)
 - Token cost: 0 input · 0 output
 
@@ -248,17 +248,24 @@
 - CheckRunner
 - card.py
 - Handoff
+- Как добавить проверку
 - ADR 0002. Store product photos in S3-compatible object storage
+- carat-algorithms
 - __init__.py
 - __init__.py
+- REST API бэкенда
+- Blocking (must be fixed before merge)
+- Carat
+- Требования заказчика (Честный Знак)
+- React + TypeScript + Vite
 
 ## God Nodes (most connected - your core abstractions)
 1. `ProductRepository` - 24 edges
 2. `compilerOptions` - 21 edges
 3. `Static Analysis Rule Configuration` - 20 edges
 4. `ProductCard` - 19 edges
-5. `compilerOptions` - 18 edges
-6. `Decisions` - 18 edges
+5. `Decisions` - 19 edges
+6. `compilerOptions` - 18 edges
 7. `CheckResult` - 15 edges
 8. `ProductStatus` - 14 edges
 9. `PhotoObjectStore` - 14 edges
@@ -286,7 +293,7 @@
 - **Static Text Rule Dictionaries** — backend_src_main_resources_analysis_static_analysis_config_direct_ai_leakage, backend_src_main_resources_analysis_static_analysis_config_knowledge_cutoff, backend_src_main_resources_analysis_static_analysis_config_ai_lexical_markers, backend_src_main_resources_analysis_static_analysis_config_ai_phrases, backend_src_main_resources_analysis_static_analysis_config_hedging_density, backend_src_main_resources_analysis_text_leakage_direct_ai_direct_ai_leakage_phrase_dictionary, backend_src_main_resources_analysis_text_leakage_knowledge_cutoff_knowledge_cutoff_phrase_dictionary, backend_src_main_resources_analysis_text_lexical_markers_en_english_ai_lexical_marker_dictionary, backend_src_main_resources_analysis_text_phrasing_transitions_en_english_ai_transition_phrase_dictionary, backend_src_main_resources_analysis_text_stylometry_hedges_en_english_hedging_term_dictionary [EXTRACTED 1.00]
 - **Static AI Artifact Checks** — docs_ai_artifacts_research_ru_c2pa_provenance, docs_ai_artifacts_research_ru_exif_camera_metadata, docs_ai_artifacts_research_ru_gop_encoding_artifacts, docs_ai_artifacts_research_ru_zero_width_characters, docs_ai_artifacts_research_ru_lexical_ai_markers [EXTRACTED 1.00]
 
-## Communities (257 total, 156 thin omitted)
+## Communities (265 total, 156 thin omitted)
 
 ### Community 0 - "ApplicationAvailability"
 Cohesion: 0.06
@@ -301,8 +308,8 @@ Cohesion: 0.07
 Nodes (15): NotFoundIllustration(), TODO: сверстать реальную страницу, ProductPageFooter(), ProductPageFooterProps, ProductStepper(), PRODUCT_STEPS, ProductPage(), ProductInfoStep() (+7 more)
 
 ### Community 3 - "TextPreprocessingException"
-Cohesion: 0.06
-Nodes (28): API, backend/AGENTS.md, CheckRunner, Database, Handlers, Layout, Photos, Settings (+20 more)
+Cohesion: 0.18
+Nodes (10): API, backend/AGENTS.md, CheckRunner, Database, Handlers, Layout, Photos, Settings (+2 more)
 
 ### Community 4 - "config.py"
 Cohesion: 0.08
@@ -333,8 +340,8 @@ Cohesion: 0.08
 Nodes (26): AI Lexical Markers, AI Phrases, Confusable Script, Conversational Scaffold, Direct AI Leakage, Em-Dash Density, Emoji Decoration, Fabricated Citations (+18 more)
 
 ### Community 11 - "ContentItem"
-Cohesion: 0.14
-Nodes (12): Blocking (must be fixed before merge), Dependencies and files, Do not report, Frontend, How to review, Invalid placement and architecture consistency, Non-blocking, PR title and description (+4 more)
+Cohesion: 0.29
+Nodes (5): Do not report, Frontend, How to review, Non-blocking, PR title and description
 
 ### Community 12 - "tsconfig.app.json"
 Cohesion: 0.07
@@ -393,12 +400,12 @@ Cohesion: 0.06
 Nodes (25): ADR 0001. Rewrite the project in Python and extract the algorithms library, Alternatives considered, Consequences, Context, Decision, Issue catalogue, Issues, Connections (+17 more)
 
 ### Community 26 - "AttributeConverter"
-Cohesion: 0.20
-Nodes (9): Adding a check, algorithms/AGENTS.md, Dependencies, Layout, Model-based checks, Purity, Statuses, Style (+1 more)
+Cohesion: 0.22
+Nodes (8): Adding a check, algorithms/AGENTS.md, Dependencies, Layout, Model-based checks, Purity, Statuses, Tests
 
 ### Community 27 - "VideoAnalysisContext.java"
-Cohesion: 0.11
-Nodes (18): 2026-10-31 - algorithm_version is an integer, 2026-10-31 - Backend depends on carat-algorithms[vision], 2026-10-31 - Backend installs every algorithms extra, 2026-10-31 - Legacy tag on dev head, 2026-10-31 - No "inferred" marker, no guillemets, 2026-10-31 - No throwaway check in the algorithms scaffold, 2026-10-31 - One commit per ported check, 2026-10-31 - Ported label checks report validity only (+10 more)
+Cohesion: 0.10
+Nodes (19): 2026-10-31 - algorithm_version is an integer, 2026-10-31 - Backend depends on carat-algorithms[vision], 2026-10-31 - Backend installs every algorithms extra, 2026-10-31 - Legacy tag on dev head, 2026-10-31 - No "inferred" marker, no guillemets, 2026-10-31 - No throwaway check in the algorithms scaffold, 2026-10-31 - One commit per ported check, 2026-10-31 - Ported label checks report validity only (+11 more)
 
 ### Community 28 - "text_preprocess_prod.py"
 Cohesion: 0.18
@@ -425,8 +432,8 @@ Cohesion: 0.38
 Nodes (4): main(), ParquetRows, Path, Build a same-source external test set from the Fashion Product Images dataset (M
 
 ### Community 35 - ".collectEvidence()"
-Cohesion: 0.43
-Nodes (6): listing_text(), main(), Path, Build a "not perfume" negative set from Amazon Berkeley Objects (ABO, CC BY 4.0), read_listings(), select()
+Cohesion: 0.18
+Nodes (10): AGENTS.md, Architecture, Git workflow, Guardrails, Python rules, Repository map, Tools and skills, What Carat is (+2 more)
 
 ### Community 36 - "StaticAnalysisConfig.java"
 Cohesion: 0.33
@@ -454,11 +461,11 @@ Nodes (5): SessionFactory, create_photo_object_store(), PhotoObjectStore, Photo 
 
 ### Community 42 - ".calculate()"
 Cohesion: 0.07
-Nodes (36): InvalidInputError, NotFoundError, Input that passed schema validation but breaks a service rule, keyed by field na, Photo, ProductStatus, StrEnum, FastAPI, register_error_handlers() (+28 more)
+Nodes (40): InvalidInputError, NotFoundError, Input that passed schema validation but breaks a service rule, keyed by field na, Photo, FastAPI, register_error_handlers(), validation_error_response(), PhotoService (+32 more)
 
 ### Community 43 - "HiddenCharacterScanner.java"
-Cohesion: 0.06
-Nodes (29): carat-algorithms, Choosing a status, Dependencies, How a check works, Model weights, Project layout, Setup, Tests (+21 more)
+Cohesion: 0.22
+Nodes (9): API, carat-backend, Code layout, Configuration, Database and migrations, Design choices, How checks run, Setup (+1 more)
 
 ### Community 44 - "ParagraphSplitter.java"
 Cohesion: 0.33
@@ -534,7 +541,7 @@ Nodes (28): `ATTEMPTS.md` - append-only log, `CONNECTIONS.md` - living document,
 
 ### Community 226 - "__init__.py"
 Cohesion: 0.09
-Nodes (35): alias, Product, delete_photo(), get_photo_content(), Response, ServicesDependency, UUID, upload_photo() (+27 more)
+Nodes (37): alias, Product, ProductStatus, StrEnum, delete_photo(), get_photo_content(), Response, ServicesDependency (+29 more)
 
 ### Community 228 - "ISSUE.md"
 Cohesion: 0.13
@@ -549,8 +556,8 @@ Cohesion: 0.35
 Nodes (11): create(), Any, TestClient, test_create_stores_every_mvp_attribute(), test_create_without_body_makes_an_empty_draft(), test_format_errors_are_reported_by_field_path(), test_list_returns_catalog_rows_newest_first(), test_patch_merges_and_null_removes() (+3 more)
 
 ### Community 232 - "ISSUE.md"
-Cohesion: 0.22
-Nodes (5): Boot matrix, FW-1427 verification procedure, Linux, UEFI Shell, Starting prompt
+Cohesion: 0.40
+Nodes (4): Boot matrix, FW-1427 verification procedure, Linux, UEFI Shell
 
 ### Community 233 - "Findings"
 Cohesion: 0.25
@@ -577,8 +584,8 @@ Cohesion: 0.33
 Nodes (6): Follow-up, Interpretation, Recovery failure investigation — 2026-07-24, Required changes, Results, Test context
 
 ### Community 242 - "Reliable discovery of cascaded external NVMe shelves"
-Cohesion: 0.40
-Nodes (5): Acceptance criteria, Links, Reliable discovery of cascaded external NVMe shelves, Scope, Summary
+Cohesion: 0.22
+Nodes (6): Acceptance criteria, Links, Reliable discovery of cascaded external NVMe shelves, Scope, Summary, Starting prompt
 
 ### Community 243 - "2026_10_31_1741-290dc8b86531_create_products_tables.py"
 Cohesion: 0.15
@@ -604,12 +611,40 @@ Nodes (9): CheckSettings, get_settings(), load_settings(), PhotoSettings, BaseMo
 Cohesion: 0.33
 Nodes (5): Current state, Handoff, Last thing tried, Next step, Warning
 
+### Community 250 - "Как добавить проверку"
+Cohesion: 0.22
+Nodes (9): 1. Выберите требование, 2. Создайте пакет, 3. Напишите проверку, 4. Выберите статус, 5. Зарегистрируйте проверку, 6. Напишите тесты, 7. Проверьте и откройте PR, Если нужна модель или тяжёлая библиотека (+1 more)
+
 ### Community 251 - "ADR 0002. Store product photos in S3-compatible object storage"
 Cohesion: 0.40
 Nodes (4): ADR 0002. Store product photos in S3-compatible object storage, Consequences, Context, Decision
 
+### Community 252 - "carat-algorithms"
+Cohesion: 0.25
+Nodes (8): carat-algorithms, Choosing a status, Dependencies, How a check works, Model weights, Project layout, Setup, Tests
+
+### Community 259 - "REST API бэкенда"
+Cohesion: 0.25
+Nodes (8): REST API бэкенда, Карточка, Карточка товара, Ошибки, Результат проверки, Строка каталога, Фото, Эндпоинты
+
+### Community 260 - "Blocking (must be fixed before merge)"
+Cohesion: 0.29
+Nodes (7): Blocking (must be fixed before merge), Dependencies and files, Invalid placement and architecture consistency, Process, Python backend rules, Results and vocabulary, Tests
+
+### Community 262 - "Carat"
+Cohesion: 0.33
+Nodes (6): Carat, Contributing, Develop, Documentation, Repository layout, Run with Docker
+
+### Community 263 - "Требования заказчика (Честный Знак)"
+Cohesion: 0.50
+Nodes (4): Выведено командой (не требование заказчика), Как пользоваться, Требования, Требования заказчика (Честный Знак)
+
+### Community 264 - "React + TypeScript + Vite"
+Cohesion: 0.50
+Nodes (3): Expanding the ESLint configuration, React Compiler, React + TypeScript + Vite
+
 ## Knowledge Gaps
-- **676 isolated node(s):** `VALID_KINDS`, `script_dir`, `templates_dir`, `context_dir`, `issue_dir` (+671 more)
+- **684 isolated node(s):** `VALID_KINDS`, `script_dir`, `templates_dir`, `context_dir`, `issue_dir` (+679 more)
   These have ≤1 connection - possible missing edges or undocumented components.
 - **156 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
 
@@ -617,7 +652,7 @@ Nodes (4): ADR 0002. Store product photos in S3-compatible object storage, Conse
 _Questions this graph is uniquely positioned to answer:_
 
 - **Why does `build_services()` connect `build_services` to `card.py`, `Combination of Weak Signals`, `.calculate()`, `CheckRunner`, `Analyzer.java`?**
-  _High betweenness centrality (0.021) - this node is a cross-community bridge._
+  _High betweenness centrality (0.020) - this node is a cross-community bridge._
 - **Why does `get_checks()` connect `Analyzer.java` to `build_services`?**
   _High betweenness centrality (0.013) - this node is a cross-community bridge._
 - **Why does `PhotoService` connect `.calculate()` to `Combination of Weak Signals`, `build_services`?**
@@ -627,6 +662,6 @@ _Questions this graph is uniquely positioned to answer:_
 - **Are the 4 inferred relationships involving `ProductCard` (e.g. with `Check` and `test_explanation_names_the_gtin_and_the_problem()`) actually correct?**
   _`ProductCard` has 4 INFERRED edges - model-reasoned connections that need verification._
 - **What connects `VALID_KINDS`, `script_dir`, `templates_dir` to the rest of the system?**
-  _676 weakly-connected nodes found - possible documentation gaps or missing edges._
+  _684 weakly-connected nodes found - possible documentation gaps or missing edges._
 - **Should `ApplicationAvailability` be split into smaller, more focused modules?**
   _Cohesion score 0.05859969558599695 - nodes in this community are weakly interconnected._

@@ -65,7 +65,8 @@ backend/
 ## Photos
 
 - Bytes in the object store under `products/<product_id>/<photo_id>.<ext>`; the database keeps metadata only.
-- Validate content type (JPEG, PNG, WEBP) and size at the boundary; never use the client's file name.
+- Validate content type (JPEG, PNG, WEBP), size and that the bytes decode as that type at the boundary; never use
+  the client's file name.
 - Upload writes the object first and removes it if the row fails; delete removes the row first.
 - Never commit photos; test images stay under 100 KB or are generated in the test.
 
