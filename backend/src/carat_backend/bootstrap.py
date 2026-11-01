@@ -30,5 +30,5 @@ def build_services(settings: Settings) -> Services:
     return Services(
         products=products,
         photos=PhotoService(session_factory, store, settings.photos.max_size_mb * 1024 * 1024),
-        checks=CheckService(products, store, CheckRunner(get_checks(), settings.checks.concurrency)),
+        checks=CheckService(products, store, CheckRunner(get_checks()), settings.checks.concurrency),
     )

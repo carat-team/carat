@@ -38,7 +38,7 @@ backend/
 - Plain `def` handlers, never `async def`. One uvicorn worker (`--workers 1` in `justfile` and Dockerfile); do not
   change without asking.
 - A handler parses input, calls one service method and returns a schema. No business logic.
-- Check runs go through the `[checks] concurrency` semaphore.
+- Photo loading and check runs go through the `[checks] concurrency` semaphore.
 
 ## API
 

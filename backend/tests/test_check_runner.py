@@ -27,7 +27,7 @@ class CrashingCheck:
 
 
 def test_crashing_check_becomes_error_and_others_still_run() -> None:
-    runner = CheckRunner([CrashingCheck(), PassingCheck()], concurrency=1)
+    runner = CheckRunner([CrashingCheck(), PassingCheck()])
 
     crashed, passed = runner.run(ProductCard(full_name="Духи"))
 
@@ -39,4 +39,4 @@ def test_crashing_check_becomes_error_and_others_still_run() -> None:
 
 
 def test_runner_without_checks_returns_empty_list() -> None:
-    assert CheckRunner([], concurrency=1).run(ProductCard()) == []
+    assert CheckRunner([]).run(ProductCard()) == []

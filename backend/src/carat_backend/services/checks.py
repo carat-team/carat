@@ -17,13 +17,11 @@ CHECK_CRASHED = "CHECK_CRASHED"
 class CheckRunner:
     """Runs every check on a card. A crashing check becomes an ERROR result, never a failed request."""
 
-    def __init__(self, checks: Sequence[Check], concurrency: int) -> None:
+    def __init__(self, checks: Sequence[Check]) -> None:
         self._checks = checks
-        self._semaphore = threading.BoundedSemaphore(concurrency)
 
     def run(self, card: ProductCard) -> list[CheckResult]:
-        with self._semaphore:
-            return [self._run_one(check, card) for check in self._checks]
+        return [self._run_one(check, card) for check in self._checks]
 
     def _run_one(self, check: Check, card: ProductCard) -> CheckResult:
         started = time.perf_counter()
@@ -50,17 +48,24 @@ class CheckRunner:
 class CheckService:
     """Builds a ProductCard from a stored product and runs the checks on it."""
 
-    def __init__(self, products: ProductService, store: PhotoObjectStore, runner: CheckRunner) -> None:
+    def __init__(
+        self, products: ProductService, store: PhotoObjectStore, runner: CheckRunner, concurrency: int
+    ) -> None:
         self._products = products
         self._store = store
         self._runner = runner
+        self._semaphore = threading.BoundedSemaphore(concurrency)
 
     def check(self, product_id: uuid.UUID) -> list[CheckResult]:
         product = self._products.get(product_id)
-        photos = tuple(
-            CardPhoto(
-                content=self._store.get(photo.object_key), perspective=photo.perspective, package_id=photo.package_id
+        # The limit covers photo loading too, so waiting requests hold no photo bytes in memory
+        with self._semaphore:
+            photos = tuple(
+                CardPhoto(
+                    content=self._store.get(photo.object_key),
+                    perspective=photo.perspective,
+                    package_id=photo.package_id,
+                )
+                for photo in product.photos
             )
-            for photo in product.photos
-        )
-        return self._runner.run(ProductCard.model_validate({**product.attributes, "photos": photos}))
+            return self._runner.run(ProductCard.model_validate({**product.attributes, "photos": photos}))
