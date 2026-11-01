@@ -76,7 +76,7 @@ Rendering helper: ZXing `MultiFormatWriter` -> black/white image. Python: `zxing
   most `max_image_side` (`scale = min(1, max_side / max(size))`, `round()` per side), `reader.readtext(np.asarray)`,
   keep `(text, confidence)` with `confidence >= min_confidence`.
 - Weights: Dockerfile pre-downloads with `easyocr.Reader(['ru', 'en'], gpu=False)` (EasyOCR default
-  `~/.EasyOCR/model`: `craft_mlt_25k.pth`, `cyrillic_g2.pth`, `english_g2.pth`). New code passes
+  `~/.EasyOCR/model`). For `ru` + `en` EasyOCR loads only `craft_mlt_25k.pth` and `cyrillic_g2.pth` (cyrillic covers Latin; checked in `easyocr.py` and by a real download). New code passes
   `model_storage_directory=weights_directory`, `download_enabled=False`.
 - Torch pinned to CPU index: `[tool.uv.sources] torch = { index = "pytorch-cpu" }`, index
   `https://download.pytorch.org/whl/cpu`, `explicit = true`.

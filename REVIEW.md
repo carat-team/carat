@@ -18,7 +18,7 @@ Rules for reviewing a pull request in the Carat repository. Used by human review
 - `algorithms/` imports `backend`, `model`, a web framework, a database driver or `grpc`.
 - `backend/` or `algorithms/` imports from `model/`.
 - New top-level project, server, Dockerfile or service that was not agreed.
-- `api/` reaches into `storage/` or SQLAlchemy sessions directly, skipping `services/`.
+- `rest/` reaches into `storage/` or SQLAlchemy sessions directly, skipping `services/`.
 
 ### Python backend rules
 
@@ -67,6 +67,7 @@ Rules for reviewing a pull request in the Carat repository. Used by human review
 - Naming that is unclear, single-letter variables outside loop counters.
 - Missing type hint on a private helper, `print` in a script.
 - Comment that restates the code.
+- Single-character arrows or em/en dashes in code, comments or docs (write `->` and `-`).
 - Large PR that could have been split.
 
 ## Do not report

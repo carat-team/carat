@@ -1,7 +1,6 @@
 # frontend/AGENTS.md
 
-Web UI for Carat. Early stage: the app shell and domain types exist, the API integration and
-Docker setup do not yet. Read the root `AGENTS.md` first.
+Web UI for Carat; adds to the root `AGENTS.md`.
 
 ## Stack
 
@@ -42,10 +41,10 @@ yarn ts:check           # type check only
   unless provably safe. Prefer `type` unions and literal types, as in `types/product.ts`.
 - Function components and hooks only. The React Compiler handles memoization, so do not sprinkle
   `useMemo` / `useCallback` / `memo` without a measured reason. Follow the Rules of Hooks.
-- Keep API types in sync with backend DTOs (`backend/.../dto/`); all HTTP calls go through `src/api/`,
+- API types follow `docs/api.md` (the backend contract); all HTTP calls go through `src/api/`,
   never `fetch` directly inside components. Handle loading and error states.
 - GTIN and other codes are strings (they can have leading zeros); never parse them as numbers.
-- User-facing text is Russian
+- User-facing text is Russian.
 - Accessible markup: semantic elements, labels for inputs, `alt` for product photos.
 - Do not edit the Vite/TS/ESLint/Prettier configs unless the task is about tooling.
 
