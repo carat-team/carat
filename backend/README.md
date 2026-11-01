@@ -1,4 +1,4 @@
-# carat-backend
+# Backend
 
 The Carat REST API. It stores product cards in PostgreSQL and their photos in S3-compatible object storage, runs
 the checks from [carat-algorithms](../algorithms/README.md) on a card, and returns one result per check to the
@@ -42,25 +42,26 @@ From the repository root the same recipes run as `just backend <recipe>`.
 
 Settings come from two places:
 
-- **`settings.toml`** in this directory holds everything that is not a secret. Docker mounts its own copy and
-  points the `SETTINGS_FILE` variable at it. Relative paths resolve against the directory of the file.
-- **Environment variables** hold the database connection and the storage keys. `just` loads them from the root
+- **`settings.toml`** in this directory holds the tuning values. The Docker image ships a copy, and docker compose
+  mounts this same file over it: edit it and restart the backend container to apply a change.
+- **Environment variables** hold the database and object storage connections and the weights directory. `just` loads them from the root
   `.env` (template: the root `.env.example`), the same file docker compose reads.
 
 | Setting | Where | Default | Meaning |
 |---|---|---|---|
 | `DB_HOST`, `DB_PORT` | env | `localhost`, `5432` | PostgreSQL server |
 | `DB_NAME`, `DB_USER`, `DB_PASSWORD` | env | `carat`, `carat`, empty | Database and credentials |
+| `S3_ENDPOINT` | env | `localhost:9000` | S3-compatible server, `host:port` |
+| `S3_BUCKET` | env | `carat-photos` | Bucket for photos; the backend creates it on first upload |
+| `S3_SECURE` | env | `false` | Use HTTPS |
 | `S3_ACCESS_KEY`, `S3_SECRET_KEY` | env | empty | Object storage credentials |
-| `[object_storage] endpoint` | TOML | `localhost:9000` | S3-compatible server, `host:port` |
-| `[object_storage] bucket` | TOML | `carat-photos` | Bucket for photos; the backend creates it on first upload |
-| `[object_storage] secure` | TOML | `false` | Use HTTPS |
 | `[photos] max_size_mb` | TOML | `10` | Larger uploads are rejected with 422 |
-| `[weights] easyocr_dir` | TOML | `../weights/easyocr` | EasyOCR weights (see the [algorithms README](../algorithms/README.md#model-weights)) |
 | `[checks] concurrency` | TOML | `2` | How many cards can run their checks at the same time |
+| `WEIGHTS_DIR` | env | `../weights` | The repository's `weights/` directory; relative paths resolve against the directory of the TOML file. The image sets `/app/weights` |
 | `SETTINGS_FILE` | env | `settings.toml` | Path to the TOML file |
 
-Each model family gets its own `[weights]` entry pointing at its directory under the repository's `weights/`.
+Each model family reads its own subdirectory of `WEIGHTS_DIR` (`easyocr/`), so a new model needs no new setting
+(see the [algorithms README](../algorithms/README.md#model-weights)).
 
 ## API
 

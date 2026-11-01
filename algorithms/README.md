@@ -1,4 +1,4 @@
-# carat-algorithms
+# Algorithms
 
 The library of product-card checks behind Carat. You give it a product card (attributes and photos), and each
 check returns one result: a status, a reason code and a sentence in Russian that explains the verdict.
@@ -130,9 +130,9 @@ Unit tests show that every rule works. Accuracy numbers (precision, recall) agai
 ## Model weights
 
 Weights are never committed. They live in the repository's `weights/` directory, one subdirectory per model
-family; docker mounts the same directory. The backend reads the subdirectory from its settings
-(`[weights] easyocr_dir` in `backend/settings.toml`) and passes it to the reader (`OcrReader(weights_directory)`),
-which never downloads anything on its own.
+family; docker mounts the same directory. The backend passes the whole directory (its `WEIGHTS_DIR` setting) to
+the reader (`OcrReader(weights_dir)`). The reader picks its own subdirectory (`easyocr/`) and never downloads
+anything on its own. A new model family only needs a new subdirectory, no new setting.
 
 | Used by | File in `weights/easyocr/` | Source | MD5 |
 |---|---|---|---|
