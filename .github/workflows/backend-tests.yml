@@ -1,0 +1,75 @@
+name: Backend Tests
+
+on:
+  workflow_call:
+  pull_request:
+    paths:
+      - "backend/**"
+      - "algorithms/**"
+      - ".github/workflows/backend-tests.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  check:
+    name: Lint, typecheck and test
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: backend
+
+    services:
+      postgres:
+        image: postgres:18
+        env:
+          POSTGRES_USER: carat
+          POSTGRES_PASSWORD: carat
+          POSTGRES_DB: carat_test
+        ports:
+          - 55432:5432
+        options: >-
+          --health-cmd "pg_isready -U carat -d carat_test"
+          --health-interval 5s
+          --health-timeout 5s
+          --health-retries 10
+      s3:
+        image: rustfs/rustfs:1.0.4
+        env:
+          RUSTFS_ACCESS_KEY: carat
+          RUSTFS_SECRET_KEY: carat-secret
+        ports:
+          - 59000:9000
+
+    env:
+      TEST_DATABASE_URL: postgresql+psycopg://carat:carat@localhost:55432/carat_test
+      TEST_OBJECT_STORAGE_URL: http://carat:carat-secret@localhost:59000
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Set up uv
+        uses: astral-sh/setup-uv@v10.3.3
+        with:
+          version: "0.13.6"
+          enable-cache: true
+          cache-dependency-glob: backend/uv.lock
+
+      - name: Check lockfile
+        run: uv lock --check
+
+      - name: Install dependencies
+        run: uv sync --locked
+
+      - name: Lint
+        run: |
+          uv run ruff check .
+          uv run ruff format --check .
+
+      - name: Typecheck
+        run: uv run pyright
+
+      - name: Test
+        run: uv run pytest
