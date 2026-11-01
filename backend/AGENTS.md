@@ -1,88 +1,87 @@
 # backend/AGENTS.md
 
-Spring Boot REST API and analysis pipeline. Read the root `AGENTS.md` first for workflow and guardrails.
+REST API, persistence and orchestration; adds to the root `AGENTS.md`. Package `carat_backend`, Python 3.12, uv,
+`src/` layout. Human overview and rationale: `README.md`.
 
-All static (model-free) analysis of product cards lives here, text and image alike, **in Java only**: no Python, scripts or sidecar services in the backend.
+No check logic here: an `if` that decides whether a card is good belongs in `algorithms/`.
 
 ## Stack
 
-- Java **25** (Gradle toolchain), Spring Boot **4.0.x**, Gradle **9.x** via the wrapper (`build.gradle`, Groovy DSL)
-- Spring Web MVC, Data JPA, Security, Validation, springdoc-openapi (Swagger UI)
-- PostgreSQL 18 + **Flyway** (`src/main/resources/db/migration/`), Hibernate `ddl-auto: validate`
-- Redis + Bucket4j for rate limiting
-- gRPC client: stubs generated from `../proto` by the `com.google.protobuf` Gradle plugin
-  into package `io.github.carat_team.carat.grpc` (build output, never committed)
-- Text processing: ICU4J, Lingua (language detection), Aho-Corasick (phrase matching)
-- Tests: JUnit 5, Spring Boot test slices, H2 in-memory DB, in-process gRPC
+FastAPI + Pydantic v2, uvicorn (one worker), pydantic-settings, PostgreSQL 18 with SQLAlchemy 2 (sync), psycopg 3
+and Alembic, S3-compatible storage through the `minio` client (RustFS locally). Tests: pytest + `TestClient` (needs
+`httpx2`) on real PostgreSQL and RustFS. No Redis, Celery or message broker without asking.
 
-## Build and run
+## Layout
 
-```bash
-cd backend
-./gradlew build          # compile, generate gRPC stubs, run tests
-./gradlew test           # tests only (CI runs exactly this)
-./gradlew test --tests '*TextStaticAnalyzer*'   # single test class
-./gradlew bootRun --args='--spring.profiles.active=dev'   # needs Postgres, Redis, inference
+```
+backend/
+  settings.toml, alembic.ini, migrations/, Dockerfile
+  src/carat_backend/
+    main.py          uvicorn entry point (re-exports rest.app.create_app)
+    settings.py      settings.toml + DB_* / S3_* / WEIGHTS_DIR environment
+    bootstrap.py     build_services(settings): the only place services are built
+    domain/          models.py, errors.py: shared by every layer and adapter
+    services/        products.py, photos.py, checks.py (CheckRunner + CheckService)
+    storage/         database.py, tables.py, repositories/, object_store.py
+    rest/            app.py, dependencies.py, errors.py, routers/, schemas/ (one module per resource)
+  tests/
 ```
 
-- Config: `application.yml` + `application-{dev,prod}.yml`; values from env / root `.env`.
-- Local deps without the full stack: `docker compose up -d db redis inference` from the repo root.
-- Always use `./gradlew`, never a system `gradle`. Do not bump the wrapper or plugin versions unasked.
+- `rest/` -> `services/` -> `storage/`; `domain/` is shared. `rest/` never touches SQLAlchemy or the object store;
+  services never import FastAPI or schemas.
+- Services take and return `domain` models and raise `domain.errors`; adapters map them to their transport.
+- A future gRPC adapter goes to `carat_backend/grpc/` and uses `build_services()`. No grpc code, proto or
+  dependency without asking.
 
-## Package layout
+## Handlers
 
-Two root packages in one module:
+- Plain `def` handlers, never `async def`. One uvicorn worker (`--workers 1` in `justfile` and Dockerfile); do not
+  change without asking.
+- A handler parses input, calls one service method and returns a schema. No business logic.
+- Photo loading and check runs go through the `[checks] concurrency` semaphore.
 
-- `io.github.duckysmacky.cogniflex` - reusable analysis core, framework-light. **Must not depend
-  on `io.github.carat_team.carat`.**
-  - `analysis/` - `Analyzer`, `AnalysisOrchestrator` (static + dynamic in parallel), `ContentItem`
-  - `analysis/static_/` - `StaticAnalyzer`, `AnalysisRule`, `Evidence`; `text/`, `image/`, `video/`
-    with their rules (`text/rules/`) and `config/` (bound from `analysis/static-analysis-config.yml`)
-  - `analysis/dynamic/` - `DynamicAnalyzer`s and the `InferenceClient` interface
-  - `analysis/score/` - `ScoreFusionStrategy` -> `FinalScore`
-  - `processing/` - text normalization/segmentation, media parsing
-- `io.github.carat_team.carat` - the Spring application: `controllers/`, `services/`, `dto/`,
-  `entities/`, `repositories/`, `converters/`, `config/`, `exceptions/`, `inference/` (gRPC client)
+## API
 
-Request flow: controller -> `AnalyzeService` -> preprocess -> `AnalysisOrchestrator`
-(static rules + `InferenceGrpcClient`) -> score fusion -> `HistoryService` -> response DTO.
+- Contract: `docs/api.md`. Bodies wrap card fields in `{"attributes": {...}}`.
+- Validation is format only (types, lengths, patterns, units); any attribute may be missing in a draft.
+- 422 body is exactly `{"error": "VALIDATION_ERROR", "fields": {"<field path>": "<Russian message>"}}`; do not
+  change it without telling the frontend team.
+- Check results go out as `carat_algorithms` produces them; never rename, merge or reinterpret statuses.
 
-## Common tasks
+## CheckRunner
 
-- **New static text rule**: implement `TextAnalysisRule` in `analysis/static_/text/rules/`,
-  register it as a Spring `@Component`, add its weight/thresholds to `static-analysis-config.yml`,
-  put word lists in `resources/analysis/text/<category>/*.txt`, and add tests next to the existing
-  rule tests. `ZeroWidthCharacterRule` is a minimal example.
-- **New endpoint**: thin controller under `/api/...`, logic in a service, request/response as
-  `record` DTOs with Bean Validation, errors through `GlobalExceptionHandler`.
-- **New static image/field check**: same recipe as a text rule, under `analysis/static_/image/` (or the
-  matching modality); classical CV in Java, not in `inference/`.
-- **Feature that needs a model**: endpoint, static part and data preparation here; model call through
-  `InferenceClient`/gRPC, with the inference side added in the same change.
-- **Pipeline unlike AI-detection** (e.g. image quality): its own service class and, if it needs gRPC,
-  its own `.proto`; do not extend `AnalyzeService`.
-- **Schema change**: add a new `V<n>__<snake_case_description>.sql`. Never edit an existing migration.
-- **Proto change**: edit `proto/`, rebuild here and regenerate inference stubs (`just proto`).
+- Runs every check from `get_checks()` on a `ProductCard` built from the stored product.
+- Catches every exception: `ERROR`, reason code `CHECK_CRASHED`, the check's id and `algorithm_version`.
+- Logs check id, status and duration only; never card contents or tracebacks with values.
 
-## Java style
+## Database
 
-Use modern Java 25 idioms (refactor old code toward them only when you are already changing it):
-- `record`s for DTOs, value objects, results and `@ConfigurationProperties`.
-- `sealed` interfaces + pattern matching (`switch` with patterns, `instanceof` binding) over
-  type checks and casts; switch **expressions**, not fall-through statements.
-- `var` only when the type is obvious from the right-hand side. Text blocks for multi-line strings.
-- Immutable collections: `List.of`, `Map.of`, `Stream.toList()`; return empty collections, not `null`.
-- `Optional` only as a return type, never as a field or parameter.
-- Constructor injection with `final` fields; no field `@Autowired`. No Lombok.
-- Explicit imports, no wildcards in new code. Descriptive names; no abbreviations.
-- Small focused classes; package by layer as above. Keep controllers free of business logic.
-- Log through SLF4J with parameters (`log.info("x={}", x)`), never string concatenation.
+- EAV: `products`, `product_attributes` (`attribute_key`, `value_json` JSONB), `product_photos` (metadata +
+  `object_key`). New attributes need no migration.
+- Schema change: edit `storage/tables.py`, `just backend migrate-new "<message>"`, read and fix the file. Never edit
+  a merged migration.
+- Repositories return `domain` models, never ORM rows.
 
-## Testing
+## Photos
 
-- Every new rule, service method or endpoint gets tests. Mirror the main package path in `src/test`.
-- Tests should be written to test the expected behaviour, not just to verify the code. They can and should fail if the
-  implementation fails to deliver that expected result. Do not just write tests for the sake of having 100% code green
-- Controller tests use `@WebMvcTest` slices with `@MockitoBean` (`@MockBean` is gone in Boot 4);
-  mock `InferenceClient` rather than needing a live inference server. Tests must pass without network, Postgres or Redis.
-- `./gradlew test` must be green before pushing.
+- Bytes in the object store under `products/<product_id>/<photo_id>.<ext>`; the database keeps metadata only.
+- Validate content type (JPEG, PNG, WEBP), size and that the bytes decode as that type at the boundary; never use
+  the client's file name.
+- Upload writes the object first and removes it if the row fails; delete removes the row first.
+- Never commit photos; test images stay under 100 KB or are generated in the test.
+
+## Settings
+
+- Connections come only from env: `DB_*`, `S3_*` (no prefix, no nesting) and `WEIGHTS_DIR`. Everything else lives
+  in `settings.toml` sections.
+- All config goes through `settings.py`; no `os.environ` reads elsewhere.
+- Pass `settings.weights.dir` to `algorithms` as is; model code picks its `<family>/` subdirectory. No per-model
+  weight settings.
+- New env variables go to the root `.env.example`; every new setting goes to the `README.md` table.
+
+## Tests
+
+- API tests via `TestClient` on real PostgreSQL and S3 (`just backend test-services`); without
+  `TEST_DATABASE_URL` / `TEST_OBJECT_STORAGE_URL` they skip. No SQLite.
+- Settings tests use temporary TOML files; runner tests use fake checks (one passing, one raising).
+- Do not re-test check logic; that lives in `algorithms/tests/`.

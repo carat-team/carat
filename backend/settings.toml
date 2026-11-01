@@ -1,0 +1,7 @@
+# Backend settings for local development.
+
+[photos]
+max_size_mb = 10
+
+[checks]
+concurrency = 2

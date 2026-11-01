@@ -1,60 +1,47 @@
 # model/AGENTS.md
 
-ML research workspace: data exploration, training, evaluation and export of models.
-Nothing here is deployed. Read the root `AGENTS.md` first.
+Research, training and evaluation; adds to the root `AGENTS.md`.
 
-Only model work lives here. Algorithms without a model (rules, validators, parsers, name or volume
-checks) do not belong in `model/`, even if meant to be ported later: write them in `backend/` (Java).
+`model/` is not deployed and never imported by `algorithms/` or `backend/`. It produces weights, measurements and
+decisions. Inference code for a trained model lives in `algorithms/` (see "Model-based checks" there).
 
-## Stack
+## Where code goes
 
-- Python 3.12 (same as `inference/`), PyTorch, torchvision, Hugging Face `transformers`, scikit-learn,
-  NumPy, pandas, OpenCV, MediaPipe, matplotlib; Jupyter notebooks for experiments
-- Dependencies are listed in `requirements.txt`. Install them with **uv** into a local venv:
+| Code | Home |
+|---|---|
+| Training, fine-tuning, experiments, ablations, dataset building and cleaning | `model/` |
+| Evaluation on labeled sets (precision, recall, F1, confidence intervals) | `model/` (or `algorithms/scripts/` for one check) |
+| Weight export (ONNX, state_dict) and its checksum | `model/` |
+| A rule, parser or validator that needs no model | `algorithms/` |
+| Running the trained model for a check at request time | `algorithms/` |
 
-```bash
-cd model
-uv venv --python 3.12
-uv pip install -r requirements.txt
-uv run jupyter lab              # or select .venv as the kernel in your IDE
-```
-
-Never install into the system Python. When adding a dependency, append it to `requirements.txt`
-with a lower-bound version (`package>=X.Y`).
-
-## Layout
-
-- `notebooks/` - experiments, training and optimization notebooks (`<topic>_<purpose>.ipynb`)
-- `utils/` - research helpers grouped by modality: `image_utils/`, `text_utils/`, `video_utils/`
-- `prod_utils/` - model-related code meant to be ported to `inference/` (model selection, preprocessing)
-- `workflow_model/` - model validation script and its CI workflow definition
-- `artifacts/` - local outputs (checkpoints, metrics, plots), never committed
-
-New experiments get their own clearly named subpackage or notebook; do not create `test2.py`,
-`new/`, `tmp/` or similar. Reusable logic moves out of notebooks into `utils/` modules.
-
-## Rules
-
-- **Never commit** datasets, weights, checkpoints, `*.npy`, `*.csv` dumps, Kaggle downloads or HF
-  caches. Code must load them from a configurable path. Document every dataset and model in
-  `model/README.md`: source URL (or how to obtain it), license if known, and where to place it
-  locally. If you do not know where a file came from, ask the user.
-- **Type hints on every function** in `.py` files and on functions defined in notebooks, using
-  modern syntax (`list[str]`, `X | None`).
-- Notebooks: keep them runnable top to bottom, put paths and hyperparameters in one config cell,
-  set random seeds, and clear heavy outputs (large images, long logs) before committing.
-- Report results with the exact dataset split, metrics and seed so experiments are reproducible.
-- `inference/` must never import from `model/`. To ship a model:
-  1. export weights (`.safetensors` preferred over pickled `.pth`) to `artifacts/`,
-  2. port the minimal typed inference/preprocessing code into `inference/app/detectors/`,
-  3. document the weights in `inference/README.md` and the path in `inference/config.yaml`,
-  4. keep preprocessing identical between training and inference and note it in the PR.
-- The production runtime is CPU-only; mention CPU latency and model size when proposing a model.
-- Training runs and large downloads are expensive - ask before starting them.
+If rules can solve a check, it goes to `algorithms/` first. Do not wrap a rule in a model "for later".
 
 ## Domain notes
 
-Inputs are product cards for the "Честный Знак" system: structured text fields (name, brand,
-category, codes such as GTIN / OKPD2 / TN VED) and product photos from fixed angles
-(front, left, right, back). Russian is the primary text language. Models should flag
-inconsistent, low-quality or generated content, not just classify "AI vs human".
+- Inputs are ЧЗ product cards: name, brand, category, GTIN, OKPD2, TN VED codes and photos from fixed angles.
+- Primary language is Russian; mixed Russian/Latin brand names are normal.
+
+## Python rules
+
+- Notebooks are allowed with outputs stripped before commit.
+- Type hints on every function in `.py` files, `pathlib` for paths, `logging` in library code (scripts may print).
+- Fixed random seeds; report the seed and the data split in the experiment README.
+- Report confidence intervals when the test set has fewer than 1000 items.
+
+## Data and weights
+
+- Never commit weights, datasets, images, archives or CSV dumps, not even small ones "for now".
+- Each experiment folder has a `README.md`: goal, data source and download link, command to reproduce, results
+  table, known limits.
+- Weights go to a separate branch or external storage (example: `chore/add-frame-classifier-weights`); record the
+  filename and SHA-256 in the README.
+- Small results files (`results/*.json`) may be committed.
+
+## Handing a model to `algorithms/`
+
+1. Export weights in the format `algorithms` expects (ONNX preferred); record checksum and source.
+2. Write down the exact preprocessing and the threshold, with the evidence for the threshold.
+3. Open a PR in `algorithms/` that loads the weights from the caller's weights directory
+   (`<weights_dir>/<family>/`).
+4. Model name, preprocessing and threshold are part of the check's `algorithm_version`.
