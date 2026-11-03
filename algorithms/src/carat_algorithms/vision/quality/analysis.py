@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 import math
-from dataclasses import asdict, dataclass
+from dataclasses import dataclass
 from typing import Any
 
 import cv2
@@ -58,10 +58,8 @@ class QualityResult:
     status: CheckStatus
     weakest: str
 
-    def to_dict(self) -> dict[str, Any]:
-        return asdict(self)
 
-
+# Equal minima follow this stable priority when choosing an explanation.
 _SCORE_KEYS = ("overexposure", "underexposure", "resolution", "sharpness")
 
 
@@ -93,7 +91,6 @@ def _downscale(gray: np.ndarray[Any, Any], max_side: int) -> np.ndarray[Any, Any
 
 
 def _sharpness_raw(gray: np.ndarray[Any, Any], config: QualityConfig) -> float:
-
     smoothed = cv2.GaussianBlur(gray, (3, 3), 0)
     laplacian = cv2.Laplacian(smoothed, cv2.CV_64F)
 
@@ -136,12 +133,21 @@ def verdict_for(score: int, config: QualityConfig | None = None) -> CheckStatus:
     return CheckStatus.PASS
 
 
-def analyze_quality(image: np.ndarray[Any, Any] | None, config: QualityConfig | None = None) -> QualityResult:
+def analyze_quality(
+    image: np.ndarray[Any, Any] | None,
+    config: QualityConfig | None = None,
+    *,
+    original_size: tuple[int, int] | None = None,
+) -> QualityResult:
     cfg = config or QualityConfig()
     if image is None or image.size == 0:
         raise ValueError("Empty image")
 
     height, width = image.shape[:2]
+    if original_size is not None:
+        width, height = original_size
+        if width <= 0 or height <= 0:
+            raise ValueError("Invalid original image dimensions")
     small = _downscale(_to_gray(image), cfg.analysis_max_side)
 
     sharpness_raw = _sharpness_raw(small, cfg)

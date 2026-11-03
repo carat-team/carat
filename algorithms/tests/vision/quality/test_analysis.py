@@ -90,3 +90,18 @@ def test_verdict_boundaries() -> None:
     assert verdict_for(61, cfg) == "REVIEW"
     assert verdict_for(80, cfg) == "REVIEW"
     assert verdict_for(81, cfg) == "PASS"
+
+
+def test_equal_minima_use_documented_explanation_priority() -> None:
+    image = np.full((400, 400, 3), 255, dtype=np.uint8)
+    result = analyze_quality(image)
+    assert result.sharpness == result.overexposure == 0
+    assert result.weakest == "overexposure"
+
+
+def test_tiny_object_on_white_preserves_conservative_warning() -> None:
+    image = np.full((1000, 1000, 3), 255, dtype=np.uint8)
+    image[490:510, 490:510] = 80
+    result = analyze_quality(image)
+    assert result.status == "WARNING"
+    assert result.overexposure == 0

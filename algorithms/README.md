@@ -144,3 +144,14 @@ The quickest way to fetch both files is to let EasyOCR download them once:
 ```sh
 uv run --extra ml python -c "import easyocr; easyocr.Reader(['ru', 'en'], gpu=False, model_storage_directory='weights/easyocr')"
 ```
+
+## Photo quality preprocessing
+
+`ImageQualityCheck` version 2 applies EXIF orientation, composites transparency on
+white, and bounds the working image to 1024 pixels before creating composite and BGR
+copies. JPEG draft decoding reduces the source buffer where supported; PNG still
+needs its source pixels decoded; palette/binary modes are converted before filtered resizing. Resolution uses the original oriented dimensions,
+not the working copy. Existing metric thresholds are retained. Findings include
+the photo number, original dimensions, measured value and configured reference
+values. Known malformed-image decoder and OpenCV errors return REVIEW per photo;
+unexpected runtime/resource failures remain ERROR from the backend runner.
