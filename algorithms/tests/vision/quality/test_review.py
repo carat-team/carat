@@ -166,3 +166,36 @@ def test_cv_resource_and_internal_failures_are_left_for_runner(code: int, monkey
     monkeypatch.setattr(analysis, "analyze_quality", failed)
     with pytest.raises(cv2.error):
         ImageQualityCheck().run(ProductCard(photos=(encode(good_image()),)))
+
+
+@pytest.mark.parametrize("mode", ["RGB", "L"])
+def test_png_color_key_transparency_matches_explicit_rgba(mode: str, monkeypatch: pytest.MonkeyPatch) -> None:
+    seen: list[np.ndarray[Any, Any]] = []
+    analyze = analysis.analyze_quality
+
+    def capture(
+        image: np.ndarray[Any, Any],
+        config: analysis.QualityConfig | None = None,
+        *,
+        original_size: tuple[int, int] | None = None,
+    ) -> analysis.QualityResult:
+        seen.append(image.copy())
+        return analyze(image, config, original_size=original_size)
+
+    monkeypatch.setattr(analysis, "analyze_quality", capture)
+    pixels = np.zeros((2048, 2048, 3) if mode == "RGB" else (2048, 2048), dtype=np.uint8)
+    key = (255, 0, 255) if mode == "RGB" else 200
+    pixels[:, ::2] = key
+    source = Image.fromarray(pixels)
+    source.info["transparency"] = key
+    reference = source.convert("RGBA")
+    check = ImageQualityCheck()
+    for image in (source, reference):
+        check.run(ProductCard(photos=(encode(image),)))
+    np.testing.assert_array_equal(seen[0], seen[1])
+
+
+def test_valid_sixteen_bit_grayscale_png_is_decoded() -> None:
+    image = Image.new("I;16", (2048, 1024), 16384)
+    result = ImageQualityCheck().run(ProductCard(photos=(encode(image),)))
+    assert result.reason_code != "IMAGE_QUALITY_INVALID_PHOTO"

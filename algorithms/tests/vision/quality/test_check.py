@@ -47,7 +47,7 @@ def test_photo_quality(kind: str, status: CheckStatus) -> None:
     result = run_quality((make_photo(kind),))
     assert result.status == status
     assert result.field_refs == ("photos",)
-    assert result.algorithm_version == 2
+    assert result.algorithm_version == 3
     assert result.reason_code
     assert result.explanation
 
