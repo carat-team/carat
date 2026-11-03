@@ -125,6 +125,8 @@ ml = [
     { name = "torchvision", version = "0.29.2+cpu", source = { registry = "https://download.pytorch.org/whl/cpu" }, marker = "sys_platform != 'darwin'" },
 ]
 vision = [
+    { name = "numpy" },
+    { name = "opencv-python-headless" },
     { name = "pillow" },
     { name = "zxing-cpp" },
 ]
@@ -132,6 +134,8 @@ vision = [
 [package.metadata]
 requires-dist = [
     { name = "easyocr", marker = "extra == 'ml'", specifier = ">=1.7.2" },
+    { name = "numpy", marker = "extra == 'vision'", specifier = ">=2.5.4" },
+    { name = "opencv-python-headless", marker = "extra == 'vision'", specifier = ">=5.0.0.93" },
     { name = "pillow", marker = "extra == 'vision'", specifier = ">=13.0.0" },
     { name = "pydantic", specifier = ">=2.14.2" },
     { name = "torch", marker = "extra == 'ml'", specifier = ">=2.15.0", index = "https://download.pytorch.org/whl/cpu" },
