@@ -168,7 +168,7 @@ the check returns `NOT_CHECKED` / `BACKGROUND_WEIGHTS_MISSING`; it never downloa
 - MD5 published by rembg: `fc16ebd8b0c10d971d3513d564d01e29`.
 - SHA256 verified during migration: `60920e99c45464f2ba57bee2ad08c919a52bbf852739e96947fbb4358c0d964a`.
 
-Version 1 uses CPU ISNet with RGB Lanczos 1024x1024 preprocessing from rembg's
+Version 2 uses CPU ISNet with RGB Lanczos 1024x1024 preprocessing from rembg's
 `DisSession`: divide by the image maximum and subtract 0.5, normalize the output
 mask to 0..255, then resize to the working image. Analysis uses an RGB copy with
 long side at most 512, EXIF orientation applied and transparency on white.
@@ -183,3 +183,12 @@ density are retained. Clean, noisy/foreign, and undecidable photos map to
 pure product crop helper with soft alpha. Publishing edited photos through an
 API is a separate task; this PR uses the existing card-check endpoint.
 The old Java/gRPC implementation is replaced, not run alongside the Python backend.
+
+Version 2 bounds the image before white compositing and subsequent RGB copies,
+using JPEG draft decoding where supported. Palette/binary/16-bit sources and color-key alpha are converted
+before filtered resizing, preserving the same model input for identical pixels.
+PNG still needs its source pixels decoded. Known malformed EXIF/image errors
+return REVIEW for the affected photo; the final finding names its photo position.
+An installed but broken model remains an operational ERROR from the runner,
+rather than being reported as an absent model. Geometry/color diagnostics and the
+cutout helper are retained for research and the follow-up photo-editing task.

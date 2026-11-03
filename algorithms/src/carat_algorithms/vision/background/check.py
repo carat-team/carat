@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import io
+import struct
 import threading
 from pathlib import Path
 from typing import TYPE_CHECKING
@@ -15,7 +16,7 @@ class BackgroundCheck:
     """Check all card photos; warnings and undecidable photos cannot be hidden by a clean one."""
 
     check_id = "background"
-    algorithm_version = 1
+    algorithm_version = 2
 
     def __init__(self, weights_dir: Path | None = None, *, segmenter: Segmenter | None = None) -> None:
         self._weights_dir = weights_dir
@@ -35,14 +36,16 @@ class BackgroundCheck:
             )
         results = [self._photo_result(photo.content) for photo in card.photos]
         priority = {CheckStatus.PASS: 0, CheckStatus.REVIEW: 1, CheckStatus.WARNING: 2}
-        return max(results, key=lambda result: priority[result.status])
+        number, result = max(enumerate(results, start=1), key=lambda item: priority[item[1].status])
+        return self._result(result.status, result.reason_code, f"Фото {number}: {result.explanation}")
 
     def _get_segmenter(self) -> Segmenter:
         with self._lock:
             if self._segmenter is None:
                 from carat_algorithms.vision.background.segmentation import ISNetSegmenter
 
-                assert self._weights_dir is not None
+                if self._weights_dir is None:
+                    raise RuntimeError("Background model directory was not configured")
                 self._segmenter = ISNetSegmenter(self._weights_dir)
             return self._segmenter
 
@@ -54,11 +57,23 @@ class BackgroundCheck:
 
         try:
             with Image.open(io.BytesIO(content)) as opened:
-                rgba = ImageOps.exif_transpose(opened).convert("RGBA")
+                opened.draft("RGB", (512, 512))
+                # Normalize indexed/16-bit modes and color-key alpha before filtered resizing.
+                needs_conversion = opened.mode not in ("RGB", "RGBA", "L", "LA") or "transparency" in opened.info
+                working = opened.convert("RGBA") if needs_conversion else opened
+                working.thumbnail((512, 512), Image.Resampling.BILINEAR)
+                rgba = ImageOps.exif_transpose(working).convert("RGBA")
                 white = Image.new("RGBA", rgba.size, "white")
                 image = Image.alpha_composite(white, rgba).convert("RGB")
-                image.thumbnail((512, 512), Image.Resampling.BILINEAR)
-        except (OSError, ValueError, SyntaxError, Image.DecompressionBombError):
+        except (
+            OSError,
+            ValueError,
+            SyntaxError,
+            TypeError,
+            struct.error,
+            ZeroDivisionError,
+            Image.DecompressionBombError,
+        ):
             return self._result(
                 CheckStatus.REVIEW, "BACKGROUND_INVALID_PHOTO", "Не удалось открыть фото для проверки фона"
             )

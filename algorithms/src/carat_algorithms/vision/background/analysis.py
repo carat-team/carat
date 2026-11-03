@@ -11,7 +11,7 @@ import cv2
 import numpy as np
 
 from carat_algorithms.core import CheckStatus
-from carat_algorithms.vision.background.masks import Array, components, dilate, validate_mask
+from carat_algorithms.vision.background.masks import MASK_THRESHOLD, Array, components, dilate, validate_mask
 
 MIN_OBJECT_SHARE = 0.005
 NEAR_DELTA_E = 10
@@ -84,7 +84,7 @@ def analyze_background(image: Array, mask: Array, scale: float = 1.0) -> Backgro
             foreign.append(ForeignObject(_box(labeling.labels == label, total, scale), "mask"))
 
     margin = max(3, math.floor(0.02 * min(height, width) + 0.5))
-    objects = mask > 127
+    objects = mask > MASK_THRESHOLD
     background = ~dilate(objects, margin // 2)
     if int(background.sum()) < min_area:
         background = ~objects

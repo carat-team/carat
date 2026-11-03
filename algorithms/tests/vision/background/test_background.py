@@ -160,7 +160,7 @@ def test_check_uses_product_card_and_shared_result() -> None:
     image, mask = scene((70, 40, 60, 120))
     result = BackgroundCheck(segmenter=FixedMask(mask)).run(ProductCard(photos=(photo(image),)))
     assert result.status == CheckStatus.PASS
-    assert result.field_refs == ("photos",) and result.algorithm_version == 1
+    assert result.field_refs == ("photos",) and result.algorithm_version == 2
     assert result.reason_code and result.explanation
 
 
