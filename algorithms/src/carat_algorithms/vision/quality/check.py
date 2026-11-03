@@ -36,8 +36,9 @@ class ImageQualityCheck:
                     original_size = (height, width) if orientation in (5, 6, 7, 8) else (width, height)
                     # JPEG draft avoids decoding full-resolution buffers when supported.
                     opened.draft("RGB", (config.analysis_max_side, config.analysis_max_side))
-                    # Pillow forces nearest-neighbor for palette/binary modes unless converted first.
-                    working = opened.convert("RGBA") if opened.mode in ("P", "1") else opened
+                    # Normalize indexed/16-bit modes and color-key alpha before filtered resizing.
+                    needs_conversion = opened.mode not in ("RGB", "RGBA", "L", "LA") or "transparency" in opened.info
+                    working = opened.convert("RGBA") if needs_conversion else opened
                     working.thumbnail((config.analysis_max_side, config.analysis_max_side), Image.Resampling.BOX)
                     rgba = ImageOps.exif_transpose(working).convert("RGBA")
                     white = Image.new("RGBA", rgba.size, "white")
