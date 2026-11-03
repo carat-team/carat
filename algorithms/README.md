@@ -147,7 +147,7 @@ uv run --extra ml python -c "import easyocr; easyocr.Reader(['ru', 'en'], gpu=Fa
 
 ## Photo quality preprocessing
 
-`ImageQualityCheck` version 2 applies EXIF orientation, composites transparency on
+`ImageQualityCheck` version 3 applies EXIF orientation, composites transparency on
 white, and bounds the working image to 1024 pixels before creating composite and BGR
 copies. JPEG draft decoding reduces the source buffer where supported; PNG still
 needs its source pixels decoded; palette/binary/16-bit modes and color-key alpha are normalized before filtered resizing. Resolution uses the original oriented dimensions,

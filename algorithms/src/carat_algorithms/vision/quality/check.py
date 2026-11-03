@@ -14,7 +14,7 @@ class ImageQualityCheck:
     """Evaluate resolution, sharpness, exposure and darkness of every photo."""
 
     check_id = "image_quality"
-    algorithm_version = 2
+    algorithm_version = 3
 
     def run(self, card: ProductCard) -> CheckResult:
         if not card.photos:
