@@ -5,6 +5,10 @@ from carat_algorithms.core.result import CheckResult
 
 
 class Check(Protocol):
+    """
+    A check that can be run on a product card.
+    Each check must be registered in carat_algorithms.core.registry.get_checks() to be run.
+    """
     check_id: str
     algorithm_version: int
 
