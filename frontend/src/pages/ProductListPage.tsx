@@ -1,99 +1,144 @@
-import { Button, Container, Input, Select } from '@/components/ui';
-import { IconBackspace, IconChevronLeft, IconInfoCircle, IconUpload } from '@tabler/icons-react';
+import { Button, Container } from '@/components/ui';
+import { IconArrowRight, IconPlus } from '@tabler/icons-react';
 import { useState } from 'react';
 
-// TODO: сверстать реальную страницу
+type Product = {
+  id: string;
+  name: string;
+  group: string;
+  brand: string;
+  status: string;
+};
+
+const initialProducts: Product[] = [
+  {
+    id: '1',
+    name: 'Парфюмерная вода «Lumen», 50 мл',
+    group: 'Парфюмерия',
+    brand: 'Lumen',
+    status: 'Черновик',
+  },
+  {
+    id: '2',
+    name: 'Туалетная вода «Atlas», 100 мл',
+    group: 'Парфюмерия',
+    brand: 'Atlas',
+    status: 'Черновик',
+  },
+];
 
 export const ProductListPage = () => {
-  const [a, b] = useState<string>();
+  const [products, setProducts] = useState(initialProducts);
+
+  // Временное добавление тестового товара
+  const handleAddProduct = () => {
+    const newProduct: Product = {
+      id: String(Date.now()),
+      name: 'Новый товар',
+      group: 'Парфюмерия',
+      brand: '—',
+      status: 'Черновик',
+    };
+
+    setProducts((current) => [...current, newProduct]);
+  };
+
+  // Временная обработка открытия карточки
+  const handleOpenProduct = (product: Product) => {
+    window.alert(`Выбрана карточка: ${product.name}`);
+  };
 
   return (
-    <div className="flex-1 min-h-0 flex flex-col gap-2">
-      <Container className="flex flex-col gap-2">
-        <h1>Компоненты и разные вариации:</h1>
-
-        <div className="flex gap-2 flex-wrap mb-6">
-          <Button>Добавить</Button>
-          <Button variant={'secondary'}>Импорт</Button>
-          <Button variant={'outline'}>Экспорт</Button>
-          <Button disabled variant={'outline'}>
-            Выключенная кнопка
-          </Button>
-          <Button disabled variant={'secondary'}>
-            Выключенная кнопка
-          </Button>
-          <Button disabled variant={'primary'}>
-            Выключенная кнопка
-          </Button>
-          <Button aria-label="Назад" size={'icon'}>
-            <IconChevronLeft />
-          </Button>
-          <Button aria-label="Информация" variant={'secondary'} size={'icon'}>
-            <IconInfoCircle />
-          </Button>
-          <Button aria-label="Стереть" variant={'outline'} size={'icon'}>
-            <IconBackspace />
-          </Button>
-          <Button variant={'outline'}>
-            <IconUpload /> Загрузить файл
-          </Button>
+    <main className="flex-1 min-h-0 overflow-y-auto bg-[#f4f7f9]">
+      <Container className="max-w-[1440px] px-4 py-7 md:py-8">
+        {/* Хлебные крошки */}
+        <div className="text-[11px] font-semibold uppercase tracking-wide text-slate-500">
+          КАТАЛОГ / MVP
         </div>
-      </Container>
 
-      <div className="min-h-0 flex flex-col">
-        <Container className="flex-1 min-h-0 overflow-y-auto">
-          <div className="flex flex-col gap-2 w-full">
-            <Input label="Заявленный объем" />
-            <Input disabled label="Страна производства" value="Россия матушка" />
-            <Select
-              label="Город"
-              name="city"
-              options={[
-                { value: 'msk', label: 'Москва' },
-                { value: 'spb', label: 'Санкт-Петербург' },
-                { value: 'kzn', label: 'Казань', disabled: true },
-              ]}
-              value={a}
-              onChange={b}
-            />
-            <Select
-              disabled
-              label="Город"
-              name="city"
-              options={[
-                { value: 'msk', label: 'Москва' },
-                { value: 'spb', label: 'Санкт-Петербург' },
-                { value: 'kzn', label: 'Казань', disabled: true },
-              ]}
-              value={'kzn'}
-            />
+        {/* Заголовок и кнопка добавления */}
+        <div className="mt-4 flex flex-col gap-5 md:flex-row md:items-center md:justify-between">
+          <div>
+            <h1 className="text-3xl font-semibold leading-tight text-[#303a40]">Товары</h1>
+
+            <p className="mt-2 text-sm text-slate-500">
+              Создание и редактирование карточек парфюмерной продукции. Данные демонстрационные.
+            </p>
           </div>
 
-          <p className="text-2xl">
-            Контент для скролла: Следует отметить, что консультация с широким активом позволяет
-            выполнять важные задания по разработке новых предложений. Не вызывает сомнений, что
-            управление и развитие структуры представляет собой интересный эксперимент поэтапного и
-            последовательного развития общества. Следует отметить, что реализация намеченных
-            плановых заданий способствует повышению качества существующий финансовых и
-            административных условий. Равным образом высокотехнологичная концепция общественной
-            системы напрямую зависит от соответствующих условий активизации. Для современного мира
-            выбранный нами инновационный путь обеспечивает широкому кругу специалистов прогресса
-            профессионального общества. Значимость этих проблем настолько очевидна, что постоянный
-            количественный рост и сфера нашей активности создаёт предпосылки качественно новых шагов
-            для новых предложений. Повседневная практика показывает, что реализация намеченных
-            плановых заданий влечёт за собой интересный процесс внедрения модернизации поставленных
-            обществом и правительством задач. Следует отметить, что социально-экономическое развитие
-            играет важную роль в формировании прогресса профессионального общества. Прежде всего
-            выбранный нами инновационный путь позволяет оценить значение прогресса профессионального
-            общества. Разнообразный и богатый опыт выбранный нами инновационный путь представляет
-            собой интересный эксперимент направлений прогрессивного развития. рыба10
-          </p>
-        </Container>
-      </div>
+          <Button
+            onClick={handleAddProduct}
+            className="h-[52px] w-full rounded-md text-sm font-semibold normal-case md:w-[274px]"
+          >
+            <IconPlus size={18} />
+            Добавить товар
+          </Button>
+        </div>
 
-      <Container as="footer" className="py-5">
-        А это футер. Тут будет пагинация.
+        {/* Карточка товаров */}
+        <section className="mt-14 min-h-[440px] rounded-lg border border-[#dce3e8] bg-white p-5 md:p-6">
+          {/* Заголовок карточки */}
+          <div className="flex items-center justify-between">
+            <h2 className="text-lg font-semibold text-[#303a40]">Карточки товаров</h2>
+
+            <span className="text-xs text-slate-500">Всего: {products.length}</span>
+          </div>
+
+          {/* Таблица */}
+          <div className="mt-8 overflow-x-auto">
+            <table className="w-full min-w-[760px] border-separate border-spacing-0">
+              <thead>
+                <tr className="bg-[#eef2f4] text-[11px] font-semibold text-slate-500">
+                  <th className="rounded-l-md px-4 py-4 text-left">НАИМЕНОВАНИЕ</th>
+
+                  <th className="px-4 py-4 text-left">ГРУППА</th>
+
+                  <th className="px-4 py-4 text-left">БРЕНД</th>
+
+                  <th className="px-4 py-4 text-center">СТАТУС</th>
+
+                  <th className="rounded-r-md px-4 py-4 text-center">ДЕЙСТВИЕ</th>
+                </tr>
+              </thead>
+
+              <tbody>
+                {products.map((product) => (
+                  <tr key={product.id}>
+                    <td className="border-b border-[#e3e9ed] px-4 py-6 text-sm font-medium text-[#374149]">
+                      {product.name}
+                    </td>
+
+                    <td className="border-b border-[#e3e9ed] px-4 py-6 text-sm text-[#374149]">
+                      {product.group}
+                    </td>
+
+                    <td className="border-b border-[#e3e9ed] px-4 py-6 text-sm text-[#374149]">
+                      {product.brand}
+                    </td>
+
+                    <td className="border-b border-[#e3e9ed] px-4 py-6 text-center">
+                      <span className="inline-flex min-w-[110px] justify-center rounded-full bg-[#fbfbe8] px-4 py-2 text-xs font-medium text-[#374149]">
+                        {product.status}
+                      </span>
+                    </td>
+
+                    <td className="border-b border-[#e3e9ed] px-4 py-6 text-center">
+                      <Button
+                        variant="outline"
+                        onClick={() => handleOpenProduct(product)}
+                        className="mx-auto h-[46px] min-w-[147px] rounded-md text-sm normal-case"
+                      >
+                        Открыть
+                        <IconArrowRight size={16} />
+                      </Button>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        </section>
       </Container>
-    </div>
+    </main>
   );
 };
