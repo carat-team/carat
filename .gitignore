@@ -2,19 +2,29 @@
 .vscode
 .venv
 .ipynb_checkpoints
+.worktrees
+
+.context/local/
 
 __pycache__
+.pytest_cache
+.ruff_cache
 venv
 node_modules
 
 .env
 .DS_Store
 
-inference/generated/
+graphify-out/.graphify_*
+graphify-out/cache
 
 **.pth
 **.safetensors
 
-!inference/weights/.gitkeep
+# Model weights: only the per-model directories and their placeholders are committed
+weights/**
+!weights/**/
+!weights/**/.gitkeep
+
 !model/artifacts/.gitkeep
 !model/artifacts/**/.gitkeep

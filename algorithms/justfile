@@ -1,0 +1,31 @@
+# algorithms/justfile. Run from the repo root as `just algorithms <recipe>` or from this directory.
+
+default:
+    @just --list
+
+# Core group only
+sync:
+    uv sync
+
+# Core + vision + ml extras (needed for the full test suite)
+sync-all:
+    uv sync --all-extras
+
+lint:
+    uv run ruff check .
+    uv run ruff format --check .
+
+fix:
+    uv run ruff check --fix .
+    uv run ruff format .
+
+typecheck:
+    uv run pyright
+
+test:
+    uv run pytest
+
+lock-check:
+    uv lock --check
+
+check: lock-check lint typecheck test

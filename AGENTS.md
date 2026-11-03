@@ -1,112 +1,120 @@
-# CLAUDE.md
+# AGENTS.md
 
-This file provides guidance to AI agents when working with code in this repository.
+Instructions for AI agents in the Carat repository. `CLAUDE.md` is a symlink to this file. Each project has its own
+`AGENTS.md`; read it before touching that directory.
 
-## Project Overview
+## What Carat is
 
-Carat is an AI content detection platform that analyzes text, images, and videos to determine whether they are AI-generated. It uses a dual-path analysis approach: **static analysis** (heuristic/pattern-based rules) and **dynamic analysis** (ML model inference via gRPC).
+Carat checks product cards for the "Честный Знак" (ЧЗ) marking system. A card is attributes (name,
+brand, perfumery type, volume, TN VED code, GTIN, ...) plus photos. Carat runs independent checks and returns one
+result per check: `PASS`, `WARNING`, `REVIEW`, `NOT_CHECKED` or `ERROR`, with a reason code and an explanation. It
+never accepts or rejects a card; the consumer (our frontend, later ЧЗ services) applies its own policy.
 
-## Build & Run Commands
+Carat started as a fork of Cogniflex (AI-content detection), kept under the tag `legacy/java-backend`. Never port 
+AI-content detection back.
 
-### Backend (Java 25 / Spring Boot 4.0.2)
-```bash
-cd backend
-./gradlew build       # compile + test
-./gradlew test        # run tests only
-./gradlew bootRun     # run dev server
-```
+## Repository map
 
-### Frontend (React 19 / TypeScript)
-```bash
-cd frontend
-npm run dev           # dev server
-npm run build         # tsc -b && vite build
-eslint .              # lint
-eslint . --fix        # lint + autofix
-prettier --write .    # format
-```
+| Path | What | Stack |
+|---|---|---|
+| `algorithms/` | Checks: pure logic, no transport, no database | Python 3.12, uv |
+| `backend/` | REST API, persistence, orchestration; imports `algorithms` | Python 3.12, FastAPI, PostgreSQL, S3 |
+| `model/` | Research, training, evaluation; not deployed, never imported | Python, Jupyter |
+| `frontend/` | Web UI | React 19, TypeScript, Vite, yarn |
+| `docs/` | Documentation for humans (mostly Russian) | Markdown |
+| `weights/` | Model weights, one subdirectory per family; only `.gitkeep` committed, docker mounts it | - |
+| `.context/` | Notes for agents | Markdown |
+| `.github/workflows/` | CI per project, release images, Claude review | GitHub Actions |
 
-### Inference Service (Python, uv + just)
-```bash
-cd inference
-just sync             # install deps (uv sync)
-just proto            # generate gRPC stubs into generated/
-just run              # start gRPC server on :50051
-just test-text "..."  # manual test against running server
-just                  # list all recipes
-```
-Dependencies live in `pyproject.toml` / `uv.lock`; add with `uv add <pkg>`.
-
-### Full Stack
-```bash
-docker compose up --build           # all services
-docker compose up --build inference  # individual service
-```
+No root `pyproject.toml`: each Python project owns its `pyproject.toml` and `uv.lock`. Run commands from the project
+directory or through the root `justfile` (`just backend run`, `just algorithms check`).
 
 ## Architecture
 
-Three-tier microservice architecture:
+- `algorithms` knows nothing about HTTP, gRPC, databases or the backend: a check takes a `ProductCard` and returns
+  a `CheckResult`.
+- `backend` never implements check logic. It stores cards and photos and runs checks through `CheckRunner`. REST
+  handlers (and a future gRPC servicer) are thin adapters over `services/`.
+- Full stack: `docker compose up --build` (config from `.env`, template `.env.example`).
 
-```
-Frontend (React+TS)
-        │ REST
-        ▼
-Backend (Spring Boot) ─── gRPC ──► Inference Service (Python, :50051)
-        │
-   PostgreSQL 18 + Redis 8
-```
+## Where code goes
 
-### Backend Package Layout
+| Code | Home |
+|---|---|
+| A check: rule, validator, parser, text comparison, classical CV, running a trained model | `algorithms/` |
+| Endpoints, schemas, persistence, file storage, running checks, settings | `backend/` |
+| Training, evaluation, research, model export | `model/` |
 
-Backend code is split across two packages in one Gradle module:
+- Check logic never goes into `backend/`, not even as a quick fix: add it to `algorithms/` and register it.
+- `algorithms` never imports `backend`, `model` or a web/database framework.
+- One result vocabulary: `CheckStatus` and `CheckResult` from `carat_algorithms.core`. No per-check statuses,
+  score scales or verdict enums.
+- No new top-level project, server or Dockerfile without asking. Unsure where code goes: ask first.
 
-- `io.github.duckysmacky.cogniflex` — Cogniflex-derived core: `analysis/` (detection pipeline), `processing/`, the `InferenceClient` interface and core exceptions. Must not depend on the app package.
-- `io.github.carat_team.carat` — Spring Boot app: `CaratApplication`, `controllers/`, `services/`, `dto/`, `entities/`, `repositories/`, `config/`, `ml/` (gRPC client), generated gRPC stubs (`grpc/`).
+## Python rules
 
-Overview of the layers:
+- Python 3.12, uv only (`uv add`, `uv sync`, `uv lock`); never `pip install` or a hand-made venv. Commit `uv.lock`
+  with `pyproject.toml`.
+- Type hints on every function, modern syntax (`list[str]`, `X | None`, `collections.abc`); pyright strict passes.
+- ruff, pyright and pytest through `just check`, which must pass before every commit.
+- `snake_case` modules, functions, variables; `PascalCase` classes; `UPPER_SNAKE_CASE` constants and reason codes.
+  Descriptive names, no single letters except loop counters.
+- `logging`, never `print`. Never log product data, request payloads or photos.
+- `pathlib.Path` for paths. Configurable values come from settings, not constants scattered in code.
 
-- **`analysis/`** — core detection pipeline
-  - `Analyzer<R>` — top-level interface; `AnalysisOrchestrator` runs static + dynamic analyzers in parallel via `CompletableFuture`
-  - `static_/` — rule-based heuristic analysis; `StaticAnalyzer` (abstract) evaluates a list of `AnalysisRule<C>` implementations and collects `Evidence`
-  - `dynamic/` — ML model inference; `DynamicAnalyzer` delegates to `InferenceGrpcClient` which calls the Python gRPC service
-  - `score/` — `ScoreFusionStrategy` merges static evidence + dynamic ML score into a `FinalScore` (verdict + confidence)
-- **`processing/`** — input preparation: `TextPreprocessor` (hidden chars → line endings → Unicode → whitespace normalization), `MediaParser` (image/video handling)
-- **`controllers/`** — REST endpoints: `DetectionController` (`POST /api/analyze/text`, `POST /api/analyze/media`), `HistoryController`, `StatusController`
-- **`services/`** — `AnalyzeService` orchestrates the full flow; `RateLimiterService` (Bucket4j); `HistoryService` (persistence)
-- **`entities/` + `repositories/`** — JPA entities and Spring Data repositories; Flyway migrations in `resources/db/migration/`
-- **`config/`** — Spring beans, security, gRPC client config
-- **`exceptions/`** — custom exceptions + `GlobalExceptionHandler`
+## Writing style
 
-### Analysis Flow (Text Example)
+Applies to code, comments, docs, commits and PR text:
 
-1. `POST /api/analyze/text` → `AnalyzeService.analyzeText()`
-2. `TextPreprocessor` normalizes input
-3. `ContentItemFactory` creates an immutable `ContentItem`
-4. `AnalysisOrchestrator` runs concurrently:
-   - `TextStaticAnalyzer` evaluates `TextAnalysisRule` implementations → `Evidence`
-   - `TextDynamicAnalyzer` → `InferenceGrpcClient` → Python gRPC service (RoBERTa model)
-5. `ScoreFusionStrategy.combine()` → `FinalScore`
-6. Result persisted via `HistoryService`, response returned
+- No single-character arrows (`→`, `⇒`, `←`); write `->` or `<-`.
+- No em or en dashes (`—`, `–`); write `-`.
+- No `«»` in code and comments; use `"` or `'`.
 
-### Adding a New Static Rule
+## Tools and skills
 
-Implement `TextAnalysisRule` (or `ImageAnalysisRule` / `VideoAnalysisRule`), register it as a Spring `@Component`, and `StaticAnalyzer` will pick it up automatically. See `ZeroWidthCharacterRule` for an example.
+Project skills live in `.agents/skills` (symlinked to `.claude/skills` and `.codex/skills`).
 
-### gRPC Contract
+- **graphify**: when `graphify-out/graph.json` exists, start with `graphify query "<question>"` (`path`, `explain`
+  for relationships) before grepping; `GRAPH_REPORT.md` only for broad architecture. Run `graphify update .` after
+  code changes.
+- **context-manager** with **caveman**: plans and progress of multi-session work in `.context/`.
+- **stop-slop**: for documentation and PR descriptions.
+- **investigate-first**: when planning, exploring or explaining the project.
+- Agent notes go to `.context/`, never `docs/`. Edit `docs/` only when asked.
 
-Shared proto definition: `proto/carat/inference/analyzer.proto`. Generated Java stubs live in the backend; Python stubs in `inference/`. When changing the proto, regenerate stubs for both services.
+## Git workflow
 
-### Configuration
+Never commit to `master` or `dev`. All work goes through a PR into `dev`; `dev -> master` is for maintainers.
 
-- Secrets/endpoints via `.env` (not committed)
-- Spring profiles: `dev`, `prod` (`application-{profile}.yml`)
-- gRPC inference service defaults to `localhost:50051`
-- Multi-part uploads: 1024 MB max
-- Database: H2 for tests, PostgreSQL 18 in prod/dev
+1. Branch from fresh `dev` (`git fetch origin && git checkout dev && git pull --ff-only`):
+   `git switch -c <prefix>/<short-kebab-description>`, prefixes `feature/`, `fix/`, `refactor/`, `chore/`, `docs/`.
+2. On an existing branch: check it is the right one, `git rebase origin/dev` when behind; `--force-with-lease` only
+   on your own branch.
+3. Small commits, one logical change each. Title in English, imperative, capitalized, no period, <= 50 characters.
+4. Stage files by name, not `git add .`; check `git status` and `git diff --staged` first.
+5. PR into `dev`: same title rules, description with what/why/how to test and the Taiga link. One PR = one task.
+6. Run `just check` for every affected project before pushing. Check the diff against `REVIEW.md` before opening
+   or reviewing a PR.
+7. Never approve your own work or delete remote branches.
 
-### ML Models
+Worktrees go to `.worktrees/<branch-name-with-dashes>` (`feature/auth` -> `.worktrees/feature-auth`).
 
-- **Text**: RoBERTa (Hugging Face Transformers)
-- **Image**: ResNet18 (PyTorch + torchvision)
-- **Video**: stub (not yet implemented)
-- Model weights stored locally under `inference/weights/` (not in repo)
+## Guardrails
+
+- **No secrets**: never commit `.env`, tokens, keys or credentials.
+- **No large files**: no weights (`*.pth`, `*.safetensors`, `*.onnx`, ...), datasets, CSV dumps, archives or build
+  output. Document the download source and target path in the project README; ask when the origin is unknown.
+- **No generated code**: `dist/`, `__pycache__/`, `.venv/`, coverage output.
+- **Agent files** (`AGENTS.md`, `CLAUDE.md`) change only after a critical repo change or when asked.
+- **CI, release and Docker** files change only when the task is about them or a critical change requires it.
+- **Versions** live in `backend/pyproject.toml`, `algorithms/pyproject.toml`, `frontend/package.json`; bump them
+  together and only when asked.
+- **Layout**: clear module names, one responsibility per module, no junk dirs (`utils2`, `new`).
+- **Scope**: change only what the task needs; no repo-wide reformatting or unrelated renames.
+- **Dependencies** through the package manager with the lockfile; no new tools, frameworks or services without asking.
+- **Tests**: never delete or weaken a test to make a change pass; fix a wrong test openly.
+- **Destructive actions** (history rewrites on shared branches, deleting files or data, dropping tables, resetting
+  volumes) need explicit confirmation.
+- **Flag violations**: check every request and your own plan against this file, the project `AGENTS.md` and
+  `REVIEW.md`. If something breaks them, say so before acting: the rule, why, and a compliant alternative. If the
+  user insists, do it and note the deviation in the PR description.

@@ -1,5 +1,18 @@
 name: Carat
 
+# Database and object storage settings for the backend containers, values from the root .env
+x-backend-env: &backend-env
+  DB_HOST: db
+  DB_PORT: 5432
+  DB_NAME: ${DB_NAME}
+  DB_USER: ${DB_USER}
+  DB_PASSWORD: ${DB_PASSWORD}
+  S3_ENDPOINT: s3:9000
+  S3_BUCKET: ${S3_BUCKET:-carat-photos}
+  S3_SECURE: ${S3_SECURE:-false}
+  S3_ACCESS_KEY: ${S3_ACCESS_KEY}
+  S3_SECRET_KEY: ${S3_SECRET_KEY}
+
 services:
   db:
     image: postgres:18
@@ -10,66 +23,51 @@ services:
       POSTGRES_PASSWORD: ${DB_PASSWORD}
     volumes:
       - postgres_data:/var/lib/postgresql
-    networks:
-      - backend-network
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${DB_USER} -d ${DB_NAME}"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
     restart: unless-stopped
 
-  redis:
-    image: redis:8
-    container_name: carat-redis
+  s3:
+    image: rustfs/rustfs:1.0.4
+    container_name: carat-s3
+    environment:
+      RUSTFS_ACCESS_KEY: ${S3_ACCESS_KEY}
+      RUSTFS_SECRET_KEY: ${S3_SECRET_KEY}
     volumes:
-      - redis_data:/data
-    networks:
-      - backend-network
+      - s3_data:/data
     restart: unless-stopped
 
-  backend:
+  migrate:
     build:
       context: .
       dockerfile: backend/Dockerfile
     image: carat-backend:latest
+    container_name: carat-migrate
+    command: ["alembic", "upgrade", "head"]
+    environment: *backend-env
+    depends_on:
+      db:
+        condition: service_healthy
+
+  backend:
+    image: carat-backend:latest
     container_name: carat-backend
     ports:
-      - "${BACKEND_PORT:-8080}:${BACKEND_PORT:-8080}"
-    env_file:
-      - .env
-    environment:
-      - SPRING_PROFILES_ACTIVE=prod
-      - DB_HOST=db
-      - REDIS_HOST=redis
-      - INFERENCE_HOST=inference
+      - "${BACKEND_PORT:-8080}:8080"
+    environment: *backend-env
     volumes:
-      - ./backend/src/main/resources:/app/config:ro
+      - ./backend/settings.toml:/app/settings.toml:ro
+      - ./weights:/app/weights:ro
     depends_on:
-      - db
-      - redis
-      - inference
-    networks:
-      - backend-network
-      - analysis-network
+      migrate:
+        condition: service_completed_successfully
+      s3:
+        condition: service_started
     restart: unless-stopped
-
-  inference:
-    build:
-      context: .
-      dockerfile: inference/Dockerfile
-    image: carat-inference:latest
-    container_name: carat-inference
-    env_file:
-      - .env
-    volumes:
-      - ./inference/config.yaml:/app/inference/config.yaml:ro
-      - ./inference/weights:/app/inference/weights:ro
-    networks:
-      - analysis-network
-    restart: unless-stopped
-
-networks:
-  backend-network:
-    driver: bridge
-  analysis-network:
-    driver: bridge
 
 volumes:
   postgres_data:
-  redis_data:
+  s3_data:

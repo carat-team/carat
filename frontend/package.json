@@ -1,5 +1,5 @@
 {
-  "name": "frontend",
+  "name": "carat-frontend",
   "private": true,
   "version": "0.1.0",
   "type": "module",
@@ -10,13 +10,34 @@
     "lint:fix": "eslint . --fix",
     "format": "prettier --write .",
     "format:check": "prettier --check .",
-    "ts:check": "tsc",
-    "preview": "vite preview"
+    "ts:check": "tsc -b --noEmit",
+    "preview": "vite preview",
+    "prepare": "cd .. && husky frontend/.husky"
+  },
+  "lint-staged": {
+    "*.{js,jsx,ts,tsx}": [
+      "yarn lint:fix",
+      "yarn format"
+    ],
+    "*.{css,scss,json,md}": [
+      "yarn format"
+    ]
   },
   "dependencies": {
-    "normalize.css": "^8.0.1",
+    "@hookform/resolvers": "^6.0.0",
+    "@tabler/icons-react": "^3.49.0",
+    "@tailwindcss/vite": "^4.3.3",
+    "axios": "^1.20.0",
+    "class-variance-authority": "^0.7.1",
+    "clsx": "^2.1.1",
     "react": "^19.2.4",
-    "react-dom": "^19.2.4"
+    "react-dom": "^19.2.4",
+    "react-hook-form": "^7.90.0",
+    "tailwind-merge": "^3.7.0",
+    "tailwindcss": "^4.3.3",
+    "wouter": "^3.13.0",
+    "zod": "^4.6.7",
+    "zustand": "^5.0.15"
   },
   "devDependencies": {
     "@babel/core": "^7.29.0",
@@ -34,6 +55,8 @@
     "eslint-plugin-react-hooks": "^7.0.1",
     "eslint-plugin-react-refresh": "^0.5.2",
     "globals": "^17.4.0",
+    "husky": "^9.1.7",
+    "lint-staged": "^17.6.0",
     "prettier": "3.8.1",
     "typescript": "~5.9.3",
     "typescript-eslint": "^8.56.1",

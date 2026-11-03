@@ -1,0 +1,21 @@
+@import 'tailwindcss';
+
+@theme {
+  --color-primary: #f2f00f;
+  --color-secondary: #4f5961;
+  --color-foreground: #333b40;
+  --color-action: #388cb8;
+
+  --text-2xs: 0.625rem;
+}
+
+body {
+  font-family: Inter, sans-serif;
+  color: var(--color-foreground);
+}
+
+svg.tabler-icon {
+  stroke-width: 1.5;
+  width: 20px;
+  height: 20px;
+}

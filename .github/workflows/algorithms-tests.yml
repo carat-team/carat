@@ -1,0 +1,48 @@
+name: Algorithms Tests
+
+on:
+  workflow_call:
+  pull_request:
+    paths:
+      - "algorithms/**"
+      - ".github/workflows/algorithms-tests.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  check:
+    name: Lint, typecheck and test
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: algorithms
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Set up uv
+        uses: astral-sh/setup-uv@v10.3.3
+        with:
+          version: "0.13.6"
+          enable-cache: true
+          cache-dependency-glob: algorithms/uv.lock
+
+      - name: Check lockfile
+        run: uv lock --check
+
+      - name: Install dependencies
+        run: uv sync --locked --all-extras
+
+      - name: Lint
+        run: |
+          uv run ruff check .
+          uv run ruff format --check .
+
+      - name: Typecheck
+        run: uv run pyright
+
+      - name: Test
+        run: uv run pytest
