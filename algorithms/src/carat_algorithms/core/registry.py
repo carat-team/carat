@@ -1,9 +1,11 @@
 """Checks that run on every card. A check that is not listed here does not run."""
 
+from pathlib import Path
+
 from carat_algorithms.core.check import Check
 
 
-def get_checks() -> list[Check]:
+def get_checks(weights_dir: Path | None = None) -> list[Check]:
     """
     Returns a list of all checks that should be run on every card.
     Each check must be registered here to be run.
@@ -12,6 +14,7 @@ def get_checks() -> list[Check]:
     # Imported here: check modules import carat_algorithms.core, and core must stay import-light
     from carat_algorithms.identifiers.gtin import GtinFormatCheck
     from carat_algorithms.text.volume import VolumeVsNameCheck
+    from carat_algorithms.vision.background import BackgroundCheck
     from carat_algorithms.vision.barcode import BarcodeOnPhotoCheck
     from carat_algorithms.vision.quality import ImageQualityCheck
 
@@ -22,4 +25,5 @@ def get_checks() -> list[Check]:
         BarcodeOnPhotoCheck(),
         VolumeVsNameCheck(),
         ImageQualityCheck(),
+        BackgroundCheck(weights_dir),
     ]

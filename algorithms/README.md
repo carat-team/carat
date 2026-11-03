@@ -112,7 +112,7 @@ The core install is small (pydantic) so the backend and the tests start fast. He
 
 | Extra | For | Install |
 |---|---|---|
-| `vision` | Image decoding and barcode reading: Pillow, zxing-cpp | `uv sync --extra vision` |
+| `vision` | Pillow, zxing-cpp, NumPy, OpenCV headless and ONNX Runtime (CPU) | `uv sync --extra vision` |
 | `ml` | Model-based readers: EasyOCR on CPU torch | `uv sync --extra ml` |
 
 Add a dependency with `uv add <package>` or `uv add --optional vision <package>`, and commit `uv.lock` with
@@ -155,3 +155,31 @@ not the working copy. Existing metric thresholds are retained. Findings include
 the photo number, original dimensions, measured value and configured reference
 values. Known malformed-image decoder and OpenCV errors return REVIEW per photo;
 unexpected runtime/resource failures remain ERROR from the backend runner.
+
+### Background segmentation
+
+`get_checks(weights_dir)` registers `background` and reads
+`<weights_dir>/isnet/isnet-general-use.onnx` lazily. The backend passes
+`settings.weights.dir` (configured by `WEIGHTS_DIR`). With no model installed,
+the check returns `NOT_CHECKED` / `BACKGROUND_WEIGHTS_MISSING`; it never downloads weights.
+
+- Source: [rembg ISNet general-use release](https://github.com/danielgatis/rembg/releases/download/v0.0.0/isnet-general-use.onnx).
+- Filename: `isnet-general-use.onnx`; target: `weights/isnet/isnet-general-use.onnx`.
+- MD5 published by rembg: `fc16ebd8b0c10d971d3513d564d01e29`.
+- SHA256 verified during migration: `60920e99c45464f2ba57bee2ad08c919a52bbf852739e96947fbb4358c0d964a`.
+
+Version 1 uses CPU ISNet with RGB Lanczos 1024x1024 preprocessing from rembg's
+`DisSession`: divide by the image maximum and subtract 0.5, normalize the output
+mask to 0..255, then resize to the working image. Analysis uses an RGB copy with
+long side at most 512, EXIF orientation applied and transparency on white.
+Masks use threshold 127. Components at least 10% of the largest are parts of the
+product (for example bottle and box); smaller objects covering at least 0.5%
+of the frame are foreign. A quadratic Lab background model permits soft gradients;
+the original delta-E thresholds (10 and 25), 95% uniformity and 2% maximum edge
+density are retained. Clean, noisy/foreign, and undecidable photos map to
+`PASS`, `WARNING`, and `REVIEW`; a warning takes precedence across photos.
+
+`vision.background.cutout.cutout_product(image, mask)` preserves the original
+pure product crop helper with soft alpha. Publishing edited photos through an
+API is a separate task; this PR uses the existing card-check endpoint.
+The old Java/gRPC implementation is replaced, not run alongside the Python backend.
