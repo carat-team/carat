@@ -5,6 +5,7 @@
 """
 
 import csv
+import os
 import tempfile
 import unittest
 from collections import Counter
@@ -20,7 +21,10 @@ from perfumery_name_check import (
     normalize_declared_type,
 )
 
-GOLD_PATH = Path(__file__).resolve().parent / "gold_labeled.csv"
+GOLD_PATH = Path(os.environ.get("PERFUMERY_GOLD_CSV", str(Path(__file__).resolve().parent / "gold_labeled.csv")))
+# An explicitly configured path must fail if wrong, rather than silently skip.
+GOLD_ENABLED = "PERFUMERY_GOLD_CSV" in os.environ or GOLD_PATH.is_file()
+GOLD_SKIP_REASON = "External gold CSV not supplied; set PERFUMERY_GOLD_CSV to run labeled-data checks"
 
 # Известные расхождения алгоритма с экспертной разметкой (name, declared_type).
 # Эксперт ожидал manual_review, а наборы по текущей политике не проверяются (not_checked).
@@ -107,12 +111,14 @@ class LoadCsvTests(unittest.TestCase):
         with self.assertRaises(ValueError):
             evaluation.load_labeled_csv(path)
 
+    @unittest.skipUnless(GOLD_ENABLED, GOLD_SKIP_REASON)
     def test_gold_file_is_valid(self):
         rows = evaluation.load_labeled_csv(GOLD_PATH)
         self.assertGreaterEqual(len(rows), 30)
         self.assertEqual({r["expected_status"] for r in rows}, set(evaluation.STATUSES))
 
 
+@unittest.skipUnless(GOLD_ENABLED, GOLD_SKIP_REASON)
 class GoldRegressionTests(unittest.TestCase):
     """Каждая размеченная карточка — отдельная проверка. Известные ошибки вынесены ниже."""
 
