@@ -1,0 +1,17 @@
+[project]
+name = "carat-perfume-type-training"
+version = "0.1.0"
+requires-python = ">=3.12"
+dependencies = [
+    "carat-algorithms",
+    "numpy>=1.26",
+    "openpyxl>=3.1",
+    "pandas>=2.2",
+    "scikit-learn>=1.5",
+]
+
+[tool.uv]
+package = false
+
+[tool.uv.sources]
+carat-algorithms = { path = "../../../algorithms", editable = true }

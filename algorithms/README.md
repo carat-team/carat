@@ -145,6 +145,15 @@ The quickest way to fetch both files is to let EasyOCR download them once:
 uv run --extra ml python -c "import easyocr; easyocr.Reader(['ru', 'en'], gpu=False, model_storage_directory='weights/easyocr')"
 ```
 
+## Perfume type classifier
+
+`PerfumeryTypeCheck` version 2 runs the model only when explicit type markers are absent.
+Place `model.json` in `weights/perfume_type_classifier/`; missing weights give `NOT_CHECKED`.
+Source: local export from customer data supplied by the team, obtained from the model author.
+SHA-256: `e76147233321191f173554b540b5bfdaf672e718262fa426fb07b3f1a9251800`.
+See [training and export](../model/training/perfume_type_classifier/README.md)
+for preprocessing, thresholds, reproduction, CPU measurements and limitations.
+
 ## Photo quality preprocessing
 
 `ImageQualityCheck` version 3 applies EXIF orientation, composites transparency on

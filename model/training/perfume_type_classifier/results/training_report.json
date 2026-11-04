@@ -1,0 +1,22 @@
+{
+  "seed": 42,
+  "test_size": 0.3,
+  "split": "GroupShuffleSplit by normalized name; CSV holdout name and barcode exclusion",
+  "training_rows": 233191,
+  "test_rows": 26650,
+  "classes": [
+    "ДУХИ",
+    "ДУШИСТАЯ ВОДА",
+    "ОДЕКОЛОН",
+    "ПАРФЮМЕРНАЯ ВОДА",
+    "СПРЕЙ ДЛЯ ТЕЛА",
+    "ТУАЛЕТНАЯ ВОДА"
+  ],
+  "training_seconds": 14.654766699997708,
+  "weights_bytes": 21555034,
+  "runtime_1000_seconds": 0.07988699991255999,
+  "sha256": "e76147233321191f173554b540b5bfdaf672e718262fa426fb07b3f1a9251800",
+  "accuracy_against_declared_type": 0.9972607879924953,
+  "macro_f1_against_declared_type": 0.6150717102227167,
+  "limits": "Weak labels use current algorithms rules, not the old prototype fuzzy rules; declared labels are not expert ground truth. Metrics are classification, not mismatch-detection quality."
+}

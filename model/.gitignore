@@ -4,3 +4,4 @@
 kaggle_experiments
 models_torch
 *.DS_store
+/artifacts/perfume_type_classifier/

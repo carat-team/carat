@@ -118,7 +118,7 @@ def test_registered_perfumery_type(name: str | None, declared: str | None, statu
     assert result.reason_code
     assert result.explanation
     assert result.field_refs == ("fullName", "perfumeryType")
-    assert result.algorithm_version == 1
+    assert result.algorithm_version == 2
 
 
 @pytest.mark.parametrize(
