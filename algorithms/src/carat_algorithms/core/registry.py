@@ -27,5 +27,5 @@ def get_checks(weights_dir: Path | None = None) -> list[Check]:
         VolumeVsNameCheck(),
         ImageQualityCheck(),
         BackgroundCheck(weights_dir),
-        PerfumeryTypeCheck(),
+        PerfumeryTypeCheck(weights_dir),
     ]
