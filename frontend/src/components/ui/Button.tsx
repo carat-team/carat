@@ -3,8 +3,8 @@ import { cva, type VariantProps } from 'class-variance-authority';
 import type { ComponentProps } from 'react';
 
 const buttonVariants = cva(
-  `enabled:active:brightness-92 font-medium cursor-pointer text-xs uppercase flex gap-1.5 justify-center items-center rounded-sm transition-all
-  disabled:cursor-not-allowed disabled:opacity-75 
+  `enabled:active:brightness-92 font-medium cursor-pointer text-xs flex gap-1.5 justify-center items-center rounded-md transition-all
+  disabled:cursor-not-allowed disabled:opacity-75
   `,
   {
     variants: {
@@ -14,8 +14,9 @@ const buttonVariants = cva(
         outline: 'border border-gray-200 border-solid bg-white',
       },
       size: {
-        default: 'px-6 h-11',
-        icon: 'size-11 p-0',
+        default: 'px-8 h-12',
+        small: 'px-6 h-11',
+        icon: 'size-12 p-0',
       },
     },
   },

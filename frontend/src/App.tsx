@@ -1,5 +1,5 @@
 import { Header } from '@/components/Header';
-import { NotFoundPage, ProductListPage, ProductPage } from '@/pages';
+import { DraftSavedPage, NotFoundPage, ProductListPage, ProductPage } from '@/pages';
 import { Route, Switch } from 'wouter';
 
 function App() {
@@ -11,8 +11,17 @@ function App() {
         <Route path="/">
           <ProductListPage />
         </Route>
-        <Route path="/product/:code" nest>
-          <ProductPage />
+        <Route path="/product/new/saved">
+          <DraftSavedPage />
+        </Route>
+        <Route path="/product/new" nest>
+          <ProductPage mode="create" />
+        </Route>
+        <Route path="/product/:id/saved">
+          <DraftSavedPage />
+        </Route>
+        <Route path="/product/:id" nest>
+          <ProductPage mode="edit" />
         </Route>
 
         <Route>
