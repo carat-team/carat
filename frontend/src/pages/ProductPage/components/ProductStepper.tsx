@@ -7,7 +7,7 @@ export const ProductStepper = () => {
   const currentId = params?.step;
 
   return (
-    <nav className="flex gap-0.5 items-stretch">
+    <nav className="flex gap-2.5 items-stretch">
       {PRODUCT_STEPS.map((step) => {
         const active = step.id === currentId;
         return (

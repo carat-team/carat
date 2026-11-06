@@ -1,6 +1,6 @@
-import { Button, Container } from '@/components/ui';
+import { Button, Card, Container } from '@/components/ui';
 import { IconArrowRight, IconPlus } from '@tabler/icons-react';
-import { useState } from 'react';
+import { useLocation } from 'wouter';
 
 type Product = {
   id: string;
@@ -10,7 +10,7 @@ type Product = {
   status: string;
 };
 
-const initialProducts: Product[] = [
+const products: Product[] = [
   {
     id: '1',
     name: 'Парфюмерная вода «Lumen», 50 мл',
@@ -28,105 +28,79 @@ const initialProducts: Product[] = [
 ];
 
 export const ProductListPage = () => {
-  const [products, setProducts] = useState(initialProducts);
+  const [, navigate] = useLocation();
 
-  // Временное добавление тестового товара
   const handleAddProduct = () => {
-    const newProduct: Product = {
-      id: String(Date.now()),
-      name: 'Новый товар',
-      group: 'Парфюмерия',
-      brand: '—',
-      status: 'Черновик',
-    };
-
-    setProducts((current) => [...current, newProduct]);
+    navigate('/product/new/registration');
   };
 
-  // Временная обработка открытия карточки
   const handleOpenProduct = (product: Product) => {
-    window.alert(`Выбрана карточка: ${product.name}`);
+    navigate(`/product/${product.id}/registration`);
   };
 
   return (
-    <main className="flex-1 min-h-0 overflow-y-auto bg-[#f4f7f9]">
-      <Container className="max-w-[1440px] px-4 py-7 md:py-8">
-        {/* Хлебные крошки */}
-        <div className="text-[11px] font-semibold uppercase tracking-wide text-slate-500">
-          КАТАЛОГ / MVP
-        </div>
+    <main className="flex-1 min-h-0 overflow-y-auto">
+      <Container className="py-7">
+        <div className="mb-14 flex flex-col gap-5 md:flex-row md:items-center md:justify-between">
+          <div className="flex flex-col gap-2">
+            <h1 className="text-3xl font-semibold leading-tight">Товары</h1>
 
-        {/* Заголовок и кнопка добавления */}
-        <div className="mt-4 flex flex-col gap-5 md:flex-row md:items-center md:justify-between">
-          <div>
-            <h1 className="text-3xl font-semibold leading-tight text-[#303a40]">Товары</h1>
-
-            <p className="mt-2 text-sm text-slate-500">
+            <p className="text-sm text-slate-500">
               Создание и редактирование карточек парфюмерной продукции. Данные демонстрационные.
             </p>
           </div>
 
-          <Button
-            onClick={handleAddProduct}
-            className="h-[52px] w-full rounded-md text-sm font-semibold normal-case md:w-[274px]"
-          >
-            <IconPlus size={18} />
+          <Button onClick={handleAddProduct} className="font-semibold">
+            <IconPlus />
             Добавить товар
           </Button>
         </div>
 
-        {/* Карточка товаров */}
-        <section className="mt-14 min-h-[440px] rounded-lg border border-[#dce3e8] bg-white p-5 md:p-6">
-          {/* Заголовок карточки */}
+        <Card as="section">
           <div className="flex items-center justify-between">
-            <h2 className="text-lg font-semibold text-[#303a40]">Карточки товаров</h2>
+            <h2 className="text-lg font-semibold uppercase">Карточки товаров</h2>
 
             <span className="text-xs text-slate-500">Всего: {products.length}</span>
           </div>
 
-          {/* Таблица */}
           <div className="mt-8 overflow-x-auto">
             <table className="w-full min-w-[760px] border-separate border-spacing-0">
               <thead>
-                <tr className="bg-[#eef2f4] text-[11px] font-semibold text-slate-500">
-                  <th className="rounded-l-md px-4 py-4 text-left">НАИМЕНОВАНИЕ</th>
+                <tr className="bg-slate-100 text-xs font-semibold text-slate-500 *:p-4">
+                  <th className="rounded-l-md text-left">НАИМЕНОВАНИЕ</th>
 
-                  <th className="px-4 py-4 text-left">ГРУППА</th>
+                  <th className="text-left">ГРУППА</th>
 
-                  <th className="px-4 py-4 text-left">БРЕНД</th>
+                  <th className="text-left">БРЕНД</th>
 
-                  <th className="px-4 py-4 text-center">СТАТУС</th>
+                  <th className="text-center">СТАТУС</th>
 
-                  <th className="rounded-r-md px-4 py-4 text-center">ДЕЙСТВИЕ</th>
+                  <th className="rounded-r-md text-center">ДЕЙСТВИЕ</th>
                 </tr>
               </thead>
 
               <tbody>
                 {products.map((product) => (
-                  <tr key={product.id}>
-                    <td className="border-b border-[#e3e9ed] px-4 py-6 text-sm font-medium text-[#374149]">
-                      {product.name}
-                    </td>
+                  <tr key={product.id} className="*:border-b *:border-gray-200 *:px-4 *:py-6">
+                    <td className="text-sm font-medium">{product.name}</td>
 
-                    <td className="border-b border-[#e3e9ed] px-4 py-6 text-sm text-[#374149]">
-                      {product.group}
-                    </td>
+                    <td className="text-sm">{product.group}</td>
 
-                    <td className="border-b border-[#e3e9ed] px-4 py-6 text-sm text-[#374149]">
-                      {product.brand}
-                    </td>
+                    <td className="text-sm">{product.brand}</td>
 
-                    <td className="border-b border-[#e3e9ed] px-4 py-6 text-center">
-                      <span className="inline-flex min-w-[110px] justify-center rounded-full bg-[#fbfbe8] px-4 py-2 text-xs font-medium text-[#374149]">
+                    <td>
+                      {/* TODO: Extract a reusable status badge. */}
+                      <div className="flex mx-auto w-[110px] justify-center rounded-full bg-yellow-100 px-4 py-2 text-xs font-medium">
                         {product.status}
-                      </span>
+                      </div>
                     </td>
 
-                    <td className="border-b border-[#e3e9ed] px-4 py-6 text-center">
+                    <td>
                       <Button
                         variant="outline"
+                        size="small"
                         onClick={() => handleOpenProduct(product)}
-                        className="mx-auto h-[46px] min-w-[147px] rounded-md text-sm normal-case"
+                        className="mx-auto"
                       >
                         Открыть
                         <IconArrowRight size={16} />
@@ -137,7 +111,7 @@ export const ProductListPage = () => {
               </tbody>
             </table>
           </div>
-        </section>
+        </Card>
       </Container>
     </main>
   );

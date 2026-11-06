@@ -1,30 +1,52 @@
 import { Button, Container } from '@/components/ui';
 import { IconArrowLeft, IconArrowRight } from '@tabler/icons-react';
-import { Link } from 'wouter';
+import { useLocation } from 'wouter';
 
 type ProductPageFooterProps = {
   prevHref?: string;
+  prevLabel?: string;
   nextHref?: string;
+  nextLabel?: string;
+  saveHref?: string;
+  saveLabel?: string;
 };
 
-export const ProductPageFooter = ({ prevHref, nextHref }: ProductPageFooterProps) => {
+export const ProductPageFooter = ({
+  prevHref,
+  prevLabel,
+  nextHref,
+  nextLabel,
+  saveHref,
+  saveLabel,
+}: ProductPageFooterProps) => {
+  const [, navigate] = useLocation();
+
   return (
-    <footer>
-      <Container className="flex gap-3">
+    <footer className="mt-auto shrink-0">
+      <Container className="flex flex-wrap gap-3">
         {prevHref && (
-          <Link href={prevHref}>
-            <Button size="icon" aria-label="Предыдущий шаг">
-              <IconArrowLeft />
-            </Button>
-          </Link>
+          <Button type="button" variant="outline" onClick={() => navigate(prevHref)}>
+            <IconArrowLeft />
+            {prevLabel}
+          </Button>
         )}
-        {nextHref && (
-          <Link href={nextHref}>
-            <Button size="icon" aria-label="Следующий шаг">
+        <div className="ml-auto flex flex-wrap gap-3">
+          {saveHref && (
+            <Button
+              type="button"
+              variant={nextHref ? 'outline' : 'primary'}
+              onClick={() => navigate(saveHref)}
+            >
+              {saveLabel}
+            </Button>
+          )}
+          {nextHref && (
+            <Button type="button" onClick={() => navigate(nextHref)}>
+              {nextLabel}
               <IconArrowRight />
             </Button>
-          </Link>
-        )}
+          )}
+        </div>
       </Container>
     </footer>
   );
