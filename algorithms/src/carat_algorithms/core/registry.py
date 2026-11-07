@@ -1,21 +1,18 @@
 """Checks that run on every card. A check that is not listed here does not run."""
 
-from __future__ import annotations
-
 from pathlib import Path
-from typing import TYPE_CHECKING
 
 from carat_algorithms.core.check import Check
-
-if TYPE_CHECKING:
-    from carat_algorithms.text.brand_value import BrandValueConfig
+from carat_algorithms.core.config import CheckConfig
 
 
-def get_checks(weights_dir: Path | None = None, *, brand_value_config: BrandValueConfig | None = None) -> list[Check]:
+def get_checks(weights_dir: Path | None = None, *, check_config: CheckConfig | None = None) -> list[Check]:
     """
     Returns a list of all checks that should be run on every card.
     Each check must be registered here to be run.
     """
+
+    checks_config = check_config or CheckConfig()
 
     # Imported here: check modules import carat_algorithms.core, and core must stay import-light
     from carat_algorithms.identifiers.gtin import GtinFormatCheck
@@ -30,7 +27,7 @@ def get_checks(weights_dir: Path | None = None, *, brand_value_config: BrandValu
     # The order of checks in this list is the order in which they will be run
     return [
         GtinFormatCheck(),
-        BrandValueCheck(brand_value_config),
+        BrandValueCheck(checks_config.brand_value_config),
         BarcodeOnPhotoCheck(),
         VolumeVsNameCheck(),
         ImageQualityCheck(),

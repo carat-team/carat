@@ -36,11 +36,34 @@ From the repository root the same recipes run as `just algorithms <recipe>`.
 A check is a class with two attributes and one method:
 
 ```python
-from carat_algorithms.core import ProductCard
-from carat_algorithms.text.brand_value import BrandValueCheck
+from carat_algorithms.core import CheckResult, CheckStatus, ProductCard
 
-result = BrandValueCheck().run(ProductCard(brand="Без товарного знака"))
+
+class BrandValueCheck:
+    """The brand value "Без товарного знака" is not allowed."""
+
+    check_id = "brand_value"
+    algorithm_version = 1
+
+    def run(self, card: ProductCard) -> CheckResult:
+        if card.brand is None:
+            return self._result(CheckStatus.NOT_CHECKED, "BRAND_VALUE_MISSING", "Бренд не указан")
+        if card.brand.strip().lower() == "без товарного знака":
+            return self._result(CheckStatus.WARNING, "BRAND_VALUE_FORBIDDEN", 'Бренд "Без товарного знака" недопустим')
+        return self._result(CheckStatus.PASS, "BRAND_VALUE_OK", "Бренд указан")
+
+    def _result(self, status: CheckStatus, reason_code: str, explanation: str) -> CheckResult:
+        return CheckResult(
+            check_id=self.check_id,
+            status=status,
+            reason_code=reason_code,
+            explanation=explanation,
+            field_refs=("brand",),
+            algorithm_version=self.algorithm_version,
+        )
 ```
+
+This example only shows the shape, not the real check
 
 - `check_id` is a stable snake_case name. The frontend and stored results refer to it, so do not rename it.
 - `algorithm_version` is an integer. Increase it by one whenever a change can give a different result for the
@@ -99,26 +122,28 @@ the runtime configuration.
 An application can supply approved rules explicitly:
 
 ```python
-from carat_algorithms.core import get_checks
+from carat_algorithms.core import CheckConfig, get_checks
 from carat_algorithms.text.brand_value import BrandValueCheck, BrandValueConfig, ForbiddenBrandValue
 
-config = BrandValueConfig(
+brand_value_config = BrandValueConfig(
     forbidden_values=(
         ForbiddenBrandValue("approved exact-only value"),
         ForbiddenBrandValue("approved fuzzy value", max_distance=0.05),
     )
 )
-check = BrandValueCheck(config)
-registered_checks = get_checks(brand_value_config=config)
+check = BrandValueCheck(brand_value_config)
+registered_checks = get_checks(check_config=CheckConfig(brand_value_config=brand_value_config))
 ```
 
 The proposed V1 list requires an even more explicit import because it is not approved:
 
 ```python
-from carat_algorithms.core import get_checks
+from carat_algorithms.core import CheckConfig, get_checks
 from carat_algorithms.text.brand_value.proposed import build_proposed_brand_value_config_v1
 
-checks = get_checks(brand_value_config=build_proposed_brand_value_config_v1())
+checks = get_checks(
+    check_config=CheckConfig(brand_value_config=build_proposed_brand_value_config_v1())
+)
 ```
 
 `max_distance=None` means exact comparison only. This is the safe default for short values. A configured threshold

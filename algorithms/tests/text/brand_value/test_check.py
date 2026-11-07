@@ -2,7 +2,7 @@ from math import inf, nan
 
 import pytest
 
-from carat_algorithms.core import CheckResult, CheckStatus, ProductCard, get_checks
+from carat_algorithms.core import CheckConfig, CheckResult, CheckStatus, ProductCard, get_checks
 from carat_algorithms.text.brand_value import BrandValueCheck, BrandValueConfig, ForbiddenBrandValue
 from carat_algorithms.text.brand_value.matching import jaro_winkler_distance
 from carat_algorithms.text.brand_value.normalization import normalize_brand_value
@@ -147,9 +147,10 @@ def test_check_is_registered_without_an_approved_stop_list() -> None:
     assert result.reason_code == "BRAND_VALUE_CONFIG_MISSING"
 
 
-def test_registry_accepts_explicit_brand_value_config() -> None:
-    config = BrandValueConfig(forbidden_values=(ForbiddenBrandValue("отсутствует"),))
-    check = next((item for item in get_checks(brand_value_config=config) if item.check_id == "brand_value"), None)
+def test_registry_accepts_explicit_check_config() -> None:
+    brand_value_config = BrandValueConfig(forbidden_values=(ForbiddenBrandValue("отсутствует"),))
+    check_config = CheckConfig(brand_value_config=brand_value_config)
+    check = next((item for item in get_checks(check_config=check_config) if item.check_id == "brand_value"), None)
     assert check is not None
     result = check.run(ProductCard(brand="отсутствует"))
     assert result.status == CheckStatus.WARNING
