@@ -106,6 +106,121 @@ scripts/         developer tools such as evaluation against a labeled set; src/ 
 
 Each check gets its own subpackage, for example `text/volume/`, with its rules and parsing helpers.
 
+## Brand value check
+
+`BrandValueCheck` validates `ProductCard.brand` independently of the product category. It compares the whole
+normalized field with explicitly configured stop phrases. It does not search inside a brand, determine whether a
+trademark is registered or reject an unfamiliar brand.
+
+Normalization applies Unicode NFKC, `casefold`, trimming and whitespace collapsing. Punctuation is preserved.
+The canonical value `Без товарного знака` is allowed by this implementation and is checked before configured rules.
+
+The registry creates the check without a stop list. Until the team approves and supplies that list, an ordinary
+non-empty brand returns `NOT_CHECKED / BRAND_VALUE_CONFIG_MISSING`. Preliminary candidates are not imported into
+the runtime configuration.
+
+An application can supply approved rules explicitly:
+
+```python
+from carat_algorithms.core import CheckConfig, get_checks
+from carat_algorithms.text.brand_value import BrandValueCheck, BrandValueConfig, ForbiddenBrandValue
+
+brand_value_config = BrandValueConfig(
+    forbidden_values=(
+        ForbiddenBrandValue("approved exact-only value"),
+        ForbiddenBrandValue("approved fuzzy value", max_distance=0.05),
+    )
+)
+check = BrandValueCheck(brand_value_config)
+registered_checks = get_checks(check_config=CheckConfig(brand_value_config=brand_value_config))
+```
+
+The proposed V1 list requires an even more explicit import because it is not approved:
+
+```python
+from carat_algorithms.core import CheckConfig, get_checks
+from carat_algorithms.text.brand_value.proposed import build_proposed_brand_value_config_v1
+
+checks = get_checks(
+    check_config=CheckConfig(brand_value_config=build_proposed_brand_value_config_v1())
+)
+```
+
+`max_distance=None` means exact comparison only. This is the safe default for short values. A configured threshold
+uses Jaro-Winkler distance, where `0` is identical and larger values are less similar. Thresholds are per phrase;
+there is no shared default threshold. The distance scale and prefix weight `0.1` follow the
+[RapidFuzz JaroWinkler normalized distance definition](https://rapidfuzz.github.io/RapidFuzz/Usage/distance/JaroWinkler.html),
+but the implementation is local and adds no runtime dependency. Tests include the published `MARTHA` / `MARHTA`
+control pair from the
+[Winkler comparison table](https://www.niss.org/sites/default/files/winkler-presentation.pdf).
+
+| Reason code | Status | Condition |
+|---|---|---|
+| `BRAND_VALUE_MISSING` | `NOT_CHECKED` | `brand` is absent |
+| `BRAND_VALUE_EMPTY` | `WARNING` | `brand` is empty after normalization |
+| `BRAND_VALUE_CANONICAL` | `PASS` | canonical `Без товарного знака` |
+| `BRAND_VALUE_CONFIG_MISSING` | `NOT_CHECKED` | approved stop list is not configured |
+| `BRAND_VALUE_FORBIDDEN` | `WARNING` | exact match with a configured stop phrase |
+| `BRAND_VALUE_SIMILAR` | `REVIEW` | distance is within that phrase's configured threshold |
+| `BRAND_VALUE_OK` | `PASS` | configured rules ran and found no match |
+
+`PASS` only means that this check found no configured forbidden value. It does not confirm the legal status of a
+brand. A similar match is sent to review and does not modify the card.
+
+Explanations for empty and exactly forbidden values recommend the canonical fallback `Без товарного знака` when
+the product has no trademark. A similar-value explanation keeps the submitted value, matched stop phrase,
+distance and threshold, and presents the same fallback as a conditional manual-review recommendation.
+
+### Preliminary candidates
+
+`PROPOSED_BRAND_STOP_PHRASES_V1` is proposed for review and has not been approved by the team. It is kept in
+`text.brand_value.proposed`, is not re-exported from `text.brand_value`, and is not runtime configuration unless a
+caller explicitly builds and passes it. Source `A` means the task author's working hypothesis; source `X` means
+the supplied export `Косметика и парфюмерия (все атрибуты).xlsx`. Counts use its three non-overlapping general
+sheets, normalize case and whitespace, and keep punctuation.
+
+| Proposed phrase | Count | Source | Mode | Preliminary max distance |
+|---|---:|---|---|---:|
+| `отсутствует` | 20135 | A, X | Jaro-Winkler | 0.07 |
+| `нет товарного знака` | 5205 | X | Jaro-Winkler | 0.06 |
+| `без бренда` | 1154 | A, X | Jaro-Winkler | 0.05 |
+| `без торговой марки` | 5 | A, X | Jaro-Winkler | 0.05 |
+| `без товарной марки` | 9 | X | Jaro-Winkler | 0.05 |
+| `товарный знак отсутствует` | 19 | A, X | Jaro-Winkler | 0.06 |
+| `нет` | 2230 | A, X | Exact | - |
+| `без знака` | 2069 | X | Exact | - |
+| `без тм` | 100 | A, X | Exact | - |
+| `без тз` | 83 | X | Exact | - |
+| `нет бренда` | 13 | X | Exact | - |
+| `не указан` | 0 | A | Exact | - |
+| `не указано` | 2 | X | Exact | - |
+| `без марки` | 0 | A | Exact | - |
+| `б/н` | 0 | A | Exact | - |
+| `no brand` | 1 | A, X | Exact | - |
+| `no name` | 14 | A, X | Exact | - |
+| `noname` | 3 | A, X | Exact | - |
+| `честный знак` | 289 | A, X | Exact | - |
+| `-` | 144 | X | Exact | - |
+| `n/a` | 6 | X | Exact | - |
+| `none` | 1 | X | Exact | - |
+| `нет в справочнике` | 5 | X | Exact | - |
+| `без названия бренда` | 10 | X | Exact | - |
+| `без указания бренда` | 11 | X | Exact | - |
+| `товарного знака нет` | 1 | X | Exact | - |
+
+The canonical value `без товарного знака` occurs 23277 times and remains allowed. Its spelling variants are a
+separate review problem and are not stop phrases. Ambiguous values such as `noname pr`, observed 130 times, are not
+included in V1.
+
+The supplied CSV contains 47 malformed multiline `brand` records caused by unclosed quoting. Some values absorb
+subsequent product rows and reach 31460 characters. These records were not silently repaired and were excluded as
+a source of authoritative frequencies. The XLSX source has 37 multiline brand cells and a maximum brand length of
+200 characters.
+
+Jaro-Winkler is spelling similarity, not semantic matching. A shared fuzzy threshold is unsafe: for example,
+`нет` and `не` have distance about `0.0889`, while `noname` and the possible brand `Noeme` have distance about
+`0.1422`. Short stop phrases should remain exact-only unless separately evaluated against labeled data.
+
 ## Dependencies
 
 The core install is small (pydantic) so the backend and the tests start fast. Heavy libraries live in extras:
