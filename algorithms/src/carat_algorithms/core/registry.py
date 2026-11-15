@@ -17,6 +17,7 @@ def get_checks(weights_dir: Path | None = None, *, check_config: CheckConfig | N
     # Imported here: check modules import carat_algorithms.core, and core must stay import-light
     from carat_algorithms.identifiers.gtin import GtinFormatCheck
     from carat_algorithms.text.brand_value import BrandValueCheck
+    from carat_algorithms.text.name_compliance import NameCompositionCheck
     from carat_algorithms.text.perfumery_type import PerfumeryTypeCheck
     from carat_algorithms.text.volume import VolumeVsNameCheck
     from carat_algorithms.vision.background import BackgroundCheck
@@ -33,4 +34,5 @@ def get_checks(weights_dir: Path | None = None, *, check_config: CheckConfig | N
         ImageQualityCheck(),
         BackgroundCheck(weights_dir),
         PerfumeryTypeCheck(weights_dir),
+        NameCompositionCheck(),
     ]
