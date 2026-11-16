@@ -1,12 +1,23 @@
 """Checks that run on every card. A check that is not listed here does not run."""
 
+from __future__ import annotations
+
 from pathlib import Path
+from typing import TYPE_CHECKING
 
 from carat_algorithms.core.check import Check
 from carat_algorithms.core.config import CheckConfig
 
+if TYPE_CHECKING:
+    from carat_algorithms.vision.background.segmentation import Segmenter
 
-def get_checks(weights_dir: Path | None = None, *, check_config: CheckConfig | None = None) -> list[Check]:
+
+def get_checks(
+    weights_dir: Path | None = None,
+    *,
+    check_config: CheckConfig | None = None,
+    background_segmenter: Segmenter | None = None,
+) -> list[Check]:
     """
     Returns a list of all checks that should be run on every card.
     Each check must be registered here to be run.
@@ -32,7 +43,7 @@ def get_checks(weights_dir: Path | None = None, *, check_config: CheckConfig | N
         BarcodeOnPhotoCheck(),
         VolumeVsNameCheck(),
         ImageQualityCheck(),
-        BackgroundCheck(weights_dir),
+        BackgroundCheck(weights_dir, segmenter=background_segmenter),
         PerfumeryTypeCheck(weights_dir),
         NameCompositionCheck(),
     ]

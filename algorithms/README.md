@@ -303,16 +303,14 @@ the original delta-E thresholds (10 and 25), 95% uniformity and 2% maximum edge
 density are retained. Clean, noisy/foreign, and undecidable photos map to
 `PASS`, `WARNING`, and `REVIEW`; a warning takes precedence across photos.
 
-`vision.background.cutout.cutout_product(image, mask)` preserves the original
-pure product crop helper with soft alpha. Publishing edited photos through an
-API is a separate task; this PR uses the existing card-check endpoint.
-The old Java/gRPC implementation is replaced, not run alongside the Python backend.
+`vision.background.cutout.cutout_photo(content, segmenter)` uses the shared
+ISNet segmenter to return cropped PNG bytes with soft alpha. The backend's photo
+cutout endpoint calls it independently of the card checks.
 
 Version 2 bounds the image before white compositing and subsequent RGB copies,
 using JPEG draft decoding where supported. Palette/binary/16-bit sources and color-key alpha are converted
 before filtered resizing, preserving the same model input for identical pixels.
 PNG still needs its source pixels decoded. Known malformed EXIF/image errors
 return REVIEW for the affected photo; the final finding names its photo position.
-An installed but broken model remains an operational ERROR from the runner,
-rather than being reported as an absent model. Geometry/color diagnostics and the
-cutout helper are retained for research and the follow-up photo-editing task.
+An installed but broken model remains an operational ERROR from the runner.
+Geometry and color diagnostics remain internal to the background check.

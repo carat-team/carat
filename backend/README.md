@@ -68,6 +68,16 @@ Each model family reads its own subdirectory of `WEIGHTS_DIR` (`easyocr/`), so a
 [docs/api.md](../docs/api.md) defines the contract with the frontend: the card attributes, the endpoints, the
 check result format and the 422 validation error. Agree changes with the frontend team first.
 
+For Taiga #39, `POST /api/products/{product_id}/photos/{photo_id}/cutout` returns a cropped PNG with a
+transparent background. Upload the source photo first and pass the two IDs in Swagger UI (`/docs`).
+The request has no body. The stored photo remains available through its original content URL.
+
+This operation uses the local ISNet weights at `<WEIGHTS_DIR>/isnet/isnet-general-use.onnx`. It returns
+404 if the photo is not on the requested card, 422 if the photo cannot be processed or no product was
+isolated, and 503 if the model file is missing. The decoded source is limited to 24 megapixels.
+ISNet can include a hand or another object in the same mask as the product, or miss parts of a
+low-contrast product. Review the PNG before using it.
+
 ## Database and migrations
 
 Cards use an EAV layout: `products` holds one row per card (id, status, timestamps), `product_attributes` one row

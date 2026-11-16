@@ -28,8 +28,9 @@ class BackgroundCheck:
             return self._result(CheckStatus.NOT_CHECKED, "BACKGROUND_NO_PHOTOS", "У карточки нет фото")
         from carat_algorithms.vision.background.segmentation import WEIGHTS_FILENAME, WEIGHTS_SUBDIRECTORY
 
-        if self._segmenter is None and (
-            self._weights_dir is None or not (self._weights_dir / WEIGHTS_SUBDIRECTORY / WEIGHTS_FILENAME).is_file()
+        if (self._weights_dir is None and self._segmenter is None) or (
+            self._weights_dir is not None
+            and not (self._weights_dir / WEIGHTS_SUBDIRECTORY / WEIGHTS_FILENAME).is_file()
         ):
             return self._result(
                 CheckStatus.NOT_CHECKED, "BACKGROUND_WEIGHTS_MISSING", "Локальная модель проверки фона не установлена"
