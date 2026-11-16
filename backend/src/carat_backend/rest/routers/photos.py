@@ -28,6 +28,21 @@ def get_photo_content(product_id: uuid.UUID, photo_id: uuid.UUID, services: Serv
     return Response(content=content, media_type=photo.content_type)
 
 
+@router.post(
+    "/{photo_id}/cutout",
+    response_class=Response,
+    responses={
+        200: {"content": {"image/png": {"schema": {"type": "string", "format": "binary"}}}},
+        404: {"description": "Photo not found"},
+        422: {"description": "Invalid photo or product could not be isolated"},
+        503: {"description": "Background removal model is unavailable"},
+    },
+)
+def cutout_photo(product_id: uuid.UUID, photo_id: uuid.UUID, services: ServicesDependency) -> Response:
+    """Return the stored product photo with its background removed."""
+    return Response(content=services.photos.cutout(product_id, photo_id), media_type="image/png")
+
+
 @router.delete("/{photo_id}", status_code=204)
 def delete_photo(product_id: uuid.UUID, photo_id: uuid.UUID, services: ServicesDependency) -> Response:
     services.photos.delete(product_id, photo_id)

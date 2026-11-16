@@ -65,7 +65,7 @@ class BlockingCheck:
 def test_waiting_request_loads_no_photos_until_it_gets_a_slot() -> None:
     store = CountingStore()
     check = BlockingCheck()
-    service = CheckService(FixedProducts(), store, CheckRunner([check]), concurrency=1)
+    service = CheckService(FixedProducts(), store, CheckRunner([check]), threading.BoundedSemaphore(1))
     first = threading.Thread(target=service.check, args=(PRODUCT_ID,))
     second = threading.Thread(target=service.check, args=(PRODUCT_ID,))
 

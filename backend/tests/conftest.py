@@ -15,6 +15,7 @@ from carat_backend.settings import (
     ObjectStorageSettings,
     PhotoSettings,
     Settings,
+    WeightsSettings,
 )
 
 BACKEND_DIR = Path(__file__).parent.parent
@@ -43,7 +44,7 @@ def object_storage_url() -> str:
 
 
 @pytest.fixture
-def client(database_url: str, object_storage_url: str) -> Iterator[TestClient]:
+def client(database_url: str, object_storage_url: str, tmp_path: Path) -> Iterator[TestClient]:
     with create_engine(database_url).begin() as connection:
         connection.execute(text("TRUNCATE products CASCADE"))
     database = make_url(database_url)
@@ -64,6 +65,7 @@ def client(database_url: str, object_storage_url: str) -> Iterator[TestClient]:
             secret_key=storage.password or "",
         ),
         photos=PhotoSettings(max_size_mb=1),
+        weights=WeightsSettings(dir=tmp_path / "weights"),
     )
     with TestClient(create_app(settings)) as test_client:
         yield test_client

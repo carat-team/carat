@@ -4,7 +4,7 @@ from fastapi import FastAPI, Request
 from fastapi.exceptions import RequestValidationError
 from fastapi.responses import JSONResponse
 
-from carat_backend.domain.errors import InvalidInputError, NotFoundError
+from carat_backend.domain.errors import InvalidInputError, NotFoundError, ServiceUnavailableError
 
 # Request parts that mean nothing to the frontend: `body.attributes.volume.value` becomes `volume.value`
 REQUEST_PARTS = {"body", "form", "query", "path"}
@@ -57,3 +57,7 @@ def register_error_handlers(app: FastAPI) -> None:
     @app.exception_handler(NotFoundError)
     def handle_not_found(request: Request, error: NotFoundError) -> JSONResponse:
         return JSONResponse(status_code=404, content={"detail": str(error)})
+
+    @app.exception_handler(ServiceUnavailableError)
+    def handle_unavailable(request: Request, error: ServiceUnavailableError) -> JSONResponse:
+        return JSONResponse(status_code=503, content={"detail": str(error)})

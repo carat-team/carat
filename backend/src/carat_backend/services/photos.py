@@ -1,9 +1,12 @@
 import io
+import threading
 import uuid
 
+from carat_algorithms.vision.background.cutout import InvalidPhotoError, cutout_photo
+from carat_algorithms.vision.background.segmentation import ISNetSegmenter
 from PIL import Image
 
-from carat_backend.domain.errors import InvalidInputError, NotFoundError
+from carat_backend.domain.errors import InvalidInputError, NotFoundError, ServiceUnavailableError
 from carat_backend.domain.models import Photo
 from carat_backend.storage.database import SessionFactory
 from carat_backend.storage.object_store import PhotoObjectStore
@@ -14,10 +17,19 @@ FORMATS = {"image/jpeg": ("jpg", "JPEG"), "image/png": ("png", "PNG"), "image/we
 
 
 class PhotoService:
-    def __init__(self, session_factory: SessionFactory, store: PhotoObjectStore, max_size_bytes: int) -> None:
+    def __init__(
+        self,
+        session_factory: SessionFactory,
+        store: PhotoObjectStore,
+        max_size_bytes: int,
+        segmenter: ISNetSegmenter,
+        processing_slots: threading.BoundedSemaphore,
+    ) -> None:
         self._session_factory = session_factory
         self._store = store
         self.max_size_bytes = max_size_bytes
+        self._segmenter = segmenter
+        self._processing_slots = processing_slots
 
     def add(
         self,
@@ -68,11 +80,29 @@ class PhotoService:
         return saved
 
     def get_content(self, product_id: uuid.UUID, photo_id: uuid.UUID) -> tuple[Photo, bytes]:
+        photo = self._get_photo(product_id, photo_id)
+        return photo, self._store.get(photo.object_key)
+
+    def cutout(self, product_id: uuid.UUID, photo_id: uuid.UUID) -> bytes:
+        photo = self._get_photo(product_id, photo_id)
+        if not self._segmenter.weights_path.is_file():
+            raise ServiceUnavailableError("Модель вырезания фона не установлена")
+        with self._processing_slots:
+            content = self._store.get(photo.object_key)
+            try:
+                result = cutout_photo(content, self._segmenter)
+            except InvalidPhotoError as error:
+                raise InvalidInputError({"photo": str(error)}) from error
+        if result is None:
+            raise InvalidInputError({"photo": "На фото не удалось выделить товар"})
+        return result
+
+    def _get_photo(self, product_id: uuid.UUID, photo_id: uuid.UUID) -> Photo:
         with self._session_factory.begin() as session:
             photo = ProductRepository(session).get_photo(product_id, photo_id)
         if photo is None:
             raise NotFoundError(f"Photo {photo_id} not found")
-        return photo, self._store.get(photo.object_key)
+        return photo
 
     def delete(self, product_id: uuid.UUID, photo_id: uuid.UUID) -> None:
         with self._session_factory.begin() as session:

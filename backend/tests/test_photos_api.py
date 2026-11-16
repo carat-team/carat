@@ -1,7 +1,12 @@
 import io
 import uuid
+from pathlib import Path
 
 import httpx2
+import numpy as np
+import pytest
+from carat_algorithms.vision.background.masks import Array
+from carat_algorithms.vision.background.segmentation import ISNetSegmenter
 from fastapi.testclient import TestClient
 from PIL import Image
 
@@ -89,3 +94,42 @@ def test_unknown_product_or_photo_returns_404(client: TestClient) -> None:
     assert upload(client, str(uuid.uuid4())).status_code == 404
     assert client.get(f"/api/products/{product_id}/photos/{uuid.uuid4()}/content").status_code == 404
     assert client.delete(f"/api/products/{product_id}/photos/{uuid.uuid4()}").status_code == 404
+
+
+def test_cutout_returns_png_and_preserves_original(
+    client: TestClient, monkeypatch: pytest.MonkeyPatch, tmp_path: Path
+) -> None:
+    image = Image.new("RGB", (10, 10), "red")
+    buffer = io.BytesIO()
+    image.save(buffer, format="PNG")
+    original = buffer.getvalue()
+    product_id = create_product(client)
+    photo = upload(client, product_id, original).json()
+    content_url: str = photo["url"]
+    cutout_url = content_url.removesuffix("/content") + "/cutout"
+
+    mask = np.zeros((10, 10), dtype=np.uint8)
+    mask[2:8, 4:6] = 255
+    mask[2, 4] = 64
+
+    def segment(_segmenter: ISNetSegmenter, _source: Image.Image) -> Array:
+        return mask
+
+    weights_dir = tmp_path / "weights"
+    weights_file = ISNetSegmenter(weights_dir).weights_path
+    weights_file.parent.mkdir(parents=True)
+    monkeypatch.setattr(ISNetSegmenter, "segment", segment)
+    assert client.post(cutout_url).status_code == 503
+    weights_file.touch()
+    response = client.post(cutout_url)
+    assert response.status_code == 200, response.text
+    assert response.headers["content-type"] == "image/png"
+    with Image.open(io.BytesIO(response.content)) as result:
+        assert (result.format, result.mode, result.size) == ("PNG", "RGBA", (2, 6))
+        assert result.getchannel("A").getextrema() == (64, 255)
+    assert client.get(content_url).content == original
+    assert client.post(cutout_url.replace(product_id, str(uuid.uuid4()))).status_code == 404
+    mask.fill(0)
+    no_product = client.post(cutout_url)
+    assert no_product.status_code == 422
+    assert no_product.json()["fields"] == {"photo": "На фото не удалось выделить товар"}

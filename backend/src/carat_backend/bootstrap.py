@@ -5,8 +5,10 @@ so the adapters stay thin and share one behaviour.
 """
 
 from dataclasses import dataclass
+from threading import BoundedSemaphore
 
 from carat_algorithms.core import get_checks
+from carat_algorithms.vision.background.segmentation import ISNetSegmenter
 
 from carat_backend.services.checks import CheckRunner, CheckService
 from carat_backend.services.photos import PhotoService
@@ -27,10 +29,17 @@ def build_services(settings: Settings) -> Services:
     session_factory = create_session_factory(settings.database.url)
     store = create_photo_object_store(settings.object_storage)
     products = ProductService(session_factory)
+    processing_slots = BoundedSemaphore(settings.checks.concurrency)
+    segmenter = ISNetSegmenter(settings.weights.dir)
     return Services(
         products=products,
-        photos=PhotoService(session_factory, store, settings.photos.max_size_mb * 1024 * 1024),
+        photos=PhotoService(
+            session_factory, store, settings.photos.max_size_mb * 1024 * 1024, segmenter, processing_slots
+        ),
         checks=CheckService(
-            products, store, CheckRunner(get_checks(settings.weights.dir)), settings.checks.concurrency
+            products,
+            store,
+            CheckRunner(get_checks(settings.weights.dir, background_segmenter=segmenter)),
+            processing_slots,
         ),
     )

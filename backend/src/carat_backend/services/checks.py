@@ -49,12 +49,16 @@ class CheckService:
     """Builds a ProductCard from a stored product and runs the checks on it."""
 
     def __init__(
-        self, products: ProductService, store: PhotoObjectStore, runner: CheckRunner, concurrency: int
+        self,
+        products: ProductService,
+        store: PhotoObjectStore,
+        runner: CheckRunner,
+        processing_slots: threading.BoundedSemaphore,
     ) -> None:
         self._products = products
         self._store = store
         self._runner = runner
-        self._semaphore = threading.BoundedSemaphore(concurrency)
+        self._semaphore = processing_slots
 
     def check(self, product_id: uuid.UUID) -> list[CheckResult]:
         product = self._products.get(product_id)

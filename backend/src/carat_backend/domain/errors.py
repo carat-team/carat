@@ -2,6 +2,10 @@ class NotFoundError(Exception):
     pass
 
 
+class ServiceUnavailableError(Exception):
+    pass
+
+
 class InvalidInputError(Exception):
     """Input that passed schema validation but breaks a service rule, keyed by field name."""
 
