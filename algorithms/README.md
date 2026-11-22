@@ -269,6 +269,34 @@ SHA-256: `e76147233321191f173554b540b5bfdaf672e718262fa426fb07b3f1a9251800`.
 See [training and export](../model/training/perfume_type_classifier/README.md)
 for preprocessing, thresholds, reproduction, CPU measurements and limitations.
 
+## Photo origin (Taiga #99)
+
+ImageOriginCheck runs a local Community Forensics Frontier ViT-S/16 classifier.
+It decodes JPEG, PNG or WebP to RGB, resizes the shorter edge to 440 px, takes
+one 384 px center crop and applies ImageNet normalization. It uses one lazy
+ONNX Runtime CPU session with one inference thread. The check analyzes pixels.
+
+- WARNING / IMAGE_ORIGIN_AI_SIGNAL: the model reached the reference logit
+  threshold 1.359375. Send the finding to manual review.
+- REVIEW / IMAGE_ORIGIN_INCONCLUSIVE: the available photos yielded no strong signal.
+- REVIEW / IMAGE_ORIGIN_UNSUPPORTED_PHOTO: an image could not be decoded or is
+  animated, below 224 px on the short edge, above 12 MP, or wider than 8:1 in either orientation.
+- NOT_CHECKED / IMAGE_ORIGIN_NO_PHOTOS or IMAGE_ORIGIN_WEIGHTS_MISSING: upload a
+  photo or provision model weights. A damaged or unexpected model file is an operational failure.
+
+Provision the INT8 artifact at
+<WEIGHTS_DIR>/image_origin/community-forensics-frontier-int8.onnx. Source:
+[Community Forensics Frontier, immutable revision](https://huggingface.co/Thermostatic/community-forensics-frontier-detector-2026-08/tree/16db135220b318d811b207db576d90368980b595).
+The expected INT8 SHA-256 is
+6c5720f444c400bdfd8bf369ae151de7b736d6749a9ec72da343fb392cafe4eb
+(22,922,295 bytes). The separate weight build uses ONNX 1.22.0, ONNX Runtime
+1.31.1, per-channel dynamic INT8 quantization of 48 constant-weight MatMul
+operations and reduced-range weights. The runtime uses the existing vision extra.
+
+The threshold comes from the upstream model. Validate its behavior on labeled
+Carat cards before using the result beyond manual triage. A classifier signal
+is statistical. It can miss generated areas or fire on camera photos.
+
 ## Photo quality preprocessing
 
 `ImageQualityCheck` version 3 applies EXIF orientation, composites transparency on
