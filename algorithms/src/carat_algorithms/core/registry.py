@@ -22,6 +22,7 @@ def get_checks(weights_dir: Path | None = None, *, check_config: CheckConfig | N
     from carat_algorithms.text.volume import VolumeVsNameCheck
     from carat_algorithms.vision.background import BackgroundCheck
     from carat_algorithms.vision.barcode import BarcodeOnPhotoCheck
+    from carat_algorithms.vision.image_origin import ImageOriginCheck
     from carat_algorithms.vision.quality import ImageQualityCheck
 
     # Register checks here
@@ -32,6 +33,7 @@ def get_checks(weights_dir: Path | None = None, *, check_config: CheckConfig | N
         BarcodeOnPhotoCheck(),
         VolumeVsNameCheck(),
         ImageQualityCheck(),
+        ImageOriginCheck(weights_dir),
         BackgroundCheck(weights_dir),
         PerfumeryTypeCheck(weights_dir),
         NameCompositionCheck(),
