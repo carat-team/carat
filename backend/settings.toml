@@ -5,3 +5,6 @@ max_size_mb = 10
 
 [checks]
 concurrency = 2
+
+[health]
+timeout_seconds = 3

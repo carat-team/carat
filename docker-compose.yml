@@ -66,6 +66,14 @@ services:
         condition: service_completed_successfully
       s3:
         condition: service_started
+    healthcheck:
+      # The runtime image has no curl, so the check is a Python one-liner; urlopen raises on 503
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://localhost:8080/health/ready', timeout=4)"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      # The app starts listening only after the models are loaded
+      start_period: 60s
     restart: unless-stopped
 
 volumes:

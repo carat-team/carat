@@ -68,12 +68,18 @@ class CheckSettings(BaseModel):
     concurrency: int = 2
 
 
+class HealthSettings(BaseModel):
+    # Time limit for each dependency probe of GET /health/ready, in seconds (libpq accepts 2 at the least)
+    timeout_seconds: int = Field(default=3, ge=2)
+
+
 class Settings(BaseModel):
     database: DatabaseSettings = Field(default_factory=DatabaseSettings)
     object_storage: ObjectStorageSettings = Field(default_factory=ObjectStorageSettings)
     photos: PhotoSettings = PhotoSettings()
     weights: WeightsSettings = Field(default_factory=WeightsSettings)
     checks: CheckSettings = CheckSettings()
+    health: HealthSettings = HealthSettings()
 
 
 def load_settings(path: Path) -> Settings:

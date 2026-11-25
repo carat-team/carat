@@ -9,10 +9,12 @@ from dataclasses import dataclass
 from carat_algorithms.core import get_checks
 
 from carat_backend.services.checks import CheckRunner, CheckService
+from carat_backend.services.health import HealthService
 from carat_backend.services.photos import PhotoService
 from carat_backend.services.products import ProductService
 from carat_backend.settings import Settings
 from carat_backend.storage.database import create_session_factory
+from carat_backend.storage.health import create_database_probe, create_object_store_probe
 from carat_backend.storage.object_store import create_photo_object_store
 
 
@@ -21,16 +23,25 @@ class Services:
     products: ProductService
     photos: PhotoService
     checks: CheckService
+    health: HealthService
 
 
 def build_services(settings: Settings) -> Services:
     session_factory = create_session_factory(settings.database.url)
     store = create_photo_object_store(settings.object_storage)
     products = ProductService(session_factory)
+    probe_timeout = settings.health.timeout_seconds
     return Services(
         products=products,
         photos=PhotoService(session_factory, store, settings.photos.max_size_mb * 1024 * 1024),
         checks=CheckService(
             products, store, CheckRunner(get_checks(settings.weights.dir)), settings.checks.concurrency
+        ),
+        health=HealthService(
+            {
+                "database": create_database_probe(settings.database.url, probe_timeout),
+                "object_storage": create_object_store_probe(settings.object_storage, probe_timeout),
+            },
+            probe_timeout,
         ),
     )
