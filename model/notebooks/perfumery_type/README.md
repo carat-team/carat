@@ -1,11 +1,11 @@
 # Perfumery Type Name Check Research (R3)
 
-**Location:** `model/notebooks/perfumery_type_r3/`
+**Location:** `model/notebooks/perfumery_type/`
 **Scope:** Rule-based evaluation of the `perfumery_type` name check (requirement R3).
 
 ## Contents
 
-- `perfumery_type_r3_research.ipynb` — research notebook for loading the labeled sample, comparing two baseline rules with R3, calculating metrics, plotting results, and reviewing mismatches.
+- `research.ipynb` — research notebook for loading the labeled sample, comparing two baseline rules with R3, calculating metrics, plotting results, and reviewing mismatches.
 
 ## Goal
 
@@ -60,7 +60,7 @@ uv run --project algorithms --group evaluation --with pandas --with numpy --with
 Then:
 
 1. Set `PERFUMERY_GOLD_CSV` to the approved dataset path.
-2. Open `model/notebooks/perfumery_type_r3/perfumery_type_r3_research.ipynb`.
+2. Open `model/notebooks/perfumery_type/research.ipynb`.
 3. Run all cells from top to bottom.
 
 Before committing, clear notebook outputs and execution counts.
