@@ -114,3 +114,28 @@ jobs:
       - run: gh release create "$GITHUB_REF_NAME" --draft --title "$GITHUB_REF_NAME - Release" --notes-file release-notes.md
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+  deploy:
+    needs: [build-latest]
+    if: github.ref == 'refs/heads/master'
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - name: Signal deploy to mimosa
+        env:
+          DEPLOY_KEY: ${{ secrets.CARAT_DEPLOY_KEY }}
+        run: |
+          umask 077
+          printf '%s\n' "$DEPLOY_KEY" > "$HOME/id_carat_deploy"
+          ssh -i "$HOME/id_carat_deploy" -p 9922 \
+              -o BatchMode=yes -o StrictHostKeyChecking=accept-new \
+              -o IdentitiesOnly=yes \
+              carat-ci@78.107.234.81 deploy
+      - name: Verify
+        run: |
+          for i in $(seq 1 30); do
+            curl -fsS https://carat.ioplock.su:8443/health && exit 0
+            sleep 10
+          done
+          echo "health check failed" >&2
+          exit 1
